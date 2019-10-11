@@ -1,6 +1,14 @@
 <template>
   <div class="container">
-    <div class = "codemirror">
+    <div class = "editor-panel">
+      <div class = "editor-panel-handle">
+        <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Script' }">
+          <span>Script</span>
+        </div>
+        <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Console' }">
+          <span>Console</span>
+        </div>
+      </div>
       <client-only placeholder="Codemirror Loading...">
         <codemirror v-model="code" 
                     :options="cmOption"
@@ -14,6 +22,7 @@
   export default {
     data() {
       return {
+        tab: 'Script',
         code: 'const A = 10',
         cmOption: {
           tabSize: 4,
@@ -45,10 +54,34 @@
 </script>
 
 <style>
+.editor-panel {
+  display:flex;
+  width:50%;
+  float:right;
+}
+
+.editor-panel-handle-tab {
+  width:35px;
+  height:100px;
+  background:#2979D3;
+  color:white;
+  display:flex;
+}
+.editor-panel-handle-tab span{
+  height:35px;
+  min-width:100px;
+  padding:5px;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) translate(-100px, 0);
+}
+
+.isSelected {
+  background: #542FBF;
+}
+
 .container {
   margin: 0;
   min-height: 100vh;
-  /*display: flex;*/
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -59,7 +92,7 @@
   width:1000px;
 }
 .CodeMirror {
-  height:100% !important;
+  height:100%;
   width:100%;
   text-align:left;
 }
