@@ -1,11 +1,12 @@
 <template>
   <div class="container">
-    <client-only placeholder="Codemirror Loading...">
-      <codemirror v-model="code" 
-                  :options="cmOption"
-
-      />
-    </client-only>
+    <div class = "codemirror">
+      <client-only placeholder="Codemirror Loading...">
+        <codemirror v-model="code" 
+                    :options="cmOption"
+        />
+      </client-only>
+    </div>
   </div>
 </template>
 
@@ -45,14 +46,23 @@
 
 <style>
 .container {
-  margin: 0 auto;
+  margin: 0;
   min-height: 100vh;
-  display: flex;
+  /*display: flex;*/
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-
+.vue-codemirror {
+  height:100vh;
+  float:right;
+  width:1000px;
+}
+.CodeMirror {
+  height:100% !important;
+  width:100%;
+  text-align:left;
+}
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

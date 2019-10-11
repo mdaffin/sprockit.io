@@ -25,7 +25,6 @@ export default {
   loading: { color: "#fff" },
   css: [
     'codemirror/lib/codemirror.css',
-    'codemirror/addon/merge/merge.css',
     'codemirror/theme/base16-dark.css'
   ],
   plugins: [
