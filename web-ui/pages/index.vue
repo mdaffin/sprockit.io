@@ -1,37 +1,46 @@
 <template>
   <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        sprockit.io
-      </h1>
-      <h2 class="subtitle">
-        Programming game
-      </h2>
-      <div>
-        <button @click="fetchGreeting">Click me</button>
-        {{ greeting }}
-      </div>
-    </div>
+    <client-only placeholder="Codemirror Loading...">
+      <codemirror v-model="code" 
+                  :options="cmOption"
+
+      />
+    </client-only>
   </div>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
-
-export default {
-  components: {
-    Logo
-  },
-  data: () => ({
-    greeting: null
-  }),
-  methods: {
-    async fetchGreeting() {
-      this.greeting = (await this.$axios.get("/api/")).data;
+  export default {
+    data() {
+      return {
+        code: 'const A = 10',
+        cmOption: {
+          tabSize: 4,
+          styleActiveLine: true,
+          lineNumbers: true,
+          line: true,
+          foldGutter: true,
+          styleSelectedText: true,
+          mode: 'text/javascript',
+          keyMap: "sublime",
+          matchBrackets: true,
+          showCursorWhenSelecting: true,
+          theme: "monokai",
+          extraKeys: { "Ctrl": "autocomplete" },
+          hintOptions:{
+            completeSingle: false
+          }
+        }
+      }
+    },
+    methods: {
+      
+    },
+    mounted() {
+      console.log('this is current codemirror object')
+      // you can use this.codemirror to do something...
     }
   }
-};
 </script>
 
 <style>
