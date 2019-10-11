@@ -1,49 +1,101 @@
 <template>
   <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        sprockit.io
-      </h1>
-      <h2 class="subtitle">
-        Programming game
-      </h2>
-      <div>
-        <button @click="fetchGreeting">Click me</button>
-        {{ greeting }}
+    <div class = "editor-panel">
+      <div class = "editor-panel-handle">
+        <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Script' }">
+          <span>Script</span>
+        </div>
+        <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Console' }">
+          <span>Console</span>
+        </div>
       </div>
+      <client-only placeholder="Codemirror Loading...">
+        <codemirror v-model="code" 
+                    :options="cmOption"
+        />
+      </client-only>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from "~/components/Logo.vue";
-
-export default {
-  components: {
-    Logo
-  },
-  data: () => ({
-    greeting: null
-  }),
-  methods: {
-    async fetchGreeting() {
-      this.greeting = (await this.$axios.get("/api/")).data;
+  export default {
+    data() {
+      return {
+        tab: 'Script',
+        code: 'const A = 10',
+        cmOption: {
+          tabSize: 4,
+          styleActiveLine: true,
+          lineNumbers: true,
+          line: true,
+          foldGutter: true,
+          styleSelectedText: true,
+          mode: 'text/javascript',
+          keyMap: "sublime",
+          matchBrackets: true,
+          showCursorWhenSelecting: true,
+          theme: "monokai",
+          extraKeys: { "Ctrl": "autocomplete" },
+          hintOptions:{
+            completeSingle: false
+          }
+        }
+      }
     }
   }
-};
 </script>
 
 <style>
+.editor-panel {
+  display:flex;
+  width:50%;
+  float:right;
+}
+
+.editor-panel-handle{
+  background:#35495e;
+  cursor: e-resize;
+}
+
+.editor-panel-handle-tab {
+  width:35px;
+  height:100px;
+  background:#2979D3;
+  color:white;
+  display:flex;
+  cursor: pointer;
+}
+
+.editor-panel-handle-tab span{
+  height:35px;
+  min-width:100px;
+  padding:5px;
+  transform-origin: 0 0;
+  transform: rotate(-90deg) translate(-100px, 0);
+}
+
+.isSelected {
+  background: #542FBF;
+}
+
 .container {
-  margin: 0 auto;
+  margin: 0;
   min-height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-
+.vue-codemirror {
+  height:100vh;
+  float:right;
+  width:1000px;
+}
+.CodeMirror {
+  height:100%;
+  width:100%;
+  text-align:left;
+}
 .title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

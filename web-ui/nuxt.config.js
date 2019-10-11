@@ -23,8 +23,13 @@ export default {
     ]
   },
   loading: { color: "#fff" },
-  css: [],
-  plugins: [],
+  css: [
+    'codemirror/lib/codemirror.css',
+    'codemirror/theme/base16-dark.css'
+  ],
+  plugins: [
+    { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false }
+  ],
   buildModules: [],
   modules: ["@nuxtjs/axios"],
   axios: {
