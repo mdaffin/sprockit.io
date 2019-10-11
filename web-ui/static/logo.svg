@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -8,319 +6,225 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
-   version="1.1"
    id="svg8"
-   sodipodi:docname="logo.svg"
-   inkscape:version="0.92.4 5da689c313, 2019-01-14">
+   version="1.1"
+   viewBox="0 0 210 100"
+   height="100mm"
+   width="210mm">
   <defs
      id="defs2">
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient6534">
       <stop
-         id="stop6532"
+         style="stop-color:#d5719b;stop-opacity:1"
          offset="0"
-         style="stop-color:#d5719b;stop-opacity:1" />
+         id="stop6532" />
       <stop
-         id="stop6530"
+         style="stop-color:#9271d5;stop-opacity:1"
          offset="0.29389113"
-         style="stop-color:#9271d5;stop-opacity:1" />
+         id="stop6530" />
       <stop
-         style="stop-color:#57c9bd;stop-opacity:1"
+         id="stop6528"
          offset="0.58778223"
-         id="stop6528" />
+         style="stop-color:#57c9bd;stop-opacity:1" />
       <stop
-         id="stop6526"
+         style="stop-color:#6dc957;stop-opacity:1"
          offset="1"
-         style="stop-color:#6dc957;stop-opacity:1" />
+         id="stop6526" />
     </linearGradient>
     <linearGradient
-       id="linearGradient6331"
-       inkscape:collect="always">
+       id="linearGradient6331">
       <stop
-         id="stop6325"
+         style="stop-color:#6dc957;stop-opacity:1"
          offset="0"
-         style="stop-color:#6dc957;stop-opacity:1" />
+         id="stop6325" />
       <stop
-         style="stop-color:#57c9bd;stop-opacity:1"
+         id="stop6327"
          offset="0.41221777"
-         id="stop6327" />
+         style="stop-color:#57c9bd;stop-opacity:1" />
       <stop
-         id="stop6333"
+         style="stop-color:#9271d5;stop-opacity:1"
          offset="0.70610887"
-         style="stop-color:#9271d5;stop-opacity:1" />
+         id="stop6333" />
       <stop
-         id="stop6329"
+         style="stop-color:#d5719b;stop-opacity:1"
          offset="1"
-         style="stop-color:#d5719b;stop-opacity:1" />
+         id="stop6329" />
     </linearGradient>
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient6304-4">
       <stop
-         style="stop-color:#b33a20;stop-opacity:1"
+         id="stop6300"
          offset="0"
-         id="stop6300" />
+         style="stop-color:#b33a20;stop-opacity:1" />
       <stop
-         id="stop6306"
+         style="stop-color:#e08433;stop-opacity:1"
          offset="0.54830873"
-         style="stop-color:#e08433;stop-opacity:1" />
+         id="stop6306" />
       <stop
-         style="stop-color:#fde354;stop-opacity:1"
+         id="stop6302"
          offset="1"
-         id="stop6302" />
+         style="stop-color:#fde354;stop-opacity:1" />
     </linearGradient>
     <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath6671">
+       id="clipPath6671"
+       clipPathUnits="userSpaceOnUse">
       <g
-         inkscape:label="Clip"
          id="use6673">
         <text
-           inkscape:export-ydpi="90"
-           inkscape:export-xdpi="90"
-           id="text6763"
-           y="96.161118"
-           x="97.363602"
+           xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.6746875px;stroke-width:0.26458332"
-             y="96.161118"
-             x="97.363602"
+           x="97.363602"
+           y="96.161118"
+           id="text6763"><tspan
              id="tspan6761"
-             sodipodi:role="line"><tspan
-               id="tspan6757"
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.5291667px">sprocki</tspan><tspan
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-1.58749998px"
-               id="tspan6759">t</tspan></tspan></text>
+             x="97.363602"
+             y="96.161118"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.6746875px;stroke-width:0.26458332"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.5291667px"
+               id="tspan6757">sprocki</tspan><tspan
+               id="tspan6759"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-1.58749998px">t</tspan></tspan></text>
         <text
-           inkscape:export-ydpi="90"
-           inkscape:export-xdpi="90"
-           id="text6767"
-           y="94.974396"
-           x="86.918739"
+           xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6777);fill-opacity:1;stroke:none;stroke-width:0.26458332"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6777);fill-opacity:1;stroke-width:0.26458332"
-             y="94.974396"
-             x="86.918739"
+           x="86.918739"
+           y="94.974396"
+           id="text6767"><tspan
              id="tspan6765"
-             sodipodi:role="line">&gt;_</tspan></text>
+             x="86.918739"
+             y="94.974396"
+             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6777);fill-opacity:1;stroke-width:0.26458332">&gt;_</tspan></text>
         <text
-           inkscape:export-ydpi="90"
-           inkscape:export-xdpi="90"
-           id="text6773"
-           y="96.254662"
-           x="143.13889"
+           xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6779);fill-opacity:1;stroke:none;stroke-width:0.26458332"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.81491667px;fill:url(#linearGradient6779);fill-opacity:1;stroke-width:0.26458332"
-             y="96.254662"
-             x="143.13889"
+           x="143.13889"
+           y="96.254662"
+           id="text6773"><tspan
              id="tspan6771"
-             sodipodi:role="line"><tspan
-   id="tspan6769"
-   style="letter-spacing:-1.48960412px;fill:url(#linearGradient6779);fill-opacity:1">.i</tspan>o</tspan></text>
+             x="143.13889"
+             y="96.254662"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.81491667px;fill:url(#linearGradient6779);fill-opacity:1;stroke-width:0.26458332"><tspan
+   style="letter-spacing:-1.48960412px;fill:url(#linearGradient6779);fill-opacity:1"
+   id="tspan6769">.i</tspan>o</tspan></text>
       </g>
     </clipPath>
     <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath6688">
+       id="clipPath6688"
+       clipPathUnits="userSpaceOnUse">
       <g
-         inkscape:label="Clip"
          id="use6690">
         <text
-           id="text6822"
-           y="109.87608"
-           x="97.457649"
+           xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.6746875px;stroke-width:0.26458332"
-             y="109.87608"
-             x="97.457649"
+           x="97.457649"
+           y="109.87608"
+           id="text6822"><tspan
              id="tspan6820"
-             sodipodi:role="line"><tspan
-               id="tspan6816"
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.52916676px;stroke-width:0.26458332">sprocki</tspan><tspan
-               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-1.58749998px;stroke-width:0.26458332"
-               id="tspan6818">t</tspan></tspan></text>
+             x="97.457649"
+             y="109.87608"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.6746875px;stroke-width:0.26458332"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.52916676px;stroke-width:0.26458332"
+               id="tspan6816">sprocki</tspan><tspan
+               id="tspan6818"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-1.58749998px;stroke-width:0.26458332">t</tspan></tspan></text>
         <text
-           id="text6826"
-           y="108.68936"
-           x="87.012787"
+           xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6836);fill-opacity:1;stroke:none;stroke-width:0.26458332"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6836);fill-opacity:1;stroke-width:0.26458332"
-             y="108.68936"
-             x="87.012787"
+           x="87.012787"
+           y="108.68936"
+           id="text6826"><tspan
              id="tspan6824"
-             sodipodi:role="line">&gt;_</tspan></text>
+             x="87.012787"
+             y="108.68936"
+             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6836);fill-opacity:1;stroke-width:0.26458332">&gt;_</tspan></text>
         <text
-           id="text6832"
-           y="109.96963"
-           x="143.23294"
+           xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6838);fill-opacity:1;stroke:none;stroke-width:0.26458332"
-           xml:space="preserve"><tspan
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.81491673px;fill:url(#linearGradient6838);fill-opacity:1;stroke-width:0.26458332"
-             y="109.96963"
-             x="143.23294"
+           x="143.23294"
+           y="109.96963"
+           id="text6832"><tspan
              id="tspan6830"
-             sodipodi:role="line"><tspan
-   id="tspan6828"
-   style="letter-spacing:-1.48960412px;fill:url(#linearGradient6838);fill-opacity:1;stroke-width:0.26458332">.i</tspan>o</tspan></text>
+             x="143.23294"
+             y="109.96963"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-0.81491673px;fill:url(#linearGradient6838);fill-opacity:1;stroke-width:0.26458332"><tspan
+   style="letter-spacing:-1.48960412px;fill:url(#linearGradient6838);fill-opacity:1;stroke-width:0.26458332"
+   id="tspan6828">.i</tspan>o</tspan></text>
       </g>
     </clipPath>
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6304-4"
+       y2="95.973228"
+       x2="96.904144"
+       y1="95.973221"
+       x1="87.183319"
+       gradientTransform="matrix(2.4679541,0,0,2.4679541,-186.1351,-7.3442512)"
+       gradientUnits="userSpaceOnUse"
        id="linearGradient6753"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.4679541,0,0,2.4679541,-199.40261,-171.09325)"
-       x1="87.183319"
-       y1="95.973221"
-       x2="96.904144"
-       y2="95.973228" />
+       xlink:href="#linearGradient6304-4" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6331"
+       y2="95.135475"
+       x2="159.34724"
+       y1="95.135475"
+       x1="145.63657"
+       gradientTransform="matrix(2.4679541,0,0,2.4679541,-217.24233,-7.3442512)"
+       gradientUnits="userSpaceOnUse"
        id="linearGradient6755"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.4679541,0,0,2.4679541,-230.50984,-171.09325)"
-       x1="145.63657"
-       y1="95.135475"
-       x2="159.34724"
-       y2="95.135475" />
+       xlink:href="#linearGradient6331" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6304-4"
+       y2="95.973228"
+       x2="96.904144"
+       y1="95.973221"
+       x1="87.183319"
+       gradientTransform="translate(-0.26458333,-2.7119792)"
+       gradientUnits="userSpaceOnUse"
        id="linearGradient6777"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-0.26458333,-2.7119792)"
-       x1="87.183319"
-       y1="95.973221"
-       x2="96.904144"
-       y2="95.973228" />
+       xlink:href="#linearGradient6304-4" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6331"
+       y2="95.135475"
+       x2="159.34724"
+       y1="95.135475"
+       x1="145.63657"
+       gradientTransform="translate(-0.26458333,-2.7119792)"
+       gradientUnits="userSpaceOnUse"
        id="linearGradient6779"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-0.26458333,-2.7119792)"
-       x1="145.63657"
-       y1="95.135475"
-       x2="159.34724"
-       y2="95.135475" />
+       xlink:href="#linearGradient6331" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6534"
+       y2="95.973228"
+       x2="96.904144"
+       y1="95.973221"
+       x1="87.183319"
+       gradientTransform="matrix(2.4679541,0,0,2.4679541,-185.903,26.503649)"
+       gradientUnits="userSpaceOnUse"
        id="linearGradient6812"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.4679541,0,0,2.4679541,-199.17051,-137.24535)"
-       x1="87.183319"
-       y1="95.973221"
-       x2="96.904144"
-       y2="95.973228" />
+       xlink:href="#linearGradient6534" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6331"
+       y2="95.135475"
+       x2="159.34724"
+       y1="95.135475"
+       x1="145.63657"
+       gradientTransform="matrix(2.4679541,0,0,2.4679541,-216.63991,26.503649)"
+       gradientUnits="userSpaceOnUse"
        id="linearGradient6814"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2.4679541,0,0,2.4679541,-229.90742,-137.24535)"
-       x1="145.63657"
-       y1="95.135475"
-       x2="159.34724"
-       y2="95.135475" />
+       xlink:href="#linearGradient6331" />
     <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6534"
-       id="linearGradient6836"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-0.17053731,11.002984)"
-       x1="87.183319"
-       y1="95.973221"
+       y2="95.973228"
        x2="96.904144"
-       y2="95.973228" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6331"
-       id="linearGradient6838"
-       gradientUnits="userSpaceOnUse"
+       y1="95.973221"
+       x1="87.183319"
        gradientTransform="translate(-0.17053731,11.002984)"
-       x1="145.63657"
-       y1="95.135475"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6836"
+       xlink:href="#linearGradient6534" />
+    <linearGradient
+       y2="95.135475"
        x2="159.34724"
-       y2="95.135475" />
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath6860">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g6856"
-         id="use6862"
-         width="100%"
-         height="100%" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath6875">
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g6871"
-         id="use6877"
-         width="100%"
-         height="100%" />
-    </clipPath>
+       y1="95.135475"
+       x1="145.63657"
+       gradientTransform="translate(-0.17053731,11.002984)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6838"
+       xlink:href="#linearGradient6331" />
   </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="2.1433923"
-     inkscape:cx="407.3935"
-     inkscape:cy="800.54828"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer5"
-     showgrid="false"
-     showguides="false"
-     inkscape:guide-bbox="true"
-     inkscape:window-width="2540"
-     inkscape:window-height="1397"
-     inkscape:window-x="9"
-     inkscape:window-y="32"
-     inkscape:window-maximized="0"
-     inkscape:pagecheckerboard="true"
-     inkscape:snap-text-baseline="true">
-    <sodipodi:guide
-       position="66.977744,231.89641"
-       orientation="0,1"
-       id="guide4526"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="28.194662,160.37057"
-       orientation="0,1"
-       id="guide5091"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="27.318229,162.48724"
-       orientation="0,1"
-       id="guide5093"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="103.83421,197.65918"
-       orientation="0,1"
-       id="guide6000"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -334,111 +238,102 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="proto 1">
+     transform="translate(0,-197)"
+     id="layer4">
     <g
-       id="g6858"
-       clip-path="url(#clipPath6860)"
-       inkscape:export-filename="/home/user/g6858.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <g
-         inkscape:label="Clip"
-         id="g6856">
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.65297949;"
-           x="41.539268"
-           y="72.921013"
-           id="text5731"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"><tspan
-             sodipodi:role="line"
-             id="tspan5729"
-             x="41.539268"
-             y="72.921013"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0;font-family:Questrial;-inkscape-font-specification:Questrial;letter-spacing:-0.79375px;stroke-width:0.65297949;fill:#ffffff;fill-opacity:1;">sprockit</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6753);fill-opacity:1;stroke:none;stroke-width:0.65297949"
-           x="15.761829"
-           y="69.992241"
-           id="text5979"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"><tspan
-             sodipodi:role="line"
-             id="tspan5977"
-             x="15.761829"
-             y="69.992241"
-             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6753);fill-opacity:1;stroke-width:0.65297949">&gt;_</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6755);fill-opacity:1;stroke:none;stroke-width:0.65297949"
-           x="123.40334"
-           y="73.151878"
-           id="text6004"
-           inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90"><tspan
-             sodipodi:role="line"
-             id="tspan6002"
-             x="123.40334"
-             y="73.151878"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-2.01117682px;fill:url(#linearGradient6755);fill-opacity:1;stroke-width:0.65297949"><tspan
-   style="letter-spacing:-3.67627454px;fill:url(#linearGradient6755);fill-opacity:1;stroke-width:0.65297949"
-   id="tspan6154">.i</tspan>o</tspan></text>
-      </g>
+       id="g2626">
+      <text
+         id="text5731"
+         y="236.67001"
+         x="54.806778"
+         style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.65297949"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0;font-family:Questrial;-inkscape-font-specification:Questrial;letter-spacing:-0.79374999px;fill:#ffffff;fill-opacity:1;stroke-width:0.65297949"
+           y="236.67001"
+           x="54.806778"
+           id="tspan5729">sprockit</tspan></text>
+      <text
+         id="text5979"
+         y="233.74124"
+         x="29.029339"
+         style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6753);fill-opacity:1;stroke:none;stroke-width:0.65297949"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6753);fill-opacity:1;stroke-width:0.65297949"
+           y="233.74124"
+           x="29.029339"
+           id="tspan5977">&gt;_</tspan></text>
+      <text
+         id="text6004"
+         y="236.90088"
+         x="136.67085"
+         style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6755);fill-opacity:1;stroke:none;stroke-width:0.65297949"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-2.01117682px;fill:url(#linearGradient6755);fill-opacity:1;stroke-width:0.65297949"
+           y="236.90088"
+           x="136.67085"
+           id="tspan6002"><tspan
+   id="tspan6154"
+   style="letter-spacing:-3.67627454px;fill:url(#linearGradient6755);fill-opacity:1;stroke-width:0.65297949">.i</tspan>o</tspan></text>
     </g>
-  </g>
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,0,257)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot2489"
+       xml:space="preserve"><flowRegion
+         id="flowRegion2491"><rect
+           y="-900.54254"
+           x="1195.5604"
+           height="368.16925"
+           width="104.24864"
+           id="rect2493" /></flowRegion><flowPara
+         id="flowPara2495"></flowPara></flowRoot>    <flowRoot
+       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"
+       id="flowRoot2497"
+       xml:space="preserve"><flowRegion
+         id="flowRegion2499"><rect
+           y="-631.54364"
+           x="-68.619362"
+           height="427.55139"
+           width="1034.5688"
+           id="rect2501" /></flowRegion><flowPara
+         id="flowPara2503"></flowPara></flowRoot>  </g>
   <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="proto 2">
+     transform="translate(0,-197)"
+     id="layer5">
     <g
-       id="g6873"
-       clip-path="url(#clipPath6875)"
-       inkscape:export-filename="/home/user/g6873.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
-      <g
-         inkscape:label="Clip"
-         id="g6871">
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.65297949;"
-           x="41.771374"
-           y="106.76892"
-           id="text5731-6"><tspan
-             sodipodi:role="line"
-             id="tspan5729-3"
-             x="41.771374"
-             y="106.76892"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0;font-family:Questrial;-inkscape-font-specification:'Questrial Bold';letter-spacing:-0.79375px;stroke-width:0.65297949;fill:#ffffff;fill-opacity:1">sprockit</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6812);fill-opacity:1;stroke:none;stroke-width:0.65297949"
-           x="15.993934"
-           y="103.84015"
-           id="text5979-4"><tspan
-             sodipodi:role="line"
-             id="tspan5977-8"
-             x="15.993934"
-             y="103.84015"
-             style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6812);fill-opacity:1;stroke-width:0.65297949">&gt;_</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6814);fill-opacity:1;stroke:none;stroke-width:0.65297949"
-           x="124.00578"
-           y="106.99979"
-           id="text6004-6"><tspan
-             sodipodi:role="line"
-             id="tspan6002-6"
-             x="124.00578"
-             y="106.99979"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-2.01117706px;fill:url(#linearGradient6814);fill-opacity:1;stroke-width:0.65297949"><tspan
-   style="letter-spacing:-3.67627454px;fill:url(#linearGradient6814);fill-opacity:1;stroke-width:0.65297949"
-   id="tspan6154-6">.i</tspan>o</tspan></text>
-      </g>
+       id="g2635">
+      <text
+         id="text5731-6"
+         y="270.51791"
+         x="55.038883"
+         style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.65297949"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0;font-family:Questrial;-inkscape-font-specification:Questrial;letter-spacing:-0.79374999px;fill:#ffffff;fill-opacity:1;stroke-width:0.65297949"
+           y="270.51791"
+           x="55.038883"
+           id="tspan5729-3">sprockit</tspan></text>
+      <text
+         id="text5979-4"
+         y="267.58914"
+         x="29.261442"
+         style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6812);fill-opacity:1;stroke:none;stroke-width:0.65297949"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Raleway;-inkscape-font-specification:'Raleway Ultra-Bold';fill:url(#linearGradient6812);fill-opacity:1;stroke-width:0.65297949"
+           y="267.58914"
+           x="29.261442"
+           id="tspan5977-8">&gt;_</tspan></text>
+      <text
+         id="text6004-6"
+         y="270.74878"
+         x="137.27328"
+         style="font-style:normal;font-weight:normal;font-size:26.11918068px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient6814);fill-opacity:1;stroke:none;stroke-width:0.65297949"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Space Mono';-inkscape-font-specification:'Space Mono Bold';letter-spacing:-2.01117706px;fill:url(#linearGradient6814);fill-opacity:1;stroke-width:0.65297949"
+           y="270.74878"
+           x="137.27328"
+           id="tspan6002-6"><tspan
+   id="tspan6154-6"
+   style="letter-spacing:-3.67627454px;fill:url(#linearGradient6814);fill-opacity:1;stroke-width:0.65297949">.i</tspan>o</tspan></text>
     </g>
   </g>
 </svg>
