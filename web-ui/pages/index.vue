@@ -42,13 +42,6 @@
           }
         }
       }
-    },
-    methods: {
-      
-    },
-    mounted() {
-      console.log('this is current codemirror object')
-      // you can use this.codemirror to do something...
     }
   }
 </script>
@@ -60,13 +53,20 @@
   float:right;
 }
 
+.editor-panel-handle{
+  background:#35495e;
+  cursor: e-resize;
+}
+
 .editor-panel-handle-tab {
   width:35px;
   height:100px;
   background:#2979D3;
   color:white;
   display:flex;
+  cursor: pointer;
 }
+
 .editor-panel-handle-tab span{
   height:35px;
   min-width:100px;
