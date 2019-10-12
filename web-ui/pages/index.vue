@@ -28,7 +28,7 @@ export default {
 
       const doc = iframe.contentDocument;
       doc.open();
-      doc.write(`<script>${this.code}<\/script>`);
+      doc.write(`<script>${this.code}</script` + ">");
       doc.close();
     },
   },
