@@ -66,7 +66,6 @@ export default {
     handleTab: function (event) {
       if(this.editorComputedWidth == 0) {
         this.editorLeft = width - 800;
-        this.code = 'const A =323 10';
       } else {
         this.tab = event;
       }
