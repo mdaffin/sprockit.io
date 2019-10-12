@@ -1,24 +1,28 @@
 <template>
-  <client-only placeholder="Codemirror Loading...">
-    <div>
-      <div class="editor-panel-handle">
-        <div
-          class="editor-panel-handle-tab"
-          :class="{ isSelected: tab === 'Script' }"
-        >
-          <span @click="handleTab('Script')">Script</span>
-        </div>
-        <div
-          class="editor-panel-handle-tab"
-          :class="{ isSelected: tab === 'Console' }"
-        >
-          <span @click="handleTab('Console')">Console</span>
-        </div>
-        <ExecuteButton />
+  <div>
+    <div class="editor-panel-handle">
+      <div
+        class="editor-panel-handle-tab"
+        :class="{ 'is-selected': tab === 'Script' }"
+      >
+        <span @click="handleTab('Script')">Script</span>
       </div>
-      <codemirror v-model="code" :options="cmOption" @input="onCmCodeChange" />
+      <div
+        class="editor-panel-handle-tab"
+        :class="{ 'is-selected': tab === 'Console' }"
+      >
+        <span @click="handleTab('Console')">Console</span>
+      </div>
+      <ExecuteButton @click="$emit('run')" />
     </div>
-  </client-only>
+    <client-only placeholder="Codemirror Loading...">
+      <codemirror
+        :value="value"
+        @input="$emit('input', $event)"
+        :options="cmOption"
+      />
+    </client-only>
+  </div>
 </template>
 
 <script>
@@ -28,9 +32,9 @@ export default {
   components: {
     ExecuteButton,
   },
+  props: ["value"],
   data() {
     return {
-      code: "const a = 10;\nconst b = 20;\nconsole.log(a + b);\n",
       tab: "Script",
       cmOption: {
         tabSize: 4,
@@ -51,13 +55,7 @@ export default {
       },
     };
   },
-  created() {
-    if (this.$bus) this.$bus.emit("update-code", this.code);
-  },
   methods: {
-    onCmCodeChange(event) {
-      this.$bus.emit("update-code", event);
-    },
     handleTab(tab) {
       this.tab = tab;
     },
@@ -71,7 +69,9 @@ export default {
   height: 100%;
   width: 100%;
 }
+</style>
 
+<style scoped>
 .editor-panel-handle {
   position: relative;
   right: 35px;
@@ -98,7 +98,7 @@ export default {
   transform: rotate(-90deg) translate(-100px, 0);
 }
 
-.isSelected {
+.is-selected {
   background: purple;
 }
 </style>

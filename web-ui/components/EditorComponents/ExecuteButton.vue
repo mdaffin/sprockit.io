@@ -1,18 +1,9 @@
 <template>
-  <div @click="runCode()" class="executeButton">
-    Exec ute
+  <div @click="$emit('click')" class="executeButton">
+    Run
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    runCode() {
-      this.$bus.emit("runCode");
-    },
-  },
-};
-</script>
 <style scoped>
 .executeButton {
   height: 35px;
