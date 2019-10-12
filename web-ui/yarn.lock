@@ -8698,6 +8698,11 @@ vue-codemirror@^4.0.6:
     codemirror "^5.41.0"
     diff-match-patch "^1.0.0"
 
+vue-draggable-resizable@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/vue-draggable-resizable/-/vue-draggable-resizable-2.0.1.tgz#fb98d0997b1cfa8e3ba90f723cf8b605012cd96d"
+  integrity sha512-khy+BfCnw+/NK/u7pULKNdERI/ry4BnnyKQk0qkiCNkRXWuWR/lFuADTYN8ZB25GX2H1c7PWRMRPENI6v2YTUA==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
