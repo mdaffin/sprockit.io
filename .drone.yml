@@ -7,9 +7,9 @@ steps:
     image: node
     commands:
       - cd web-ui
-      - yarn install
+      - yarn install --silent
       - yarn lint
-      - yarn test
+      - yarn test --ci
     when:
       event:
         - pull_request
@@ -18,9 +18,8 @@ steps:
     image: rust
     commands:
       - rustup component add clippy
-      - cd server
-      - cargo clippy --all-features -- -D warnings
-      - cargo test
+      - cargo clippy --quiet --locked --all-features -- -D warnings
+      - cargo test --quiet --locked
     when:
       event:
         - pull_request
