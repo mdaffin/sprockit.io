@@ -1,5 +1,9 @@
 {
-  "folders": [{ "path": "." }],
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
   "settings": {
     "eslint.validate": [
       {
@@ -15,7 +19,9 @@
         "autoFix": true
       }
     ],
-    "eslint.workingDirectories": ["./web-ui"],
+    "eslint.workingDirectories": [
+      "./web-ui"
+    ],
     "eslint.autoFixOnSave": true,
     "vetur.validation.template": false,
     "files.trimTrailingWhitespace": true,
