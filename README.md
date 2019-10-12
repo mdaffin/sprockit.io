@@ -6,7 +6,7 @@ The following are needed to build/develop sprockit.io.
 - [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/docs/getting-started)
 - [Rust](https://rustup.rs/)
 
-Additionally if you use VS Code follow the guide on [Setting up VSCode](Setting-up-VSCode).
+Additionally if you use VS Code follow the guide on [Setting up VSCode](https://github.com/mdaffin/sprockit.io/wiki/Setting-up-VSCode).
 
 ## Quick Start
 
