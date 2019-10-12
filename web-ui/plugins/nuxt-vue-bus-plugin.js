@@ -1,4 +1,4 @@
-import Vue from 'vue';
-import VueBus from 'vue-bus';
+import Vue from "vue";
+import VueBus from "vue-bus";
 
 Vue.use(VueBus);
