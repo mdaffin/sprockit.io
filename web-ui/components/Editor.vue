@@ -32,7 +32,9 @@ export default {
   components: {
     ExecuteButton,
   },
-  props: ["value"],
+  props: {
+    value: { type: String, default: "" },
+  },
   data() {
     return {
       tab: "Script",
