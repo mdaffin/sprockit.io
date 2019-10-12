@@ -9169,11 +9169,6 @@ vue-codemirror@^4.0.6:
     codemirror "^5.41.0"
     diff-match-patch "^1.0.0"
 
-vue-draggable-resizable@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/vue-draggable-resizable/-/vue-draggable-resizable-2.0.1.tgz#fb98d0997b1cfa8e3ba90f723cf8b605012cd96d"
-  integrity sha512-khy+BfCnw+/NK/u7pULKNdERI/ry4BnnyKQk0qkiCNkRXWuWR/lFuADTYN8ZB25GX2H1c7PWRMRPENI6v2YTUA==
-
 vue-eslint-parser@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-5.0.0.tgz#00f4e4da94ec974b821a26ff0ed0f7a78402b8a1"
