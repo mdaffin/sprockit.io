@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import VueDraggableResizable from 'vue-draggable-resizable'
+import Vue from "vue";
+import VueDraggableResizable from "vue-draggable-resizable";
 
 // optionally import default styles
-import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+import "vue-draggable-resizable/dist/VueDraggableResizable.css";
 
-Vue.component('vue-draggable-resizable', VueDraggableResizable)
+Vue.component("vue-draggable-resizable", VueDraggableResizable);

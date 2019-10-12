@@ -6,9 +6,9 @@
 
 <style>
 html {
-  overflow-x:hidden;
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -16,7 +16,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  background-image: radial-gradient(#47627F, #35495e);
+  background-image: radial-gradient(#47627f, #35495e);
 }
 
 *,
@@ -32,10 +32,10 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #35495e; 
+  background: #35495e;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #47627F; 
+  background: #47627f;
 }
 </style>
