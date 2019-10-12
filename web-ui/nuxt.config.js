@@ -28,7 +28,8 @@ export default {
     'codemirror/theme/base16-dark.css'
   ],
   plugins: [
-    { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false }
+    { src: '~plugins/nuxt-codemirror-plugin.js', ssr: false },
+    { src: '~plugins/nuxt-vuedraggable-resizable.js', ssr: false }
   ],
   buildModules: [],
   modules: ["@nuxtjs/axios"],

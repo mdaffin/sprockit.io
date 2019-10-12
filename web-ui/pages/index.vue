@@ -1,60 +1,93 @@
 <template>
   <div class="container">
-    <div class = "editor-panel">
-      <div class = "editor-panel-handle">
-        <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Script' }">
-          <span>Script</span>
+    <client-only placeholder="Codemirror Loading...">
+      <vue-draggable-resizable id="editor" :active="true" @resizestop="updatePosition" :x=editorLeft :w=editorComputedWidth :h=pageHeight :draggable="false" :handles="['ml']">
+        <div class ="editor-panel">
+          <div class = "editor-panel-handle">
+            <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Script' }">
+              <span v-on:click="handleTab('Script')">Script</span>
+            </div>
+            <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Console' }">
+              <span v-on:click="handleTab('Console')">Console</span>
+            </div>
+          </div>
+          <codemirror v-model="code" 
+                      :options="cmOption"
+          />
         </div>
-        <div class = "editor-panel-handle-tab" v-bind:class="{ isSelected: tab === 'Console' }">
-          <span>Console</span>
-        </div>
-      </div>
-      <client-only placeholder="Codemirror Loading...">
-        <codemirror v-model="code" 
-                    :options="cmOption"
-        />
-      </client-only>
-    </div>
+      </vue-draggable-resizable>
+    </client-only>
   </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        tab: 'Script',
-        code: 'const A = 10',
-        cmOption: {
-          tabSize: 4,
-          styleActiveLine: true,
-          lineNumbers: true,
-          line: true,
-          foldGutter: true,
-          styleSelectedText: true,
-          mode: 'text/javascript',
-          keyMap: "sublime",
-          matchBrackets: true,
-          showCursorWhenSelecting: true,
-          theme: "monokai",
-          extraKeys: { "Ctrl": "autocomplete" },
-          hintOptions:{
-            completeSingle: false
-          }
+import VueDraggableResizable from 'vue-draggable-resizable';
+
+let width,height = 0;
+if (process.browser) {
+  width  = window.innerWidth || document.documentElement.clientWidth || 
+  document.body.clientWidth;
+  height = window.innerHeight|| document.documentElement.clientHeight|| 
+  document.body.clientHeight;
+}
+
+export default {
+  data() {
+    return {
+      tab: 'Script',
+      code: 'const A = 10',
+      editorLeft: width,
+      pageHeight: height,
+      cmOption: {
+        tabSize: 4,
+        styleActiveLine: true,
+        lineNumbers: true,
+        line: true,
+        foldGutter: true,
+        styleSelectedText: true,
+        mode: 'text/javascript',
+        keyMap: "sublime",
+        matchBrackets: true,
+        showCursorWhenSelecting: true,
+        theme: 'base16-dark',
+        extraKeys: { "Ctrl": "autocomplete" },
+        hintOptions:{
+          completeSingle: false
         }
       }
     }
+  },
+  computed: {
+    editorComputedWidth: function() {
+      return width - this.editorLeft;
+    }
+  },
+  methods:{
+    handleTab: function (event) {
+      if(this.editorComputedWidth == 0) {
+        this.editorLeft = width - 800;
+        this.code = 'const A =323 10';
+      } else {
+        this.tab = event;
+      }
+    },
+    updatePosition: function (event) {
+      this.editorLeft = event;
+    },
   }
+}
 </script>
 
 <style>
 .editor-panel {
   display:flex;
-  width:50%;
-  float:right;
+  height:100%;
 }
 
 .editor-panel-handle{
-  background:#35495e;
+  position: relative;
+  right: 35px;
+  margin-right:-35px;
   cursor: e-resize;
 }
 
@@ -86,35 +119,45 @@
   align-items: center;
   text-align: center;
 }
+
+.handle-ml, .handle-mr {
+  top: 200px;
+  margin-top: 0;
+
+  /*Had to do this because they use an inline style that toggles*/
+  display: block !important;
+  left: -35px;
+  height: calc(100% - 200px);
+  width:35px;
+  background:#2a3a4b;
+  border:none;
+  z-index:10;
+}
 .vue-codemirror {
-  height:100vh;
-  float:right;
-  width:1000px;
+  height:100%;
+  width:100%;
 }
 .CodeMirror {
   height:100%;
   width:100%;
   text-align:left;
 }
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+
+.CodeMirror-sizer {
+  width:100%;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.cm-s-base16-dark .CodeMirror-gutters {
+  background: #212D3B;
+  border-right: 0px;
 }
 
-.links {
-  padding-top: 15px;
+.cm-s-base16-dark .CodeMirror-linenumber {
+  color: white;
+  text-align:center;
+}
+
+.vdr{ 
+  border:none;
 }
 </style>
