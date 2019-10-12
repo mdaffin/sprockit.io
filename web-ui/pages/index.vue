@@ -15,15 +15,15 @@
           <div class="editor-panel-handle">
             <div
               class="editor-panel-handle-tab"
-              v-bind:class="{ isSelected: tab === 'Script' }"
+              :class="{ isSelected: tab === 'Script' }"
             >
-              <span v-on:click="handleTab('Script')">Script</span>
+              <span @click="handleTab('Script')">Script</span>
             </div>
             <div
               class="editor-panel-handle-tab"
-              v-bind:class="{ isSelected: tab === 'Console' }"
+              :class="{ isSelected: tab === 'Console' }"
             >
-              <span v-on:click="handleTab('Console')">Console</span>
+              <span @click="handleTab('Console')">Console</span>
             </div>
           </div>
           <codemirror v-model="code" :options="cmOption" />
@@ -34,10 +34,8 @@
 </template>
 
 <script>
-import VueDraggableResizable from "vue-draggable-resizable";
-
-let width,
-  height = 0;
+let width = 0;
+let height = 0;
 if (process.browser) {
   width =
     window.innerWidth ||
@@ -70,15 +68,15 @@ export default {
         theme: "base16-dark",
         extraKeys: { Ctrl: "autocomplete" },
         hintOptions: {
-          completeSingle: false
-        }
-      }
+          completeSingle: false,
+        },
+      },
     };
   },
   computed: {
     editorComputedWidth: function() {
       return width - this.editorLeft;
-    }
+    },
   },
   methods: {
     handleTab: function(event) {
@@ -90,8 +88,8 @@ export default {
     },
     updatePosition: function(event) {
       this.editorLeft = event;
-    }
-  }
+    },
+  },
 };
 </script>
 
