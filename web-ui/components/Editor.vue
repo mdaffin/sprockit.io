@@ -45,7 +45,6 @@ export default {
     return {
       tab: "Script",
       isResizing: false,
-      percentInPx: 0,
       mouseCurrentX: null,
       currentRelativeMousePosX: 0,
       clickRelativeMousePosX: 0,
@@ -68,73 +67,61 @@ export default {
       },
     };
   },
-  mounted: function() {
-    let windowWidth =
-      window.innerWidth ||
-      document.documentElement.clientWidth ||
-      document.body.clientWidth;
-    this.percentInPx = windowWidth / 100;
-    window.addEventListener("mousemove", e => this.resizeEditor(e));
-    window.addEventListener("click", this.stopDrag);
-    window.addEventListener("resize", () => this.updateWindowDimensions());
-    document.getElementById("editor-panel-handle").addEventListener("mousemove", this.relativeMousePosX);
-  },
-  beforeDestroy() {
-    window.removeEventListener("mousemove", e => this.resizeEditor(e));
-    window.removeEventListener("click", this.stopDrag);
-    window.removeEventListener("resize", () => this.updateWindowDimensions());
-  },
   methods: {
     handleTab(tab) {
       this.tab = tab;
     },
-    updateWindowDimensions() {
-      let windowWidth =
-        window.innerWidth ||
-        document.documentElement.clientWidth ||
-        document.body.clientWidth;
-      this.percentInPx = windowWidth / 100;
-    },
     startDrag() {
       this.isResizing = true;
       this.clickRelativeMousePosX = this.currentRelativeMousePosX;
+      window.addEventListener("mousemove", e => this.resizeEditor(e));
+      window.addEventListener("mouseup", this.stopDrag);
+      document
+        .getElementById("editor-panel-handle")
+        .addEventListener("mousemove", this.relativeMousePosX);
     },
     relativeMousePosX(e) {
       this.currentRelativeMousePosX = e.layerX;
     },
     stopDrag() {
       if (this.isResizing) {
-        let position = (this.mouseCurrentX + (35 - this.currentRelativeMousePosX)) / this.percentInPx;
+        let windowWidth =
+          window.innerWidth ||
+          document.documentElement.clientWidth ||
+          document.body.clientWidth;
+        let position =
+          (this.mouseCurrentX + (35 - this.currentRelativeMousePosX)) /
+          (windowWidth / 100);
         position = position < 100 ? position : 100;
         document.documentElement.style.setProperty(
           "--output-width",
           `${100 - position}%`,
         );
       }
+      window.removeEventListener("mousemove", e => this.resizeEditor(e));
+      window.removeEventListener("mouseup", this.stopDrag);
+      document
+        .getElementById("editor-panel-handle")
+        .removeEventListener("mousemove", this.relativeMousePosX);
       this.isResizing = false;
     },
     resizeEditor(e) {
       this.mouseCurrentX = e.clientX;
-      let x = e.clientX;
-      let diff = 0;
-      if (!this.editorResizePx) {
-        this.editorResizePx = x;
-      } else {
-        diff = x - this.editorResizePx;
-        this.editorResizePx = x;
-      }
-      let currentEditorWidth = getComputedStyle(
-        document.documentElement,
-        null,
-      ).getPropertyValue("--output-width");
+      let width = window.innerWidth - e.clientX;
+      let windowWidth =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth;
 
-      if (
-        this.isResizing &&
-        currentEditorWidth.replace("%", "") - diff / this.percentInPx > 0
-      )
+      if (width > window.innerWidth) {
+        width = window.innerWidth;
+      } else if (width < 0) {
+        width = 0;
+      }
+      if (this.isResizing)
         document.documentElement.style.setProperty(
           "--output-width",
-          `${currentEditorWidth.replace("%", "") - diff / this.percentInPx}%`,
+          `${width / (windowWidth / 100)}%`,
         );
     },
   },
