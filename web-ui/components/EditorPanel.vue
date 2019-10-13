@@ -64,7 +64,11 @@ export default {
       this.isResizing = false;
     },
     resizeEditor(e) {
-      let width = window.innerWidth - e.clientX;
+      let windowWidth =
+        window.innerWidth ||
+        document.documentElement.clientWidth ||
+        document.body.clientWidth;
+      let width = windowWidth - e.clientX;
 
       if (width > window.innerWidth) {
         width = window.innerWidth;
