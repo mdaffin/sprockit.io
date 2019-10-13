@@ -83,6 +83,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener("mousemove", (e) => this.resizeEditor(e));
     window.removeEventListener("click", this.stopDrag);
+    window.removeEventListener('resize', () => this.updateWindowDimensions());
   },
   methods: {
     handleTab(tab) {
@@ -96,8 +97,9 @@ export default {
       this.isResizing = true;
     },
     stopDrag() {
+      if(this.isResizing)
+        document.documentElement.style.setProperty('--output-width', `${100 - this.mouseCurrentX/this.percentInPx}%`);
       this.isResizing = false;
-      document.documentElement.style.setProperty('--output-width', `${100 - this.mouseCurrentX/this.percentInPx}%`);
     },
     resizeEditor(e) {
       this.mouseCurrentX = e.clientX;
