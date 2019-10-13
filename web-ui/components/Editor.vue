@@ -43,10 +43,7 @@ export default {
     ExecuteButton,
   },
   props: {
-    value: { 
-      type: String, 
-      default: "" 
-    },
+    value: { type: String, default: "" },
   },
   data() {
     return {
