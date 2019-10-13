@@ -99,6 +99,7 @@ export default {
   background: #151515;
   width: 100%;
 }
+
 .editor-panel-header {
   position: relative;
   right: 35px;
