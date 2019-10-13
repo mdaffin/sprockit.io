@@ -45,6 +45,9 @@ export default {
     proxy: true,
   },
   proxy: {
-    "/api/": "http://localhost:4000",
+    "/api/game/maze": {
+      target: "http://localhost:4000",
+      pathRewrite: { "^/api/game/maze": "" },
+    },
   },
 };

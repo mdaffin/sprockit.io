@@ -1,18 +1,33 @@
-use actix_web::{web, App, HttpRequest, HttpServer, Responder};
+use actix_web::{middleware::Logger, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use failure::Fail;
+use log::info;
+use std::io;
+use std::net::ToSocketAddrs;
+mod maze;
+use maze::Maze;
 
-fn greet(req: HttpRequest) -> impl Responder {
-    let name = req.match_info().get("name").unwrap_or("World");
-    format!("Hello {}!", &name)
+fn map(_: HttpRequest) -> impl Responder {
+    let maze = Maze::new(10);
+    HttpResponse::Ok().json(maze)
 }
 
 fn main() {
+    env_logger::init();
+
+    if let Err(err) = run("localhost:4000") {
+        for cause in Fail::iter_chain(&err) {
+            println!("{}: {}", cause.name().unwrap_or("Error"), cause);
+        }
+    }
+}
+
+pub fn run(addr: impl ToSocketAddrs) -> Result<(), io::Error> {
     HttpServer::new(|| {
         App::new()
-            .route("/api/", web::get().to(greet))
-            .route("/api/{name}", web::get().to(greet))
+            .wrap(Logger::default())
+            .route("/map", web::get().to(map))
     })
-    .bind("127.0.0.1:4000")
-    .expect("Can not bind to port 4000")
-    .run()
-    .unwrap();
+    .bind(addr)?
+    .run()?;
+    Ok(())
 }
