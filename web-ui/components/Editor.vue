@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="editor-panel">
+  <div class="editor-panel">
+    <div class="editor-panel-handle">
       <div
         class="editor-panel-tab"
         :class="{ 'is-selected': tab === 'Script' }"
@@ -110,6 +110,11 @@ export default {
 
 <style scoped>
 .editor-panel {
+  color: #fff;
+  background: #151515;
+}
+
+.editor-panel-handle {
   position: relative;
   right: 35px;
   margin-right: -35px;
