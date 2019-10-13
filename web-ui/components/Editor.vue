@@ -45,9 +45,6 @@ export default {
     return {
       tab: "Script",
       isResizing: false,
-      mouseCurrentX: null,
-      currentRelativeMousePosX: 0,
-      clickRelativeMousePosX: 0,
       cmOption: {
         tabSize: 4,
         styleActiveLine: true,
@@ -73,40 +70,15 @@ export default {
     },
     startDrag() {
       this.isResizing = true;
-      this.clickRelativeMousePosX = this.currentRelativeMousePosX;
       window.addEventListener("mousemove", e => this.resizeEditor(e));
       window.addEventListener("mouseup", this.stopDrag);
-      document
-        .getElementById("editor-panel-handle")
-        .addEventListener("mousemove", this.relativeMousePosX);
-    },
-    relativeMousePosX(e) {
-      this.currentRelativeMousePosX = e.layerX;
     },
     stopDrag() {
-      if (this.isResizing) {
-        let windowWidth =
-          window.innerWidth ||
-          document.documentElement.clientWidth ||
-          document.body.clientWidth;
-        let position =
-          (this.mouseCurrentX + (35 - this.currentRelativeMousePosX)) /
-          (windowWidth / 100);
-        position = position < 100 ? position : 100;
-        document.documentElement.style.setProperty(
-          "--output-width",
-          `${100 - position}%`,
-        );
-      }
       window.removeEventListener("mousemove", e => this.resizeEditor(e));
       window.removeEventListener("mouseup", this.stopDrag);
-      document
-        .getElementById("editor-panel-handle")
-        .removeEventListener("mousemove", this.relativeMousePosX);
       this.isResizing = false;
     },
     resizeEditor(e) {
-      this.mouseCurrentX = e.clientX;
       let width = window.innerWidth - e.clientX;
       let windowWidth =
         window.innerWidth ||
