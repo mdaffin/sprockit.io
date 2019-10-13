@@ -1,72 +1,57 @@
 <template>
   <div>
-    <div class="editor-panel">
+    <div class="editor-panel-header">
       <div
-        class="editor-panel-tab"
-        :class="{ 'is-selected': tab === 'Script' }"
+        class="editor-panel-header-tab"
+        :class="{ 'is-selected': currentTabComponent === 'Editor' }"
       >
-        <span @click="handleTab('Script')">Script</span>
+        <span @click="handleTab('Editor')">Editor</span>
       </div>
       <div
-        class="editor-panel-tab"
-        :class="{ 'is-selected': tab === 'Console' }"
+        class="editor-panel-header-tab"
+        :class="{ 'is-selected': currentTabComponent === 'Console' }"
       >
         <span @click="handleTab('Console')">Console</span>
       </div>
       <ExecuteButton @click="$emit('run')" />
-      <div id="editor-panel-handle" @mousedown="startDrag" />
+      <div id="editor-panel-header-handle" @mousedown="startDrag" />
     </div>
-    <client-only placeholder="Codemirror Loading...">
-      <codemirror
-        v-show="tab === 'Script'"
-        :class="{ 'block-highlight': isResizing }"
-        :value="value"
-        @input="$emit('input', $event)"
-        :options="cmOption"
-      />
-      <div class="output" id="output-area" v-show="tab === 'Console'">
-        <iframe id="output" />
-      </div>
-    </client-only>
+    <Editor
+      :class="{ 'block-highlight': isResizing }"
+      @input="$emit('input', $event)"
+      v-model="value" 
+      v-show="currentTabComponent === 'Editor'"
+    />
+    <Console
+      :class="{ 'block-highlight': isResizing }"
+      v-show="currentTabComponent === 'Console'"
+    />
   </div>
 </template>
 
 <script>
-import ExecuteButton from "~/components/EditorComponents/ExecuteButton";
+import ExecuteButton from "~/components/EditorPanelComponents/ExecuteButton";
+import Editor from "~/components/EditorPanelComponents/Editor";
+import Console from "~/components/EditorPanelComponents/Console";
 
 export default {
   components: {
     ExecuteButton,
+    Editor,
+    Console
   },
   props: {
     value: { type: String, default: "" },
   },
   data() {
     return {
-      tab: "Script",
       isResizing: false,
-      cmOption: {
-        tabSize: 4,
-        styleActiveLine: true,
-        lineNumbers: true,
-        line: true,
-        foldGutter: true,
-        styleSelectedText: true,
-        mode: "text/javascript",
-        keyMap: "sublime",
-        matchBrackets: true,
-        showCursorWhenSelecting: true,
-        theme: "base16-dark",
-        extraKeys: { Ctrl: "autocomplete" },
-        hintOptions: {
-          completeSingle: false,
-        },
-      },
+      currentTabComponent: 'Editor'
     };
   },
   methods: {
     handleTab(tab) {
-      this.tab = tab;
+      this.currentTabComponent = tab;
     },
     startDrag() {
       this.isResizing = true;
@@ -80,10 +65,6 @@ export default {
     },
     resizeEditor(e) {
       let width = window.innerWidth - e.clientX;
-      let windowWidth =
-        window.innerWidth ||
-        document.documentElement.clientWidth ||
-        document.body.clientWidth;
 
       if (width > window.innerWidth) {
         width = window.innerWidth;
@@ -93,7 +74,7 @@ export default {
       if (this.isResizing)
         document.documentElement.style.setProperty(
           "--output-width",
-          `${width / (windowWidth / 100)}%`,
+          `${width / ((width + e.clientX) / 100)}%`,
         );
     },
   },
@@ -109,14 +90,14 @@ export default {
 </style>
 
 <style scoped>
-.editor-panel {
+.editor-panel-header {
   position: relative;
   right: 35px;
   margin-right: -35px;
   cursor: e-resize;
 }
 
-.editor-panel-tab {
+.editor-panel-header-tab {
   width: 35px;
   height: 100px;
   background: #2979d3;
@@ -125,7 +106,7 @@ export default {
   cursor: pointer;
 }
 
-.editor-panel-tab span {
+.editor-panel-header-tab span {
   height: 35px;
   min-width: 100px;
   padding: 5px;
@@ -134,7 +115,7 @@ export default {
   transform: rotate(-90deg) translate(-100px, 0);
 }
 
-#editor-panel-handle {
+#editor-panel-header-handle {
   height: calc(100% - 235px);
   background-color: #2a3a4b;
 }

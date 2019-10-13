@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <Editor class="editor-container" v-model="code" @run="run" />
+    <EditorPanel class="editor-panel" v-model="code" @run="run" />
   </div>
 </template>
 
 <script>
-import Editor from "~/components/Editor.vue";
+import EditorPanel from "~/components/EditorPanel.vue";
 
 export default {
   components: {
-    Editor,
+    EditorPanel,
   },
   data() {
     return {
@@ -45,7 +45,7 @@ export default {
   grid-template-areas: "output editor";
 }
 
-.editor-container {
+.editor-panel {
   grid-area: editor;
   display: flex;
 }
