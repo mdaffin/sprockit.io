@@ -17,6 +17,7 @@
       <div id="editor-panel-header-handle" @mousedown="startDrag" />
     </div>
     <Editor
+      class="editor"
       :class="{ 'block-highlight': isResizing }"
       @input="$emit('input', $event)"
       v-model="value"
@@ -94,6 +95,10 @@ export default {
 </style>
 
 <style scoped>
+.editor {
+  background: #151515;
+  width: 100%;
+}
 .editor-panel-header {
   position: relative;
   right: 35px;
