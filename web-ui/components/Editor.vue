@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-panel">
     <div class="editor-panel-handle">
       <div
         class="editor-panel-handle-tab"
@@ -74,6 +74,11 @@ export default {
 </style>
 
 <style scoped>
+.editor-panel {
+  color: #fff;
+  background: #151515;
+}
+
 .editor-panel-handle {
   position: relative;
   right: 35px;
