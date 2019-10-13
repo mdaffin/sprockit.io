@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <EditorPanel class="editor-container" v-model="code" @run="run" />
+    <EditorPanel class="editor-panel" v-model="code" @run="run" />
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
   grid-template-areas: "output editor";
 }
 
-.editor-container {
+.editor-panel {
   grid-area: editor;
   display: flex;
 }
