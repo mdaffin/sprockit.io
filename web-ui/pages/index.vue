@@ -1,9 +1,6 @@
 <template>
   <div class="container">
-    <div class="output" id="output-area">
-      <iframe id="output" />
-    </div>
-    <Editor class="editor-panel" v-model="code" @run="run" />
+    <Editor class="editor-container" v-model="code" @run="run" />
   </div>
 </template>
 
@@ -37,23 +34,25 @@ export default {
 
 <style>
 :root {
-  --output-width: 40%;
+  --output-width: 30%;
 }
 
 .container {
   display: grid;
   height: 100vh;
   width: 100vw;
-  grid-template-columns: var(--output-width) 1fr;
+  grid-template-columns: 1fr var(--output-width);
   grid-template-areas: "output editor";
 }
 
-.editor-panel {
+.editor-container {
   grid-area: editor;
   display: flex;
 }
 
 .output {
   grid-area: output;
+  background: #151515;
+  width: 100%;
 }
 </style>
