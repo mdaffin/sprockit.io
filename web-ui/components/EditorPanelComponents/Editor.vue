@@ -1,11 +1,11 @@
 <template>
-    <client-only placeholder="Codemirror Loading...">
-      <codemirror
-        :value="value"
-        @input="$emit('input', $event)"
-        :options="cmOption"
-      />
-    </client-only>
+  <client-only placeholder="Codemirror Loading...">
+    <codemirror
+      :value="value"
+      @input="$emit('input', $event)"
+      :options="cmOption"
+    />
+  </client-only>
 </template>
 
 <script>
@@ -34,5 +34,5 @@ export default {
       },
     };
   },
-}
+};
 </script>

@@ -19,7 +19,7 @@
     <Editor
       :class="{ 'block-highlight': isResizing }"
       @input="$emit('input', $event)"
-      v-model="value" 
+      v-model="value"
       v-show="currentTabComponent === 'Editor'"
     />
     <Console
@@ -38,7 +38,7 @@ export default {
   components: {
     ExecuteButton,
     Editor,
-    Console
+    Console,
   },
   props: {
     value: { type: String, default: "" },
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       isResizing: false,
-      currentTabComponent: 'Editor'
+      currentTabComponent: "Editor",
     };
   },
   methods: {

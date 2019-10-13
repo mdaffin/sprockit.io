@@ -1,5 +1,7 @@
 <template>
-  <div @click="$emit('click')" class="executeButton">Run</div>
+  <div @click="$emit('click')" class="executeButton">
+    Run
+  </div>
 </template>
 
 <style scoped>
