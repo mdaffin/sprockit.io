@@ -16,16 +16,13 @@
       <ExecuteButton @click="$emit('run')" />
       <div id="editor-panel-header-handle" @mousedown="startDrag" />
     </div>
-    <Editor
-      class="editor"
+    <component 
+      class = "panel-content"
+      v-bind:is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
+      :console="console"
       @input="$emit('input', $event)"
       v-model="value"
-      v-show="currentTabComponent === 'Editor'"
-    />
-    <Console
-      :class="{ 'block-highlight': isResizing }"
-      v-show="currentTabComponent === 'Console'"
     />
   </div>
 </template>
@@ -43,6 +40,7 @@ export default {
   },
   props: {
     value: { type: String, default: "" },
+    console: { type: String, default: "" }
   },
   data() {
     return {
@@ -95,7 +93,8 @@ export default {
 </style>
 
 <style scoped>
-.editor {
+.panel-content {
+  color: white;
   background: #151515;
   width: 100%;
 }
