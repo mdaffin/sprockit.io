@@ -1,6 +1,5 @@
 use actix_web::{middleware::Logger, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use failure::Fail;
-use log::info;
 use std::io;
 use std::net::ToSocketAddrs;
 mod maze;
