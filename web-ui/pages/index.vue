@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <AppContainer class = "app-container" />
     <EditorPanel
       class="editor-panel"
       v-model="code"
@@ -11,10 +12,12 @@
 
 <script>
 import EditorPanel from "~/components/EditorPanel.vue";
+import AppContainer from "~/components/AppContainer.vue";
 
 export default {
   components: {
     EditorPanel,
+    AppContainer
   },
   mounted() {
     window.log = output => {
@@ -71,7 +74,7 @@ export default {
   height: 100vh;
   width: 100vw;
   grid-template-columns: 1fr var(--output-width);
-  grid-template-areas: "output editor";
+  grid-template-areas: "app editor";
 }
 
 .editor-panel {
@@ -79,10 +82,8 @@ export default {
   display: flex;
 }
 
-.output {
-  grid-area: output;
-  background: #151515;
-  width: 100%;
-  color: white;
+.app-container {
+  grid-area: app;
+  padding: 3rem calc(3vw + 35px) 3rem 3vw;
 }
 </style>

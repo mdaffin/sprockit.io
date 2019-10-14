@@ -20,7 +20,7 @@
       class="panel-content"
       :is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
-      :-current-key-="currentProp"
+      :[currentPropKey]="currentProp"
       @input="$emit('input', $event)"
     />
   </div>
@@ -48,7 +48,7 @@ export default {
     };
   },
   computed: {
-    currentKey: function() {
+    currentPropKey: function() {
       return this.currentTabComponent === "Editor" ? "value" : "console";
     },
     currentProp: function() {
