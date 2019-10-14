@@ -18,11 +18,10 @@
     </div>
     <component 
       class = "panel-content"
-      v-bind:is="currentTabComponent"
+      :is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
-      :console="console"
+      :[currentKey]="currentProp"
       @input="$emit('input', $event)"
-      v-model="value"
     />
   </div>
 </template>
@@ -45,8 +44,16 @@ export default {
   data() {
     return {
       isResizing: false,
-      currentTabComponent: "Editor",
+      currentTabComponent: "Editor"
     };
+  },
+  computed:{
+    currentKey: function () {
+      return this.currentTabComponent === "Editor" ? "value" : "console"
+    },
+    currentProp: function () {
+      return this.currentTabComponent === "Editor" ? this.value : this.console
+    }
   },
   methods: {
     handleTab(tab) {
