@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <EditorPanel class="editor-panel" v-model="code" @run="run" :console="console" />
+    <EditorPanel
+      class="editor-panel"
+      v-model="code"
+      @run="run"
+      :console="console"
+    />
   </div>
 </template>
 
@@ -18,8 +23,9 @@ export default {
   },
   data() {
     return {
-      code: "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\n",
-      console: ""
+      code:
+        "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\n",
+      console: "",
     };
   },
   methods: {
@@ -50,7 +56,7 @@ export default {
     },
     addToLog(output) {
       this.console += `${output}<br>`;
-    }
+    },
   },
 };
 </script>

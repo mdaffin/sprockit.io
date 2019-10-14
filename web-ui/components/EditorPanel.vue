@@ -16,11 +16,11 @@
       <ExecuteButton @click="$emit('run')" />
       <div id="editor-panel-header-handle" @mousedown="startDrag" />
     </div>
-    <component 
-      class = "panel-content"
+    <component
+      class="panel-content"
       :is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
-      :[currentKey]="currentProp"
+      :-current-key-="currentProp"
       @input="$emit('input', $event)"
     />
   </div>
@@ -39,21 +39,21 @@ export default {
   },
   props: {
     value: { type: String, default: "" },
-    console: { type: String, default: "" }
+    console: { type: String, default: "" },
   },
   data() {
     return {
       isResizing: false,
-      currentTabComponent: "Editor"
+      currentTabComponent: "Editor",
     };
   },
-  computed:{
-    currentKey: function () {
-      return this.currentTabComponent === "Editor" ? "value" : "console"
+  computed: {
+    currentKey: function() {
+      return this.currentTabComponent === "Editor" ? "value" : "console";
     },
-    currentProp: function () {
-      return this.currentTabComponent === "Editor" ? this.value : this.console
-    }
+    currentProp: function() {
+      return this.currentTabComponent === "Editor" ? this.value : this.console;
+    },
   },
   methods: {
     handleTab(tab) {

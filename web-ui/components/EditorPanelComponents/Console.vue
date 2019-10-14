@@ -5,7 +5,7 @@
 <script>
 export default {
   props: {
-    console: { type: String, default: "" }
+    console: { type: String, default: "" },
   },
-}
+};
 </script>
