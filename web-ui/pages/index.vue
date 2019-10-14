@@ -1,18 +1,15 @@
 <template>
   <div class="container">
-    <div class="output" id="output-area">
-      <iframe id="output" />
-    </div>
-    <Editor class="editor-panel" v-model="code" @run="run" />
+    <EditorPanel class="editor-panel" v-model="code" @run="run" />
   </div>
 </template>
 
 <script>
-import Editor from "~/components/Editor.vue";
+import EditorPanel from "~/components/EditorPanel.vue";
 
 export default {
   components: {
-    Editor,
+    EditorPanel,
   },
   data() {
     return {
@@ -37,14 +34,14 @@ export default {
 
 <style>
 :root {
-  --output-width: 40%;
+  --output-width: 30%;
 }
 
 .container {
   display: grid;
   height: 100vh;
   width: 100vw;
-  grid-template-columns: var(--output-width) 1fr;
+  grid-template-columns: 1fr var(--output-width);
   grid-template-areas: "output editor";
 }
 
@@ -55,5 +52,7 @@ export default {
 
 .output {
   grid-area: output;
+  background: #151515;
+  width: 100%;
 }
 </style>

@@ -11,5 +11,8 @@
   color: white;
   background: green;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
