@@ -20,7 +20,7 @@
       class="panel-content"
       :is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
-      :-current-prop-key-="currentProp"
+      :[currentPropKey]="currentProp"
       @input="$emit('input', $event)"
     />
   </div>
