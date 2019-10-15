@@ -8,7 +8,7 @@
         v-for="game in games"
         @click = setGameMode(game)
       >
-        <div class = "game-card-visual blue">
+        <div class = "game-card-visual gold">
 
         </div>
         <div>{{game}}</div>
@@ -65,8 +65,8 @@ export default {
   height:170px;
 }
 
-.blue {
-  background-color: #7CC1FE;
+.gold {
+  background-color: #C0B283;
 }
 </style>
 

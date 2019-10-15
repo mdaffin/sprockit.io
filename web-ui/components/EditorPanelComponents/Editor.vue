@@ -26,7 +26,7 @@ export default {
         keyMap: "sublime",
         matchBrackets: true,
         showCursorWhenSelecting: true,
-        theme: "base16-dark",
+        theme: "duotone-light",
         extraKeys: { Ctrl: "autocomplete" },
         hintOptions: {
           completeSingle: false,
@@ -36,3 +36,4 @@ export default {
   },
 };
 </script>
+

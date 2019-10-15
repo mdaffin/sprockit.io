@@ -84,7 +84,7 @@ export default {
       if (this.isResizing)
         document.documentElement.style.setProperty(
           "--output-width",
-          `${width / ((width + e.clientX) / 100)}%`,
+          `${(width) / ((width + e.clientX) / 100)}%`,
         );
     },
   },
@@ -101,23 +101,22 @@ export default {
 
 <style scoped>
 .panel-content {
-  color: white;
-  background: #151515;
+  color: #373737;
+  background: #faf8f5;
   width: 100%;
 }
 
 .editor-panel-header {
   position: relative;
-  right: 35px;
-  margin-right: -35px;
+  right:35px;
+  margin-right:-35px;
   cursor: e-resize;
 }
 
 .editor-panel-header-tab {
   width: 35px;
   height: 100px;
-  background: #2979d3;
-  color: white;
+  background: #DCD0C0;
   display: flex;
   cursor: pointer;
 }
@@ -133,11 +132,11 @@ export default {
 
 #editor-panel-header-handle {
   height: calc(100% - 235px);
-  background-color: #2a3a4b;
+  background-color: #F0F0F0;
 }
 
 .is-selected {
-  background: purple;
+  background: #C0B283;
 }
 
 .is-resizing {
