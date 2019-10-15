@@ -1,3 +1,4 @@
+use actix_http::error::ResponseError;
 use actix_web::{middleware::Logger, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use failure::Fail;
 use log::info;
@@ -8,46 +9,31 @@ use std::net::ToSocketAddrs;
 use std::sync::Mutex;
 use uuid::Uuid;
 
+mod error;
 mod maze;
+
+use error::ServiceError;
 use maze::Maze;
 
 type Sessions = web::Data<Mutex<HashMap<Uuid, Maze>>>;
 
-#[derive(Debug, Serialize)]
-struct ErrorResponse<'a> {
-    error: &'a str,
-    help: &'a str,
-}
-
 fn map(state: Sessions, req: HttpRequest) -> impl Responder {
     let token = match req.headers().get("x-token") {
         Some(t) => t,
-        None => return HttpResponse::BadRequest().json(ErrorResponse {
-                error: "missing session token",
-                help: "The token can be set with the header `X-TOKEN`Session tokens are obtained by sending a post request to /start",
-            }),
+        None => return ServiceError::MissingSessionToken.error_response(),
     };
     let token = match token.to_str() {
         Ok(t) => t,
-        Err(e) => return HttpResponse::BadRequest().json(ErrorResponse {
-                error: &format!("token is not a valid utf-8 string: {}", e),
-                help: "The token must be a valid utf-8 string. Session tokens are obtained by sending a post request to /start",
-            }),
+        Err(_) => return ServiceError::InvalidTokenUTF8.error_response(),
     };
     let token = match Uuid::parse_str(token) {
         Ok(t) => t,
-        Err(e) => return HttpResponse::BadRequest().json(ErrorResponse {
-                error: &format!("token is not a valid UUID: {}", e),
-                help: "The token must be a valid utf-8 string. Session tokens are obtained by sending a post request to /start",
-            }),
+        Err(_) => return ServiceError::InvalidTokenUUID.error_response(),
     };
     let sessions = state.lock().unwrap();
     let maze = match sessions.get(&token) {
         Some(map) => map,
-        None => return HttpResponse::NotFound().json(ErrorResponse {
-                error: &format!("session not found: {}", token),
-                help: "No session was found for the given token. Session tokens are obtained by sending a post request to /start",
-            }),
+        None => return ServiceError::SessionNotFound.error_response(),
     };
 
     HttpResponse::Ok().json(maze)
