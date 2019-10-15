@@ -1,13 +1,9 @@
 <template>
-  <div 
-    v-if="!gameState"
-  >
+  <div v-if="!gameState">
     Loading..... A css loader would be good
   </div>
-  <div
-    v-else
-  >
-    {{gameState}}
+  <div v-else>
+    {{ gameState }}
   </div>
 </template>
 
@@ -15,17 +11,19 @@
 export default {
   data() {
     return {
-      gameState: null
+      gameState: null,
     };
   },
-  mounted: function () {
+  mounted: function() {
     this.createGameSession();
   },
   methods: {
     async createGameSession() {
       //this.gameState = (await this.$axios.get("/api/game/maze")).data;
-      this.gameState = (await this.$axios.get("https://dsdsd.free.beeceptor.com/api/game/maze")).data;
-    }
-  }
-}
+      this.gameState = (await this.$axios.get(
+        "https://dsdsd.free.beeceptor.com/api/game/maze",
+      )).data;
+    },
+  },
+};
 </script>

@@ -1,23 +1,17 @@
 <template>
   <div>
-    <div 
-      class = "game-list"
-      v-if = "!selectedGame"
-    >
-      <div class = "game-card" 
-        v-for="game in games"
-        @click = setGameMode(game)
+    <div class="game-list" v-if="!selectedGame">
+      <div
+        class="game-card"
+        v-for="(game, index) in games"
+        @click="setGameMode(game)"
+        :key="index"
       >
-        <div class = "game-card-visual gold">
-
-        </div>
-        <div>{{game}}</div>
+        <div class="game-card-visual gold" />
+        <div>{{ game }}</div>
       </div>
     </div>
-    <GameManager 
-      :game="selectedGame"
-      v-else 
-    />
+    <GameManager :game="selectedGame" v-else />
   </div>
 </template>
 
@@ -26,23 +20,21 @@ import GameManager from "~/components/GameContainer/GameManager.vue";
 
 export default {
   components: {
-    GameManager
+    GameManager,
   },
   data() {
     return {
-      games: ['Maze'],
-      selectedGame: null
+      games: ["Maze"],
+      selectedGame: null,
     };
   },
-  mounted: function () {
-
-  },
+  mounted: function() {},
   methods: {
     setGameMode(Game) {
       this.selectedGame = Game;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -53,21 +45,19 @@ export default {
   gap: 2rem 2rem;
 }
 .game-card {
-  height:190px;
-  width:100%;
-  color:white;
-  display:flex;
+  height: 190px;
+  width: 100%;
+  color: white;
+  display: flex;
   flex-direction: column;
 }
 
 .game-card-visual {
   border-radius: 10px;
-  height:170px;
+  height: 170px;
 }
 
 .gold {
-  background-color: #C0B283;
+  background-color: #c0b283;
 }
 </style>
-
-

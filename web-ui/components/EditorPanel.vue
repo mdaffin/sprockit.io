@@ -20,7 +20,7 @@
       class="panel-content"
       :is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
-      :[currentPropKey]="currentProp"
+      :-current-prop-key-="currentProp"
       @input="$emit('input', $event)"
     />
   </div>
@@ -84,7 +84,7 @@ export default {
       if (this.isResizing)
         document.documentElement.style.setProperty(
           "--output-width",
-          `${(width) / ((width + e.clientX) / 100)}%`,
+          `${width / ((width + e.clientX) / 100)}%`,
         );
     },
   },
@@ -108,15 +108,15 @@ export default {
 
 .editor-panel-header {
   position: relative;
-  right:35px;
-  margin-right:-35px;
+  right: 35px;
+  margin-right: -35px;
   cursor: e-resize;
 }
 
 .editor-panel-header-tab {
   width: 35px;
   height: 100px;
-  background: #DCD0C0;
+  background: #dcd0c0;
   display: flex;
   cursor: pointer;
 }
@@ -132,11 +132,11 @@ export default {
 
 #editor-panel-header-handle {
   height: calc(100% - 235px);
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
 }
 
 .is-selected {
-  background: #C0B283;
+  background: #c0b283;
 }
 
 .is-resizing {

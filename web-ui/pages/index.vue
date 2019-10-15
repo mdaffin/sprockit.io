@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <AppContainer class = "app-container" />
+    <AppContainer class="app-container" />
     <EditorPanel
       class="editor-panel"
       v-model="code"
@@ -17,7 +17,7 @@ import AppContainer from "~/components/AppContainer.vue";
 export default {
   components: {
     EditorPanel,
-    AppContainer
+    AppContainer,
   },
   mounted() {
     window.log = output => {
