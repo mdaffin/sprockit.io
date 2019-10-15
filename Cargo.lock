@@ -1166,6 +1166,7 @@ dependencies = [
 name = "sprokit-game-maze"
 version = "0.1.0"
 dependencies = [
+ "actix-http 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-service 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "derive_more 0.15.0 (registry+https://github.com/rust-lang/crates.io-index)",
