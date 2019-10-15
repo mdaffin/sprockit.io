@@ -16,16 +16,12 @@
       <ExecuteButton @click="$emit('run')" />
       <div id="editor-panel-header-handle" @mousedown="startDrag" />
     </div>
-    <Editor
-      class="editor"
+    <component
+      class="panel-content"
+      :is="currentTabComponent"
       :class="{ 'block-highlight': isResizing }"
+      :[currentPropKey]="currentProp"
       @input="$emit('input', $event)"
-      v-model="value"
-      v-show="currentTabComponent === 'Editor'"
-    />
-    <Console
-      :class="{ 'block-highlight': isResizing }"
-      v-show="currentTabComponent === 'Console'"
     />
   </div>
 </template>
@@ -43,12 +39,21 @@ export default {
   },
   props: {
     value: { type: String, default: "" },
+    console: { type: String, default: "" },
   },
   data() {
     return {
       isResizing: false,
       currentTabComponent: "Editor",
     };
+  },
+  computed: {
+    currentPropKey: function() {
+      return this.currentTabComponent === "Editor" ? "value" : "console";
+    },
+    currentProp: function() {
+      return this.currentTabComponent === "Editor" ? this.value : this.console;
+    },
   },
   methods: {
     handleTab(tab) {
@@ -95,10 +100,12 @@ export default {
 </style>
 
 <style scoped>
-.editor {
-  background: #151515;
+.panel-content {
+  color: #373737;
+  background: #faf8f5;
   width: 100%;
 }
+
 .editor-panel-header {
   position: relative;
   right: 35px;
@@ -109,8 +116,7 @@ export default {
 .editor-panel-header-tab {
   width: 35px;
   height: 100px;
-  background: #2979d3;
-  color: white;
+  background: #dcd0c0;
   display: flex;
   cursor: pointer;
 }
@@ -126,11 +132,11 @@ export default {
 
 #editor-panel-header-handle {
   height: calc(100% - 235px);
-  background-color: #2a3a4b;
+  background-color: #f0f0f0;
 }
 
 .is-selected {
-  background: purple;
+  background: #c0b283;
 }
 
 .is-resizing {
