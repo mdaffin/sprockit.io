@@ -17,12 +17,14 @@ mod maze;
 use error::ServiceError;
 use maze::Maze;
 
-type Sessions = web::Data<Mutex<HashMap<Token, Maze>>>;
+type Sessions = web::Data<Mutex<HashMap<SessionToken, Maze>>>;
 
+/// A session token used to identify a currently running game. Users must supply this in the
+/// X-TOKEN header and can obtain it from the /start endpoint.
 #[derive(Debug, Serialize, Eq, PartialEq, Default, Display, Hash, Clone, Copy)]
-struct Token(uuid::Uuid);
+struct SessionToken(uuid::Uuid);
 
-impl FromRequest for Token {
+impl FromRequest for SessionToken {
     type Error = ServiceError;
     type Future = Result<Self, ServiceError>;
     type Config = ();
@@ -33,25 +35,35 @@ impl FromRequest for Token {
             .get("x-token")
             .ok_or(ServiceError::MissingSessionToken)?;
         let token = token.to_str().map_err(|_| ServiceError::InvalidTokenUTF8)?;
-        Ok(Token(
+        Ok(SessionToken(
             uuid::Uuid::parse_str(token).map_err(|_| ServiceError::InvalidTokenUUID)?,
         ))
     }
 }
 
-fn map(state: Sessions, token: Token) -> Result<HttpResponse, ServiceError> {
+impl SessionToken {
+    /// Creates a new randomly generated token.
+    fn new() -> Self {
+        SessionToken(uuid::Uuid::new_v4())
+    }
+}
+
+/// The /map endpoint. Returns the map associated with the session token passed into the request.
+fn map(state: Sessions, token: SessionToken) -> Result<HttpResponse, ServiceError> {
     let sessions = state.lock().unwrap();
     let maze = sessions.get(&token).ok_or(ServiceError::SessionNotFound)?;
     Ok(HttpResponse::Ok().json(maze))
 }
 
+/// The /start endpoint. Creates a new game session and returns the token used to idenfiy this
+/// session.
 fn start(state: Sessions, _: HttpRequest) -> impl Responder {
     #[derive(Debug, Serialize)]
     struct Response {
-        token: Token,
+        token: SessionToken,
     }
 
-    let token = Token(uuid::Uuid::new_v4());
+    let token = SessionToken::new();
     let maze = Maze::new(10);
 
     {
@@ -63,17 +75,9 @@ fn start(state: Sessions, _: HttpRequest) -> impl Responder {
     HttpResponse::Ok().json(Response { token })
 }
 
-fn main() {
-    env_logger::init();
-
-    if let Err(err) = run("localhost:4000") {
-        for cause in Fail::iter_chain(&err) {
-            println!("{}: {}", cause.name().unwrap_or("Error"), cause);
-        }
-    }
-}
-
-pub fn run(addr: impl ToSocketAddrs) -> Result<(), io::Error> {
+/// Creates a new HTTP server on `addr` and runs it. This method blocks until the server is
+/// shutdown.
+fn run_server(addr: impl ToSocketAddrs) -> Result<(), io::Error> {
     let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
 
     HttpServer::new(move || {
@@ -87,4 +91,14 @@ pub fn run(addr: impl ToSocketAddrs) -> Result<(), io::Error> {
     .bind(addr)?
     .run()?;
     Ok(())
+}
+
+fn main() {
+    env_logger::init();
+
+    if let Err(err) = run_server("localhost:4000") {
+        for cause in Fail::iter_chain(&err) {
+            println!("{}: {}", cause.name().unwrap_or("Error"), cause);
+        }
+    }
 }
