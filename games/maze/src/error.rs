@@ -2,7 +2,7 @@ use actix_web::{error::ResponseError, HttpResponse};
 use derive_more::Display;
 use serde::Serialize;
 
-#[derive(Debug, Display)]
+#[derive(Debug, Display, PartialEq)]
 pub enum ServiceError {
     #[display(fmt = "missing session token")]
     MissingSessionToken,

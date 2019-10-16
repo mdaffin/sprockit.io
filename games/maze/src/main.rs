@@ -102,3 +102,60 @@ fn main() {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    mod session_token {
+        use super::super::{ServiceError, SessionToken};
+        use actix_web::{
+            http::header::HeaderValue,
+            test::{block_on, TestRequest},
+            FromRequest,
+        };
+
+        #[test]
+        /// The session token should be extracted from the X-TOKEN header if present.
+        fn extracted_from_header() {
+            let uuid = uuid::Uuid::new_v4();
+            let (req, mut payload) =
+                TestRequest::with_header("X-TOKEN", format!("{}", uuid)).to_http_parts();
+
+            let token = block_on(SessionToken::from_request(&req, &mut payload));
+
+            assert_eq!(token, Ok(SessionToken(uuid)));
+        }
+
+        #[test]
+        /// If the token is missing it should return an error
+        fn missing_token() {
+            let (req, mut payload) = TestRequest::default().to_http_parts();
+
+            let token = block_on(SessionToken::from_request(&req, &mut payload));
+
+            assert_eq!(token, Err(ServiceError::MissingSessionToken));
+        }
+
+        #[test]
+        /// If the token is not valid utf8 it should return an error
+        fn none_utf8_token() {
+            let (req, mut payload) =
+                TestRequest::with_header("X-TOKEN", HeaderValue::from_bytes(&[245]).unwrap())
+                    .to_http_parts();
+
+            let token = block_on(SessionToken::from_request(&req, &mut payload));
+
+            assert_eq!(token, Err(ServiceError::InvalidTokenUTF8));
+        }
+
+        #[test]
+        /// If the token is not a valid uuid it should return an error
+        fn none_uuid_token() {
+            let (req, mut payload) =
+                TestRequest::with_header("X-TOKEN", "not-a-uuid").to_http_parts();
+
+            let token = block_on(SessionToken::from_request(&req, &mut payload));
+
+            assert_eq!(token, Err(ServiceError::InvalidTokenUUID));
+        }
+    }
+}
