@@ -1,5 +1,8 @@
-use actix_http::error::ResponseError;
-use actix_web::{middleware::Logger, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    dev::Payload, middleware::Logger, web, App, FromRequest, HttpRequest, HttpResponse, HttpServer,
+    Responder,
+};
+use derive_more::Display;
 use failure::Fail;
 use log::info;
 use serde::Serialize;
@@ -7,7 +10,6 @@ use std::collections::HashMap;
 use std::io;
 use std::net::ToSocketAddrs;
 use std::sync::Mutex;
-use uuid::Uuid;
 
 mod error;
 mod maze;
@@ -15,37 +17,41 @@ mod maze;
 use error::ServiceError;
 use maze::Maze;
 
-type Sessions = web::Data<Mutex<HashMap<Uuid, Maze>>>;
+type Sessions = web::Data<Mutex<HashMap<Token, Maze>>>;
 
-fn map(state: Sessions, req: HttpRequest) -> impl Responder {
-    let token = match req.headers().get("x-token") {
-        Some(t) => t,
-        None => return ServiceError::MissingSessionToken.error_response(),
-    };
-    let token = match token.to_str() {
-        Ok(t) => t,
-        Err(_) => return ServiceError::InvalidTokenUTF8.error_response(),
-    };
-    let token = match Uuid::parse_str(token) {
-        Ok(t) => t,
-        Err(_) => return ServiceError::InvalidTokenUUID.error_response(),
-    };
+#[derive(Debug, Serialize, Eq, PartialEq, Default, Display, Hash, Clone, Copy)]
+struct Token(uuid::Uuid);
+
+impl FromRequest for Token {
+    type Error = ServiceError;
+    type Future = Result<Self, ServiceError>;
+    type Config = ();
+
+    fn from_request(req: &HttpRequest, _pl: &mut Payload) -> Self::Future {
+        let token = req
+            .headers()
+            .get("x-token")
+            .ok_or(ServiceError::MissingSessionToken)?;
+        let token = token.to_str().map_err(|_| ServiceError::InvalidTokenUTF8)?;
+        Ok(Token(
+            uuid::Uuid::parse_str(token).map_err(|_| ServiceError::InvalidTokenUUID)?,
+        ))
+    }
+}
+
+fn map(state: Sessions, token: Token) -> Result<HttpResponse, ServiceError> {
     let sessions = state.lock().unwrap();
-    let maze = match sessions.get(&token) {
-        Some(map) => map,
-        None => return ServiceError::SessionNotFound.error_response(),
-    };
-
-    HttpResponse::Ok().json(maze)
+    let maze = sessions.get(&token).ok_or(ServiceError::SessionNotFound)?;
+    Ok(HttpResponse::Ok().json(maze))
 }
 
 fn start(state: Sessions, _: HttpRequest) -> impl Responder {
     #[derive(Debug, Serialize)]
     struct Response {
-        token: Uuid,
+        token: Token,
     }
 
-    let token = Uuid::new_v4();
+    let token = Token(uuid::Uuid::new_v4());
     let maze = Maze::new(10);
 
     {
