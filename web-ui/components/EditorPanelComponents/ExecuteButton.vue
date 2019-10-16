@@ -8,7 +8,6 @@
 .executeButton {
   height: 35px;
   width: 35px;
-  color: white;
   background: green;
   cursor: pointer;
   display: flex;

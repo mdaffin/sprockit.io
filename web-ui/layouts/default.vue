@@ -16,7 +16,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  background-image: radial-gradient(#47627f, #35495e);
+  background-color: #2b2b2b;
 }
 
 *,
