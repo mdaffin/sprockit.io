@@ -19,17 +19,31 @@ export default {
     EditorPanel,
     AppContainer,
   },
-  mounted() {
-    window.log = output => {
-      this.addToLog(output);
-    };
-  },
   data() {
     return {
       code:
-        "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\n",
-      console: "",
+        "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\nsdfsdf\n",
+      console: [],
     };
+  },
+  mounted() {
+    if (typeof(Storage) !== "undefined")
+      if(localStorage.code)
+        this.code = localStorage.code;
+      
+    window.log = (output, type) => {
+      this.addToLog(output, type);
+    };
+
+    let storeCode = (e) => {
+      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        if (typeof(Storage) !== "undefined")
+          localStorage.code = this.code;
+      }
+    };
+
+    document.addEventListener("keydown", storeCode);
   },
   methods: {
     run() {
@@ -44,11 +58,15 @@ export default {
       const doc = iframe.contentDocument;
 
       const logger = `
-        var console = {
+        let console = {
           log:(output) => {
-            parent.log(output);
+            parent.log(output, 'norm');
           }
         };
+
+        window.onerror = function(error, url, line) {
+          parent.log('Javascript Error : ' + error+ ' on line ' + (line - 10), 'error');
+        }
       `;
 
       doc.open();
@@ -57,8 +75,12 @@ export default {
       );
       doc.close();
     },
-    addToLog(output) {
-      this.console += `${output}<br>`;
+    addToLog(output, type) {
+      let consoleLine = {
+        output: output,
+        type: type
+      }
+      this.console.push(consoleLine);
     },
   },
 };

@@ -39,7 +39,7 @@ export default {
   },
   props: {
     value: { type: String, default: "" },
-    console: { type: String, default: "" },
+    console: { type: Array, default: [] },
   },
   data() {
     return {
@@ -48,10 +48,10 @@ export default {
     };
   },
   computed: {
-    currentPropKey: function() {
+    currentPropKey() {
       return this.currentTabComponent === "Editor" ? "value" : "console";
     },
-    currentProp: function() {
+    currentProp() {
       return this.currentTabComponent === "Editor" ? this.value : this.console;
     },
   },
@@ -101,7 +101,6 @@ export default {
 
 <style scoped>
 .panel-content {
-  color: #373737;
   background: #faf8f5;
   width: 100%;
 }
