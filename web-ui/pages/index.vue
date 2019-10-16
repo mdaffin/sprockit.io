@@ -27,19 +27,20 @@ export default {
     };
   },
   mounted() {
-    if (typeof(Storage) !== "undefined")
-      if(localStorage.code)
-        this.code = localStorage.code;
-      
+    if (typeof Storage !== "undefined")
+      if (localStorage.code) this.code = localStorage.code;
+
     window.log = (output, type) => {
       this.addToLog(output, type);
     };
 
-    let storeCode = (e) => {
-      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+    let storeCode = e => {
+      if (
+        e.keyCode == 83 &&
+        (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)
+      ) {
         e.preventDefault();
-        if (typeof(Storage) !== "undefined")
-          localStorage.code = this.code;
+        if (typeof Storage !== "undefined") localStorage.code = this.code;
       }
     };
 
@@ -78,8 +79,8 @@ export default {
     addToLog(output, type) {
       let consoleLine = {
         output: output,
-        type: type
-      }
+        type: type,
+      };
       this.console.push(consoleLine);
     },
   },

@@ -39,7 +39,12 @@ export default {
   },
   props: {
     value: { type: String, default: "" },
-    console: { type: Array, default: [] },
+    console: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {

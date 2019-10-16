@@ -5,7 +5,12 @@
 <script>
 export default {
   props: {
-    console: { type: Array, default: [] },
+    console: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   computed: {
     computedConsole() {
