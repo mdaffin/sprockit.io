@@ -1,4 +1,4 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import Console from "@/components/EditorPanelComponents/Console";
 
 describe("Console", () => {
