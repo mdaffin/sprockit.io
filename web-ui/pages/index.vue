@@ -40,7 +40,6 @@ export default {
     }
 
     window.log = (output, type) => {
-      alert(type);
       this.addToLog(output, type);
     };
 

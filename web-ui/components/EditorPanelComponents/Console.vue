@@ -1,16 +1,15 @@
 <template>
   <div class="output" id="console">
-    <div 
+    <div
       class="console-line"
       :class="[line.type]"
       v-for="(line, index) in this.console"
       :key="index"
     >
-      {{line.output}}
+      {{ line.output }}
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
