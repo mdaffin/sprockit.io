@@ -72,6 +72,10 @@ export default {
     stopDrag() {
       window.removeEventListener("mousemove", e => this.resizeEditor(e));
       window.removeEventListener("mouseup", this.stopDrag);
+      if (typeof Storage !== "undefined")
+        localStorage.editorWidth = window
+          .getComputedStyle(document.documentElement)
+          .getPropertyValue("--output-width");
       this.isResizing = false;
     },
     resizeEditor(e) {

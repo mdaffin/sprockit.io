@@ -27,11 +27,20 @@ export default {
     };
   },
   mounted() {
-    if (typeof Storage !== "undefined" && localStorage.code) {
-      this.code = localStorage.code;
+    if (typeof Storage !== "undefined") {
+      if (localStorage.code) {
+        this.code = localStorage.code;
+      }
+      if (localStorage.editorWidth) {
+        document.documentElement.style.setProperty(
+          "--output-width",
+          `${localStorage.editorWidth}`,
+        );
+      }
     }
 
     window.log = (output, type) => {
+      alert(type);
       this.addToLog(output, type);
     };
 
@@ -67,7 +76,7 @@ export default {
         };
 
         window.onerror = function(error, url, line) {
-          parent.log(\`Javascript Error : \${error} on line \${line - 10} error\`);
+          parent.log(\`Javascript Error : \${error} on line \${line - 10}\`, 'error');
         }
       `;
 
@@ -90,7 +99,7 @@ export default {
 
 <style>
 :root {
-  --output-width: 30%;
+  --output-width: 0%;
 }
 
 .container {

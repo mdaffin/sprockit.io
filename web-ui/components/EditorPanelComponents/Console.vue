@@ -1,6 +1,16 @@
 <template>
-  <div class="output" id="console" v-html="computedConsole" />
+  <div class="output" id="console">
+    <div 
+      class="console-line"
+      :class="[line.type]"
+      v-for="(line, index) in this.console"
+      :key="index"
+    >
+      {{line.output}}
+    </div>
+  </div>
 </template>
+
 
 <script>
 export default {
@@ -10,15 +20,6 @@ export default {
       default() {
         return [];
       },
-    },
-  },
-  computed: {
-    computedConsole() {
-      return this.console
-        .map(
-          line => `<div class="console-line ${line.type}">${line.output}</div>`,
-        )
-        .join();
     },
   },
 };
