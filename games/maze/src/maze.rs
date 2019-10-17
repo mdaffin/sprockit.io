@@ -78,4 +78,9 @@ mod tests {
         let maze = Maze::new(size);
         assert_eq!(maze.map.map.len(), size * size);
     }
+
+    #[test]
+    fn mazemap_serializes_to_a_2d_array() {
+        assert!(true);
+    }
 }
