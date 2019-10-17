@@ -53,7 +53,14 @@ export default {
 
       doc.open();
       doc.write(
-        unescape("%3Cscript%3E" + logger + this.code + "%3C/script%3E"),
+        unescape(
+          "%3Cscript%3E" +
+            logger +
+            "console.log(new Date(Date.now()).toLocaleTimeString());" +
+            this.code +
+            "console.log('\\n');" +
+            "%3C/script%3E",
+        ),
       );
       doc.close();
     },
