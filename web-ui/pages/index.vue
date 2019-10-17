@@ -22,29 +22,28 @@ export default {
   data() {
     return {
       code:
-        "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\nsdfsdf\n",
+        "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\n",
       console: [],
     };
   },
   mounted() {
-    if (typeof Storage !== "undefined")
-      if (localStorage.code) this.code = localStorage.code;
+    if (typeof Storage !== "undefined" && localStorage.code) {
+      this.code = localStorage.code;
+    }
 
     window.log = (output, type) => {
       this.addToLog(output, type);
     };
 
-    let storeCode = e => {
-      if (
-        e.keyCode == 83 &&
-        (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)
-      ) {
+    const saveCode = e => {
+      const modifierKey = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
+      if (e.keyCode == 83 && modifierKey) {
         e.preventDefault();
         if (typeof Storage !== "undefined") localStorage.code = this.code;
       }
     };
 
-    document.addEventListener("keydown", storeCode);
+    document.addEventListener("keydown", saveCode);
   },
   methods: {
     run() {
@@ -59,14 +58,14 @@ export default {
       const doc = iframe.contentDocument;
 
       const logger = `
-        let console = {
+        const console = {
           log:(output) => {
             parent.log(output, 'norm');
           }
         };
 
         window.onerror = function(error, url, line) {
-          parent.log('Javascript Error : ' + error+ ' on line ' + (line - 10), 'error');
+          parent.log(\`Javascript Error : \${error} on line \${line - 10} error\`);
         }
       `;
 
@@ -77,7 +76,7 @@ export default {
       doc.close();
     },
     addToLog(output, type) {
-      let consoleLine = {
+      const consoleLine = {
         output: output,
         type: type,
       };

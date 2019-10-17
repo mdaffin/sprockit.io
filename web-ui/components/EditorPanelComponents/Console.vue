@@ -14,11 +14,9 @@ export default {
   },
   computed: {
     computedConsole() {
-      let computedConsole = "";
-      this.console.forEach(line => {
-        computedConsole += `<div class = "console-line ${line.type}">${line.output}</div>`;
-      });
-      return computedConsole;
+      return this.console
+        .map(line => `<div class="console-line ${line.type}">${line.output}</div>`)
+        .join();
     },
   },
 };
@@ -27,9 +25,6 @@ export default {
 <style>
 .console-line {
   padding: 5px;
-}
-.console-line:nth-child(2n) {
-  background-color: #e6dfd7;
 }
 .error {
   color: red;
