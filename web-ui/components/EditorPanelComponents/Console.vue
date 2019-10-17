@@ -15,7 +15,9 @@ export default {
   computed: {
     computedConsole() {
       return this.console
-        .map(line => `<div class="console-line ${line.type}">${line.output}</div>`)
+        .map(
+          line => `<div class="console-line ${line.type}">${line.output}</div>`,
+        )
         .join();
     },
   },
