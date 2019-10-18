@@ -80,13 +80,7 @@ export default {
       `;
 
       doc.open();
-      doc.write(
-        unescape(
-          `%3Cscript%3E
-          ${logger}
-          %3C/script%3E`,
-        ),
-      );
+      doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
       doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
     },
