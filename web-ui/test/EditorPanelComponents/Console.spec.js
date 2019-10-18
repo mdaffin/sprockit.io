@@ -1,13 +1,16 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import Console from "@/components/EditorPanelComponents/Console";
 
 describe("Console", () => {
-  test("Displays console output when passed", () => {
-    const wrapper = shallowMount(Console);
-    wrapper.setData({ console: "This is some console output" });
+  test("Console output passed into the component is displayed to the user", () => {
+    const wrapper = mount(Console, {
+      propsData: {
+        console: [{ output: "This is some console output", type: "norm" }],
+      },
+    });
 
-    const content = wrapper.find("#console").text();
+    const content = wrapper.html();
 
-    expect(content).toEqual("This is some console output");
+    expect(content).toContain("This is some console output");
   });
 });
