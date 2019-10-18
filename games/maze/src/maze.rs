@@ -71,6 +71,7 @@ impl MazeMap {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json;
 
     #[test]
     fn creating_maze_with_size() {
@@ -81,6 +82,18 @@ mod tests {
 
     #[test]
     fn mazemap_serializes_to_a_2d_array() {
-        assert!(true);
+        let size = 2;
+        let mut map = MazeMap {
+            size,
+            map: vec![Cell::Blocked; size * size],
+        };
+
+        map.set(0, 0, Cell::Open);
+
+        let serialized = serde_json::to_string(&map).unwrap();
+        assert_eq!(
+            serialized.as_str(),
+            r#"[["Open","Blocked"],["Blocked","Blocked"]]"#
+        );
     }
 }
