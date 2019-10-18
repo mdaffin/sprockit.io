@@ -19,17 +19,41 @@ export default {
     EditorPanel,
     AppContainer,
   },
-  mounted() {
-    window.log = output => {
-      this.addToLog(output);
-    };
-  },
   data() {
     return {
       code:
         "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\n",
-      console: "",
+      console: [],
     };
+  },
+  mounted() {
+    if (typeof Storage !== "undefined") {
+      if (localStorage.code) {
+        this.code = localStorage.code;
+      }
+      if (localStorage.editorWidth) {
+        document.documentElement.style.setProperty(
+          "--output-width",
+          `${localStorage.editorWidth}`,
+        );
+      }
+    }
+
+    window.log = (output, type) => {
+      this.addToLog(output, type);
+    };
+
+    const saveCode = e => {
+      const modifierKey = navigator.platform.match("Mac")
+        ? e.metaKey
+        : e.ctrlKey;
+      if (e.keyCode == 83 && modifierKey) {
+        e.preventDefault();
+        if (typeof Storage !== "undefined") localStorage.code = this.code;
+      }
+    };
+
+    document.addEventListener("keydown", saveCode);
   },
   methods: {
     run() {
@@ -44,28 +68,34 @@ export default {
       const doc = iframe.contentDocument;
 
       const logger = `
-        var console = {
+        const console = {
           log:(output) => {
-            parent.log(output);
+            parent.log(output, 'norm');
           }
         };
+
+        window.onerror = function(error, url, line) {
+          parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
+        }
       `;
 
       doc.open();
       doc.write(
         unescape(
-          "%3Cscript%3E" +
-            logger +
-            "console.log(new Date(Date.now()).toLocaleTimeString());" +
-            this.code +
-            "console.log('\\n');" +
-            "%3C/script%3E",
+          `%3Cscript%3E
+          ${logger}
+          %3C/script%3E`,
         ),
       );
+      doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
     },
-    addToLog(output) {
-      this.console += `${output}<br>`;
+    addToLog(output, type) {
+      const consoleLine = {
+        output: output,
+        type: type,
+      };
+      this.console.push(consoleLine);
     },
   },
 };
