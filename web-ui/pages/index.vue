@@ -98,7 +98,7 @@ export default {
 
 <style>
 :root {
-  --output-width: 0%;
+  --output-width: 30%;
 }
 
 .container {
