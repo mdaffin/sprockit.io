@@ -75,21 +75,19 @@ export default {
         };
 
         window.onerror = function(error, url, line) {
-          parent.log(\`Javascript Error : \${error} on line \${line - 10}\`, 'error');
+          parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
         }
       `;
 
       doc.open();
       doc.write(
         unescape(
-          "%3Cscript%3E" +
-            logger +
-            "console.log(new Date(Date.now()).toLocaleTimeString());" +
-            this.code +
-            "console.log('\\n');" +
-            "%3C/script%3E",
+          `%3Cscript%3E
+          ${logger}
+          %3C/script%3E`,
         ),
       );
+      doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
     },
     addToLog(output, type) {
