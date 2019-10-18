@@ -1,11 +1,17 @@
+use serde::ser::{SerializeSeq, Serializer};
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Maze {
     player: Position,
     exit: Position,
+    map: MazeMap,
+}
+
+#[derive(Debug)]
+struct MazeMap {
     size: usize,
-    grid: Vec<Cell>,
+    map: Vec<Cell>,
 }
 
 #[derive(Debug, Copy, Clone, Serialize)]
@@ -25,8 +31,10 @@ impl Maze {
         let mut maze = Maze {
             player: Position { x: 0, y: 0 },
             exit: Position { x: size, y: 0 },
-            size,
-            grid: vec![Cell::Blocked; size * size],
+            map: MazeMap {
+                size,
+                map: vec![Cell::Blocked; size * size],
+            },
         };
 
         for x in 0..size {
@@ -37,7 +45,26 @@ impl Maze {
     }
 
     fn set(&mut self, x: usize, y: usize, cell: Cell) {
-        self.grid[self.size * y + x] = cell;
+        self.map.set(x, y, cell);
+    }
+}
+
+impl Serialize for MazeMap {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut seq = serializer.serialize_seq(Some(self.size))?;
+        for i in 0..self.size {
+            seq.serialize_element(&self.map[i..i + self.size])?;
+        }
+        seq.end()
+    }
+}
+
+impl MazeMap {
+    fn set(&mut self, x: usize, y: usize, cell: Cell) {
+        self.map[self.size * y + x] = cell;
     }
 }
 
@@ -49,6 +76,11 @@ mod tests {
     fn creating_maze_with_size() {
         let size = 10;
         let maze = Maze::new(size);
-        assert_eq!(maze.grid.len(), size * size);
+        assert_eq!(maze.map.map.len(), size * size);
+    }
+
+    #[test]
+    fn mazemap_serializes_to_a_2d_array() {
+        assert!(true);
     }
 }
