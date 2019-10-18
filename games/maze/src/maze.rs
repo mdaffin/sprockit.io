@@ -56,7 +56,7 @@ impl Serialize for MazeMap {
     {
         let mut seq = serializer.serialize_seq(Some(self.size))?;
         for i in 0..self.size {
-            seq.serialize_element(&self.map[i..i + self.size])?;
+            seq.serialize_element(&self.map[(i * self.size)..(i * self.size) + self.size])?;
         }
         seq.end()
     }
@@ -87,8 +87,8 @@ mod tests {
     /// The map maze should serialize to a 2d array instead of its internal representation.
     fn mazemap_serializes_to_a_2d_array() {
         let test_cases = [
-            (2, r#"[["Open","Blocked"],["Blocked","Blocked"]]"#),
-            (3, r#"[["Open","Blocked","Blocked"],["Blocked","Blocked","Blocked"],["Blocked","Blocked","Blocked"]]"#),
+            (3, r#"[["Open","Blocked","Blocked"],["Blocked","Open","Blocked"],["Blocked","Blocked","Blocked"]]"#),
+            (2, r#"[["Open","Blocked"],["Blocked","Open"]]"#),
         ];
         for &(size, expected) in test_cases.into_iter() {
             let mut map = MazeMap {
@@ -97,6 +97,7 @@ mod tests {
             };
 
             map.set(0, 0, Cell::Open);
+            map.set(1, 1, Cell::Open);
 
             let serialized = serde_json::to_string(&map).unwrap();
             assert_eq!(serialized.as_str(), expected);
