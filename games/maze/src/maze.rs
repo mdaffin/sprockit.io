@@ -56,7 +56,7 @@ impl Serialize for MazeMap {
     {
         let mut seq = serializer.serialize_seq(Some(self.size))?;
         for i in 0..self.size {
-            seq.serialize_element(&self.map[i..i + self.size])?;
+            seq.serialize_element(&self.map[(i * self.size)..(i * self.size) + self.size])?;
         }
         seq.end()
     }
@@ -71,16 +71,36 @@ impl MazeMap {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serde_json;
 
     #[test]
+    /// A new map gets created with a backing array of cells of size equal to a square of `size`
+    /// sides.
     fn creating_maze_with_size() {
-        let size = 10;
-        let maze = Maze::new(size);
-        assert_eq!(maze.map.map.len(), size * size);
+        for size in 1..100 {
+            let maze = Maze::new(size);
+            assert_eq!(maze.map.map.len(), size * size);
+        }
     }
 
     #[test]
+    /// The map maze should serialize to a 2d array instead of its internal representation.
     fn mazemap_serializes_to_a_2d_array() {
-        assert!(true);
+        let test_cases = [
+            (3, r#"[["Open","Blocked","Blocked"],["Blocked","Open","Blocked"],["Blocked","Blocked","Blocked"]]"#),
+            (2, r#"[["Open","Blocked"],["Blocked","Open"]]"#),
+        ];
+        for &(size, expected) in test_cases.into_iter() {
+            let mut map = MazeMap {
+                size,
+                map: vec![Cell::Blocked; size * size],
+            };
+
+            map.set(0, 0, Cell::Open);
+            map.set(1, 1, Cell::Open);
+
+            let serialized = serde_json::to_string(&map).unwrap();
+            assert_eq!(serialized.as_str(), expected);
+        }
     }
 }
