@@ -91,7 +91,6 @@ mod tests {
         map.set(0, 0, Cell::Open);
 
         let serialized = serde_json::to_string(&map).unwrap();
-        dbg!(&serialized);
         assert_eq!(
             serialized.as_str(),
             r#"[["Open","Blocked"],["Blocked","Blocked"]]"#
