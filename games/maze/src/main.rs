@@ -5,7 +5,7 @@ use actix_web::{
 use derive_more::Display;
 use failure::Fail;
 use log::info;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::io;
 use std::net::ToSocketAddrs;
@@ -21,7 +21,7 @@ type Sessions = web::Data<Mutex<HashMap<SessionToken, Maze>>>;
 
 /// A session token used to identify a currently running game. Users must supply this in the
 /// X-TOKEN header and can obtain it from the /start endpoint.
-#[derive(Debug, Serialize, Eq, PartialEq, Default, Display, Hash, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Default, Display, Hash, Clone, Copy)]
 struct SessionToken(uuid::Uuid);
 
 impl FromRequest for SessionToken {
@@ -57,7 +57,7 @@ fn map(state: Sessions, token: SessionToken) -> Result<HttpResponse, ServiceErro
 
 /// The /start endpoint. Creates a new game session and returns the token used to idenfiy this
 /// session.
-fn start(state: Sessions, _: HttpRequest) -> impl Responder {
+fn start(state: Sessions) -> impl Responder {
     #[derive(Debug, Serialize)]
     struct Response {
         token: SessionToken,
@@ -82,15 +82,19 @@ fn run_server(addr: impl ToSocketAddrs) -> Result<(), io::Error> {
 
     HttpServer::new(move || {
         App::new()
-            .register_data(sessions.clone())
             .wrap(Logger::default())
+            .register_data(sessions.clone())
             .data(web::JsonConfig::default().limit(4096))
-            .route("/map", web::get().to(map))
-            .route("/start", web::post().to(start))
+            .configure(routes)
     })
     .bind(addr)?
     .run()?;
     Ok(())
+}
+
+fn routes(cfg: &mut web::ServiceConfig) {
+    cfg.service(web::resource("/map").route(web::get().to(map)));
+    cfg.service(web::resource("/start").route(web::post().to(start)));
 }
 
 fn main() {
@@ -156,6 +160,36 @@ mod tests {
             let token = block_on(SessionToken::from_request(&req, &mut payload));
 
             assert_eq!(token, Err(ServiceError::InvalidTokenUUID));
+        }
+    }
+
+    mod start {
+        use super::super::{routes, SessionToken, Sessions};
+        use actix_web::{test, web, App};
+        use serde::Deserialize;
+        use std::collections::HashMap;
+        use std::sync::Mutex;
+
+        #[test]
+        /// Starting a new session adds the session to the store and returns the corrisponing token
+        fn new_session_stored_and_token_returned() {
+            #[derive(Debug, Deserialize)]
+            struct Response {
+                token: SessionToken,
+            }
+
+            let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
+            let mut app =
+                test::init_service(App::new().register_data(sessions.clone()).configure(routes));
+            let req = test::TestRequest::post().uri("/start").to_request();
+
+            let response: HashMap<String, SessionToken> = test::read_response_json(&mut app, req);
+
+            assert!(response.get("token").is_some());
+            assert_eq!(
+                response.get("token"),
+                sessions.lock().unwrap().keys().next()
+            );
         }
     }
 }
