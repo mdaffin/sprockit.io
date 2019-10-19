@@ -15,9 +15,8 @@ describe("Console", () => {
   });
 
   test("Output should be blank if none has been passed in yet", () => {
-    const wrapper = mount(Console);
-    const content = wrapper.find(".output");
+    const console = mount(Console);
 
-    expect(content.isEmpty()).toBeTruthy();
+    expect(console.isEmpty()).toBeTruthy();
   });
 });
