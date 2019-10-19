@@ -1,8 +1,8 @@
 import { mount } from "@vue/test-utils";
 import ExecuteButton from "@/components/EditorPanelComponents/ExecuteButton";
 
-describe("Console", () => {
-  test("Console output passed into the component is displayed to the user", () => {
+describe("ExecuteButton", () => {
+  test("Should emit a event with a click property", () => {
     const wrapper = mount(ExecuteButton);
     const button = wrapper.find(".executeButton");
 
