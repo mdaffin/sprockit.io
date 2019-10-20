@@ -2,8 +2,10 @@
   <div v-if="!gameState">
     Loading..... A css loader would be good
   </div>
-  <div v-else class="maze-game-ascii gold">
-    <pre>{{ mapMaze() }}</pre>
+  <div v-else>
+    <div class="maze-game-ascii">
+      <pre>{{ mapMaze() }}</pre>
+    </div>
   </div>
 </template>
 
@@ -174,12 +176,13 @@ export default {
 
 <style scoped>
 .maze-game-ascii {
-  border-radius: 10px;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .maze-game-ascii > pre {
+  border: solid 4px #373737;
   font-size: 2.25vw;
-  word-spacing: 0;
 }
 </style>
