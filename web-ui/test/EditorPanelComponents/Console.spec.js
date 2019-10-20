@@ -13,4 +13,10 @@ describe("Console", () => {
 
     expect(content).toContain("This is some console output");
   });
+
+  test("Output should be blank if none has been passed in yet", () => {
+    const console = mount(Console);
+
+    expect(console.isEmpty()).toBeTruthy();
+  });
 });
