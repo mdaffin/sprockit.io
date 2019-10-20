@@ -20,10 +20,10 @@ export default {
   methods: {
     async createGameSession() {
       this.gameViz = {
+        Blocked: "██",
+        Exit: "▒▒",
+        Open: "  ",
         Player: "⋐⋑",
-        Open: "░░",
-        Blocked: "▓▓",
-        Exit: "██",
       };
       //this.gameState = (await this.$axios.get("/api/game/maze")).data;
       this.gameState = {
@@ -177,6 +177,7 @@ export default {
 }
 .maze-game-ascii > pre {
   font-size: 2.25vw;
+  word-spacing: 0;
   margin: -5px 0;
 }
 </style>
