@@ -3,9 +3,7 @@
     Loading..... A css loader would be good
   </div>
   <div v-else class="maze-game-ascii gold">
-    <pre v-for="row in mapMaze()" :key="index">
-    {{ row }}
-    </pre>
+    <pre>{{ mapMaze() }}</pre>
   </div>
 </template>
 
@@ -22,10 +20,10 @@ export default {
   methods: {
     async createGameSession() {
       this.gameViz = {
-        Player: "@",
-        Open: "▁",
-        Blocked: "▒",
-        Exit: "█",
+        Player: "⋐⋑",
+        Open: "░░",
+        Blocked: "▓▓",
+        Exit: "██",
       };
       //this.gameState = (await this.$axios.get("/api/game/maze")).data;
       this.gameState = {
@@ -45,20 +43,8 @@ export default {
             "Open",
           ],
           [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
+            "Open",
+            "Open",
             "Blocked",
             "Blocked",
             "Blocked",
@@ -151,6 +137,18 @@ export default {
             "Blocked",
             "Blocked",
             "Blocked",
+          ],
+          [
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Blocked",
+            "Open",
           ],
         ],
       };
@@ -165,7 +163,7 @@ export default {
       map[playerY][playerX] = "Player";
       map[exitY][exitX] = "Exit";
 
-      return map.map(x => x.map(y => this.gameViz[y]).join(" "));
+      return map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
     },
   },
 };
