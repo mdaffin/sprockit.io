@@ -83,6 +83,7 @@ export default {
       doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
       doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
+      this.$store.commit("SET_RUN", true);
     },
     addToLog(output, type) {
       const consoleLine = {

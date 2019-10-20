@@ -1,10 +1,10 @@
 <template>
-  <div v-if="!gameState">
-    Loading..... A css loader would be good
+  <div v-if="!hasRun" class="maze-game-ascii">
+    <pre>{{ emptyMaze() }}</pre>
   </div>
   <div v-else>
     <div class="maze-game-ascii">
-      <pre>{{ mapMaze() }}</pre>
+      <pre>{{ getMaze() }}</pre>
     </div>
   </div>
 </template>
@@ -16,9 +16,6 @@ export default {
       gameState: null,
     };
   },
-  mounted: function() {
-    this.createGameSession();
-  },
   methods: {
     async createGameSession() {
       this.gameViz = {
@@ -28,137 +25,12 @@ export default {
         Player: "⋐⋑",
       };
       this.gameState = (await this.$axios.get("/api/game/maze/map", {
-        headers: { "X-TOKEN": "0d37d691-cfb1-4edf-8713-9450b329d498" },
+        headers: { "X-TOKEN": "5e017a67-2080-4a76-9f41-010cc1556e3a" },
       })).data;
-      /*
-      this.gameState = {
-        player: { x: 0, y: 0 },
-        exit: { x: 9, y: 0 },
-        map: [
-          [
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-          ],
-          [
-            "Open",
-            "Open",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Open",
-          ],
-        ],
-      };*/
     },
-    mapMaze() {
+    getMaze() {
+      this.createGameSession();
+
       const map = this.gameState.map;
       const [playerX, playerY] = [
         this.gameState.player.x,
@@ -169,6 +41,14 @@ export default {
       map[exitY][exitX] = "Exit";
 
       return map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
+    },
+    emptyMaze() {
+      return Array.from({ length: 10 }, x => " ".repeat(20)).join("\n");
+    },
+  },
+  computed: {
+    hasRun() {
+      return this.$store.state.run;
     },
   },
 };
