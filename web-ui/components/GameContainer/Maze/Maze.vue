@@ -178,6 +178,5 @@ export default {
 .maze-game-ascii > pre {
   font-size: 2.25vw;
   word-spacing: 0;
-  margin: -5px 0;
 }
 </style>
