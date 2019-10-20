@@ -25,7 +25,10 @@ export default {
         Open: "  ",
         Player: "⋐⋑",
       };
-      //this.gameState = (await this.$axios.get("/api/game/maze")).data;
+      this.gameState = (await this.$axios.get("/api/game/maze/map", {
+        headers: { "X-TOKEN": "0d37d691-cfb1-4edf-8713-9450b329d498" },
+      })).data;
+      /*
       this.gameState = {
         player: { x: 0, y: 0 },
         exit: { x: 9, y: 0 },
@@ -151,7 +154,7 @@ export default {
             "Open",
           ],
         ],
-      };
+      };*/
     },
     mapMaze() {
       const map = this.gameState.map;
