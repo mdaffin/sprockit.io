@@ -43,7 +43,7 @@ export default {
       return map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
     },
     emptyMaze() {
-      return Array.from({ length: 10 }, x => " ".repeat(20)).join("\n");
+      return Array.from({ length: 10 }, () => " ".repeat(20)).join("\n");
     },
   },
   computed: {
