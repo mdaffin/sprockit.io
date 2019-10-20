@@ -4,7 +4,7 @@
   </div>
   <div v-else class="maze-game-ascii gold">
     <pre v-for="row in mapMaze()" :key="index">
-      {{ row }}
+    {{ row }}
     </pre>
   </div>
 </template>
