@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-panel">
     <div class="editor-panel-header">
       <div
         class="editor-panel-header-tab"
@@ -87,20 +87,26 @@ export default {
 
       if (width > window.innerWidth) {
         width = window.innerWidth;
-      } else if (width < 0) {
-        width = 0;
       }
+
+      if (width > 35) {
+        width = `${width / ((width + e.clientX) / 100)}%`;
+      } else {
+        width = "35px";
+      }
+
       if (this.isResizing)
-        document.documentElement.style.setProperty(
-          "--output-width",
-          `${width / ((width + e.clientX) / 100)}%`,
-        );
+        document.documentElement.style.setProperty("--output-width", width);
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.editor-panel {
+  display: flex;
+}
+
 .CodeMirror,
 .vue-codemirror {
   height: 100%;
@@ -116,8 +122,6 @@ export default {
 
 .editor-panel-header {
   position: relative;
-  right: 35px;
-  margin-right: -35px;
   cursor: e-resize;
 }
 

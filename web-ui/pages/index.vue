@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <AppContainer class="app-container" />
+  <div class="app">
+    <GamePanel class="game-panel" />
     <EditorPanel
       class="editor-panel"
       v-model="code"
@@ -12,12 +12,12 @@
 
 <script>
 import EditorPanel from "~/components/EditorPanel.vue";
-import AppContainer from "~/components/AppContainer.vue";
+import GamePanel from "~/components/GamePanel.vue";
 
 export default {
   components: {
     EditorPanel,
-    AppContainer,
+    GamePanel,
   },
   data() {
     return {
@@ -95,26 +95,24 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 :root {
   --output-width: 30%;
 }
 
-.container {
+.app {
   display: grid;
   height: 100vh;
   width: 100vw;
   grid-template-columns: 1fr var(--output-width);
-  grid-template-areas: "app editor";
+  grid-template-areas: "game editor";
 }
 
 .editor-panel {
   grid-area: editor;
-  display: flex;
 }
 
-.app-container {
-  grid-area: app;
-  padding: 3rem calc(3vw + 35px) 3rem 3vw;
+.game-panel {
+  grid-area: game;
 }
 </style>
