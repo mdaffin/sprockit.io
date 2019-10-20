@@ -3,7 +3,7 @@
     Loading..... A css loader would be good
   </div>
   <div v-else class="maze-game-ascii gold">
-    <pre v-for="row in mapMaze()">
+    <pre v-for="row in mapMaze()" :key="index">
       {{ row }}
     </pre>
   </div>
@@ -163,7 +163,7 @@ export default {
       ];
       const [exitX, exitY] = [this.gameState.exit.x, this.gameState.exit.y];
       map[playerY][playerX] = "Player";
-      map[exitX][exitY] = "Exit";
+      map[exitY][exitX] = "Exit";
 
       return map.map(x => x.map(y => this.gameViz[y]).join(" "));
     },
