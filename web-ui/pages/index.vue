@@ -53,6 +53,7 @@ export default {
       }
     };
 
+    this.getToken();
     document.addEventListener("keydown", saveCode);
   },
   methods: {
@@ -91,6 +92,10 @@ export default {
         type: type,
       };
       this.console.push(consoleLine);
+    },
+    async getToken() {
+      const token = await this.$axios.post("/api/game/maze/start", "404");
+      this.$store.commit("SET_TOKEN", token.data.token);
     },
   },
 };

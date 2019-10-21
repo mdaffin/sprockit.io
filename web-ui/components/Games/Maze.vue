@@ -1,10 +1,10 @@
 <template>
   <div v-if="!hasRun" class="maze-game-ascii">
-    <pre>{{ emptyMaze() }}</pre>
+    <pre>{{ this.emptyMap }}</pre>
   </div>
   <div v-else>
     <div class="maze-game-ascii">
-      <pre>{{ getMaze() }}</pre>
+      <pre>{{ this.gameState.visualMap }}</pre>
     </div>
   </div>
 </template>
@@ -13,34 +13,39 @@
 export default {
   data() {
     return {
-      gameState: null,
-    };
-  },
-  methods: {
-    async createGameSession() {
-      this.gameViz = {
+      gameViz: {
         Blocked: "██",
         Exit: "▒▒",
         Open: "  ",
         Player: "⋐⋑",
-      };
-      this.gameState = (await this.$axios.get("/api/game/maze/map", {
-        headers: { "X-TOKEN": "5e017a67-2080-4a76-9f41-010cc1556e3a" },
-      })).data;
-    },
-    getMaze() {
-      this.createGameSession();
+      },
+      gameState: {
+        visualMap: this.emptyMaze(),
+      },
+      emptyMap: this.emptyMaze(),
+    };
+  },
+  updated() {
+    this.getMaze();
+  },
+  methods: {
+    async getMaze() {
+      const data = (await this.fetchMaze()).data;
+      const map = await data.map;
+      const [playerX, playerY] = await [data.player.x, data.player.y];
+      const [exitX, exitY] = await [data.exit.x, data.exit.y];
 
-      const map = this.gameState.map;
-      const [playerX, playerY] = [
-        this.gameState.player.x,
-        this.gameState.player.y,
-      ];
-      const [exitX, exitY] = [this.gameState.exit.x, this.gameState.exit.y];
       map[playerY][playerX] = "Player";
       map[exitY][exitX] = "Exit";
 
-      return map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
+      this.gameState.visualMap = await map
+        .map(x => x.map(y => this.gameViz[y]).join(""))
+        .join("\n");
+    },
+    async fetchMaze() {
+      return await this.$axios.get("/api/game/maze/map", {
+        headers: { "X-TOKEN": this.$store.state.token },
+      });
     },
     emptyMaze() {
       return Array.from({ length: 10 }, () => " ".repeat(20)).join("\n");
