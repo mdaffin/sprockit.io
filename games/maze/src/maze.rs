@@ -1,14 +1,14 @@
 use serde::ser::{SerializeSeq, Serializer};
 use serde::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Maze {
     player: Position,
     exit: Position,
     map: MazeMap,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct MazeMap {
     size: usize,
     map: Vec<Cell>,
