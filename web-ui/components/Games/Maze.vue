@@ -31,9 +31,9 @@ export default {
   methods: {
     async getMaze() {
       const data = (await this.fetchMaze()).data;
-      const map = await data.map;
-      const [playerX, playerY] = await [data.player.x, data.player.y];
-      const [exitX, exitY] = await [data.exit.x, data.exit.y];
+      const map = data.map;
+      const [playerX, playerY] = [data.player.x, data.player.y];
+      const [exitX, exitY] = [data.exit.x, data.exit.y];
 
       map[playerY][playerX] = "Player";
       map[exitY][exitX] = "Exit";
