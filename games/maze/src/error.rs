@@ -42,7 +42,7 @@ impl ResponseError for ServiceError {
                 })
             }
             ServiceError::SessionNotFound => {
-                HttpResponse::BadRequest().json(ErrorResponse{
+                HttpResponse::NotFound().json(ErrorResponse{
                     error: &format!("{}", self),
                     help: "No session was found for the given token. Session tokens are obtained by sending a post request to /start",
                 })
