@@ -1,10 +1,10 @@
 <template>
   <div v-if="!hasRun" class="maze-game-ascii">
-    <pre>{{ this.emptyMap }}</pre>
+    <pre>{{ this.map }}</pre>
   </div>
   <div v-else>
     <div class="maze-game-ascii">
-      <pre>{{ this.gameState.visualMap }}</pre>
+      <pre>{{ this.map }}</pre>
     </div>
   </div>
 </template>
@@ -20,21 +20,18 @@ export default {
         open: "  ",
         player: "⋐⋑",
       },
-      gameState: {
-        visualMap: this.emptyMaze(),
-      },
-      emptyMap: this.emptyMaze(),
+      map: this.emptyMaze(),
     };
   },
   props: {
     value: { type: String, default: "" },
   },
   updated() {
-    this.getMaze();
+    this.drawMaze();
   },
   methods: {
-    async getMaze() {
-      const data = (await this.fetchMaze()).data;
+    async drawMaze() {
+      const data = await this.$store.dispatch("FETCH_MAZE");
       const map = data.map;
       const [playerX, playerY] = [data.player.x, data.player.y];
       const [exitX, exitY] = [data.exit.x, data.exit.y];
@@ -42,22 +39,18 @@ export default {
       map[playerY][playerX] = "player";
       map[exitY][exitX] = "exit";
 
-      this.gameState.visualMap = map
-        .map(x => x.map(y => this.gameViz[y]).join(""))
-        .join("\n");
-    },
-    async fetchMaze() {
-      return await this.$axios.get("/api/game/maze/map", {
-        headers: { "X-TOKEN": this.$store.state.token },
-      });
+      this.map = map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
     },
     emptyMaze() {
-      return Array.from({ length: 10 }, () => " ".repeat(20)).join("\n");
+      return Array.from({ length: 10 }, () => "░▓".repeat(10)).join("\n");
     },
   },
   computed: {
     hasRun() {
       return this.$store.state.run;
+    },
+    mazeState() {
+      return this.$store.state.maze;
     },
   },
 };
