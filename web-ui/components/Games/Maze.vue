@@ -14,16 +14,20 @@ export default {
   data() {
     return {
       gameViz: {
-        Blocked: "██",
-        Exit: "▒▒",
-        Open: "  ",
-        Player: "⋐⋑",
+        blocked: "██",
+        exit: "▒▒",
+        hidden: "??",
+        open: "  ",
+        player: "⋐⋑",
       },
       gameState: {
         visualMap: this.emptyMaze(),
       },
       emptyMap: this.emptyMaze(),
     };
+  },
+  props: {
+    value: { type: String, default: "" },
   },
   updated() {
     this.getMaze();
@@ -35,10 +39,10 @@ export default {
       const [playerX, playerY] = [data.player.x, data.player.y];
       const [exitX, exitY] = [data.exit.x, data.exit.y];
 
-      map[playerY][playerX] = "Player";
-      map[exitY][exitX] = "Exit";
+      map[playerY][playerX] = "player";
+      map[exitY][exitX] = "exit";
 
-      this.gameState.visualMap = await map
+      this.gameState.visualMap = map
         .map(x => x.map(y => this.gameViz[y]).join(""))
         .join("\n");
     },
