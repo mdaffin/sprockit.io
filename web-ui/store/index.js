@@ -1,6 +1,6 @@
 export const state = () => ({
   maze: Array.from({ length: 10 }, () =>
-    Array.from({ length: 10 }, () => "empty"),
+    Array.from({ length: 10 }, () => "hidden"),
   ),
 });
 

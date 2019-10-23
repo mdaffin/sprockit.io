@@ -10,9 +10,8 @@ export default {
     return {
       gameViz: {
         blocked: "██",
-        empty: "░░",
+        hidden: "░░",
         exit: "▒▒",
-        hidden: "??",
         open: "  ",
         player: "⋐⋑",
       },
