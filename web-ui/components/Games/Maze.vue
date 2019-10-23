@@ -1,11 +1,6 @@
 <template>
-  <div v-if="!gameState">
-    Loading..... A css loader would be good
-  </div>
-  <div v-else>
-    <div class="maze-game-ascii">
-      <pre>{{ mapMaze() }}</pre>
-    </div>
+  <div class="maze-game-ascii">
+    <pre>{{ this.drawMaze }}</pre>
   </div>
 </template>
 
@@ -13,159 +8,20 @@
 export default {
   data() {
     return {
-      gameState: null,
+      gameViz: {
+        blocked: "██",
+        hidden: "░░",
+        exit: "▒▒",
+        open: "  ",
+        player: "⋐⋑",
+      },
     };
   },
-  mounted: function() {
-    this.createGameSession();
-  },
-  methods: {
-    async createGameSession() {
-      this.gameViz = {
-        Blocked: "██",
-        Exit: "▒▒",
-        Open: "  ",
-        Player: "⋐⋑",
-      };
-      //this.gameState = (await this.$axios.get("/api/game/maze")).data;
-      this.gameState = {
-        player: { x: 0, y: 0 },
-        exit: { x: 9, y: 0 },
-        map: [
-          [
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-            "Open",
-          ],
-          [
-            "Open",
-            "Open",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-          ],
-          [
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Blocked",
-            "Open",
-          ],
-        ],
-      };
-    },
-    mapMaze() {
-      const map = this.gameState.map;
-      const [playerX, playerY] = [
-        this.gameState.player.x,
-        this.gameState.player.y,
-      ];
-      const [exitX, exitY] = [this.gameState.exit.x, this.gameState.exit.y];
-      map[playerY][playerX] = "Player";
-      map[exitY][exitX] = "Exit";
-
-      return map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
+  computed: {
+    drawMaze() {
+      return this.$store.state.maze
+        .map(x => x.map(y => this.gameViz[y]).join(""))
+        .join("\n");
     },
   },
 };
