@@ -11,15 +11,7 @@ export const mutations = {
 };
 
 export const actions = {
-  async FETCH_TOKEN() {
-    const { data } = await this.$axios.post(
-      "/api/game/maze/start",
-      `${Date.now()}`,
-    );
-    return data.token;
-  },
-  async FETCH_MAZE({ commit, dispatch }) {
-    const token = await dispatch("FETCH_TOKEN");
+  async FETCH_MAZE({ commit, dispatch }, token) {
     const { data } = await this.$axios.get("/api/game/maze/map", {
       headers: { "X-TOKEN": token },
     });

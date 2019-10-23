@@ -55,10 +55,10 @@ export default {
     document.addEventListener("keydown", saveCode);
   },
   methods: {
-    run() {
-      this.$store.dispatch("FETCH_TOKEN");
+    async run() {
       const container = document.getElementById("editor-panel-header-handle");
       const iframe = document.createElement("IFRAME");
+      const token = await this.fetch_token();
       container.innerHTML = "";
       iframe.style.width = "0px";
       iframe.style.height = "0px";
@@ -83,7 +83,7 @@ export default {
       doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
       doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
-      this.$store.dispatch("FETCH_MAZE");
+      this.$store.dispatch("FETCH_MAZE", token);
     },
     addToLog(output, type) {
       const consoleLine = {
@@ -91,6 +91,13 @@ export default {
         type: type,
       };
       this.console.push(consoleLine);
+    },
+    async fetch_token() {
+      const { data } = await this.$axios.post(
+        "/api/game/maze/start",
+        `${Date.now()}`,
+      );
+      return data.token;
     },
   },
 };
