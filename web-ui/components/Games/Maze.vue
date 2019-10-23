@@ -17,13 +17,6 @@ export default {
       },
     };
   },
-  methods: {
-    emptyMap() {
-      return Array.from({ length: 10 }, () =>
-        Array.from({ length: 10 }, () => "empty"),
-      );
-    },
-  },
   computed: {
     drawMaze() {
       return this.$store.state.maze
