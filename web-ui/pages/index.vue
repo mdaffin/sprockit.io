@@ -52,12 +52,11 @@ export default {
         if (typeof Storage !== "undefined") localStorage.code = this.code;
       }
     };
-
-    this.$store.dispatch("FETCH_TOKEN");
     document.addEventListener("keydown", saveCode);
   },
   methods: {
     run() {
+      this.$store.dispatch("FETCH_TOKEN");
       const container = document.getElementById("editor-panel-header-handle");
       const iframe = document.createElement("IFRAME");
       container.innerHTML = "";
@@ -84,7 +83,7 @@ export default {
       doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
       doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
-      this.$store.commit("SET_RUN", true);
+      this.$store.dispatch("FETCH_MAZE");
     },
     addToLog(output, type) {
       const consoleLine = {

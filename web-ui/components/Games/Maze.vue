@@ -1,11 +1,6 @@
 <template>
-  <div v-if="!hasRun" class="maze-game-ascii">
-    <pre>{{ this.map }}</pre>
-  </div>
-  <div v-else>
-    <div class="maze-game-ascii">
-      <pre>{{ this.map }}</pre>
-    </div>
+  <div class="maze-game-ascii">
+    <pre>{{ this.drawMaze }}</pre>
   </div>
 </template>
 
@@ -15,42 +10,26 @@ export default {
     return {
       gameViz: {
         blocked: "██",
+        empty: "░░",
         exit: "▒▒",
         hidden: "??",
         open: "  ",
         player: "⋐⋑",
       },
-      map: this.emptyMaze(),
     };
   },
-  props: {
-    value: { type: String, default: "" },
-  },
-  updated() {
-    this.drawMaze();
-  },
   methods: {
-    async drawMaze() {
-      const data = await this.$store.dispatch("FETCH_MAZE");
-      const map = data.map;
-      const [playerX, playerY] = [data.player.x, data.player.y];
-      const [exitX, exitY] = [data.exit.x, data.exit.y];
-
-      map[playerY][playerX] = "player";
-      map[exitY][exitX] = "exit";
-
-      this.map = map.map(x => x.map(y => this.gameViz[y]).join("")).join("\n");
-    },
-    emptyMaze() {
-      return Array.from({ length: 10 }, () => "░▓".repeat(10)).join("\n");
+    emptyMap() {
+      return Array.from({ length: 10 }, () =>
+        Array.from({ length: 10 }, () => "empty"),
+      );
     },
   },
   computed: {
-    hasRun() {
-      return this.$store.state.run;
-    },
-    mazeState() {
-      return this.$store.state.maze;
+    drawMaze() {
+      return this.$store.state.maze
+        .map(x => x.map(y => this.gameViz[y]).join(""))
+        .join("\n");
     },
   },
 };

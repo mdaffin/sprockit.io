@@ -1,31 +1,29 @@
 export const state = () => ({
-  run: false,
-  token: "",
-  maze: {},
+  maze: Array.from({ length: 10 }, () =>
+    Array.from({ length: 10 }, () => "empty"),
+  ),
 });
 
 export const mutations = {
-  SET_RUN(state, bool) {
-    state.run = bool;
-  },
-  SET_TOKEN(state, token) {
-    state.token = token;
-  },
   SET_MAZE(state, maze) {
     state.maze = maze;
   },
 };
 
 export const actions = {
-  async FETCH_TOKEN({ commit }) {
-    const { data } = await this.$axios.post("/api/game/maze/start", "404");
-    commit("SET_TOKEN", data.token);
+  async FETCH_TOKEN() {
+    const { data } = await this.$axios.post(
+      "/api/game/maze/start",
+      `${Date.now()}`,
+    );
+    return data.token;
   },
-  async FETCH_MAZE({ commit, state }) {
+  async FETCH_MAZE({ commit, dispatch }) {
+    const token = await dispatch("FETCH_TOKEN");
     const { data } = await this.$axios.get("/api/game/maze/map", {
-      headers: { "X-TOKEN": state.token },
+      headers: { "X-TOKEN": token },
     });
-    commit("SET_MAZE", data);
+    commit("SET_MAZE", data.map);
     return data;
   },
 };
