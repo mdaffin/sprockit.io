@@ -9,6 +9,7 @@ use std::net::ToSocketAddrs;
 use std::sync::Mutex;
 
 mod map;
+mod move_player;
 mod start;
 
 type Sessions = web::Data<Mutex<HashMap<SessionToken, Maze>>>;
@@ -22,6 +23,7 @@ pub struct SessionToken(uuid::Uuid);
 fn routes(cfg: &mut web::ServiceConfig) {
     cfg.service(web::resource("/map").route(web::get().to(map::map)));
     cfg.service(web::resource("/start").route(web::post().to(start::start)));
+    cfg.service(web::resource("/move/{direction}").route(web::post().to(move_player::move_player)));
 }
 
 /// Creates a new HTTP server on `addr` and runs it. This method blocks until the server is
