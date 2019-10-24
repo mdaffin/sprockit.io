@@ -1,5 +1,6 @@
 use serde::ser::{SerializeSeq, Serializer};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
+use std::fmt;
 
 #[derive(Debug, Serialize, Clone)]
 pub struct Maze {
@@ -38,24 +39,77 @@ pub enum TileType {
     Open,
 }
 
+#[derive(Debug, Copy, Clone, Deserialize, Serialize, PartialEq)]
+pub enum Direction {
+    #[serde(rename = "up")]
+    Up,
+    #[serde(rename = "down")]
+    Down,
+    #[serde(rename = "left")]
+    Left,
+    #[serde(rename = "right")]
+    Right,
+}
+
 impl Maze {
     pub fn new(size: usize) -> Self {
         let mut maze = Maze {
             player: Position { x: 0, y: 0 },
             exit: Position { x: size - 1, y: 0 },
-            map: MazeMap {
-                size,
-                map: vec![Tile::blocked(); size * size],
-            },
+            map: MazeMap::random(size),
         };
 
         for x in 0..size {
-            maze.set(x, 0, Tile::open())
+            maze.map.set(x, 0, Tile::open())
         }
 
         maze.reveal_around_player();
 
         maze
+    }
+
+    #[cfg(test)]
+    pub fn from_slice_with_player_at(x: usize, y: usize, map: &[TileType]) -> Self {
+        let map = MazeMap::from_slice(map);
+        let mut maze = Maze {
+            player: Position { x, y },
+            exit: Position {
+                x: map.size() - 1,
+                y: map.size() - 1,
+            },
+            map,
+        };
+
+        maze.reveal_around_player();
+        maze
+    }
+
+    pub fn move_player(&mut self, direction: Direction) {
+        use Direction::*;
+
+        let (x, y) = match dbg!(direction) {
+            Up => (self.player.x as i32, self.player.y as i32 - 1),
+            Down => (self.player.x as i32, self.player.y as i32 + 1),
+            Left => (self.player.x as i32 - 1, self.player.y as i32),
+            Right => (self.player.x as i32 + 1, self.player.y as i32),
+        };
+
+        if x >= 0
+            && y >= 0
+            && (x as usize) < self.map.size
+            && (y as usize) < self.map.size
+            && self.map.get(x as usize, y as usize).tile_type == TileType::Open
+        {
+            self.player = Position {
+                x: x as usize,
+                y: y as usize,
+            };
+        }
+    }
+
+    #[cfg(test)]
+    pub fn player(&self) -> Position {
+        self.player
     }
 
     fn reveal_around_player(&mut self) {
@@ -73,9 +127,56 @@ impl Maze {
             self.map.reveal(self.player.x, self.player.y + 1);
         }
     }
+}
+
+impl MazeMap {
+    pub fn random(size: usize) -> Self {
+        MazeMap {
+            size,
+            map: vec![Tile::blocked(); size * size],
+        }
+    }
+
+    #[cfg(test)]
+    pub fn from_slice(map: &[TileType]) -> Self {
+        let map: Vec<_> = map
+            .into_iter()
+            .map(|&tile_type| Tile {
+                tile_type,
+                visibility: TileVisibility::Hidden,
+            })
+            .collect();
+
+        let size = (map.len() as f64).sqrt() as usize;
+        assert_eq!(map.len(), size * size);
+
+        MazeMap {
+            size,
+            map: Vec::from(map),
+        }
+    }
+
+    #[cfg(test)]
+    pub fn size(&self) -> usize {
+        self.size
+    }
+
+    fn to_index(&self, x: usize, y: usize) -> usize {
+        self.size * y + x
+    }
+
+    fn reveal(&mut self, x: usize, y: usize) {
+        let i = self.to_index(x, y);
+        self.map[i].reveal();
+    }
 
     fn set(&mut self, x: usize, y: usize, cell: Tile) {
-        self.map.set(x, y, cell);
+        let i = self.to_index(x, y);
+        self.map[i] = cell;
+    }
+
+    fn get(&mut self, x: usize, y: usize) -> Tile {
+        self.map[self.to_index(x, y)]
     }
 }
 
@@ -131,19 +232,19 @@ impl Serialize for Tile {
     }
 }
 
-impl MazeMap {
-    fn to_index(&self, x: usize, y: usize) -> usize {
-        self.size * y + x
-    }
-
-    fn reveal(&mut self, x: usize, y: usize) {
-        let i = self.to_index(x, y);
-        self.map[i].reveal();
-    }
-
-    fn set(&mut self, x: usize, y: usize, cell: Tile) {
-        let i = self.to_index(x, y);
-        self.map[i] = cell;
+impl fmt::Display for Direction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        use Direction::*;
+        write!(
+            f,
+            "{}",
+            match self {
+                Up => "up",
+                Down => "down",
+                Left => "left",
+                Right => "right",
+            }
+        )
     }
 }
 
