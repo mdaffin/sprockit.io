@@ -20,11 +20,10 @@ pub fn move_player(
 #[cfg(test)]
 mod tests {
     use super::{super::routes, SessionToken, Sessions};
-    use crate::maze::{Direction, Maze, TileType};
+    use crate::maze::{Direction, Maze, Tile};
     use actix_web::{test, web, App};
     use std::collections::HashMap;
     use std::sync::Mutex;
-    use TileType::{Blocked, Open};
 
     mod move_player_with {
         use super::*;
@@ -81,18 +80,26 @@ mod tests {
         }
 
         fn test_open(direction: Direction, x: usize, y: usize) {
-            test(direction, 1, 1, x, y, &[Open; 3 * 3])
+            test(direction, 1, 1, x, y, &[Tile::open(); 3 * 3])
         }
 
         fn test_blocked(direction: Direction) {
             let map = &[
-                Blocked, Blocked, Blocked, Blocked, Open, Blocked, Blocked, Blocked, Blocked,
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::open(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
             ];
             test(direction, 1, 1, 1, 1, map)
         }
 
         fn test_edge(direction: Direction) {
-            test(direction, 0, 0, 0, 0, &[Open])
+            test(direction, 0, 0, 0, 0, &[Tile::open()])
         }
 
         fn test(
@@ -101,7 +108,7 @@ mod tests {
             start_y: usize,
             end_x: usize,
             end_y: usize,
-            map: &[TileType],
+            map: &[Tile],
         ) {
             let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
             let token = SessionToken::new();

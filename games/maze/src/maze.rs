@@ -28,13 +28,13 @@ pub struct Tile {
 }
 
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]
-pub enum TileVisibility {
+enum TileVisibility {
     Hidden,
     Revealed,
 }
 
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]
-pub enum TileType {
+enum TileType {
     Blocked,
     Open,
 }
@@ -69,7 +69,7 @@ impl Maze {
     }
 
     #[cfg(test)]
-    pub fn from_slice_with_player_at(x: usize, y: usize, map: &[TileType]) -> Self {
+    pub fn from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Self {
         let map = MazeMap::from_slice(map);
         let mut maze = Maze {
             player: Position { x, y },
@@ -138,15 +138,7 @@ impl MazeMap {
     }
 
     #[cfg(test)]
-    pub fn from_slice(map: &[TileType]) -> Self {
-        let map: Vec<_> = map
-            .into_iter()
-            .map(|&tile_type| Tile {
-                tile_type,
-                visibility: TileVisibility::Hidden,
-            })
-            .collect();
-
+    pub fn from_slice(map: &[Tile]) -> Self {
         let size = (map.len() as f64).sqrt() as usize;
         assert_eq!(map.len(), size * size);
 
@@ -187,6 +179,7 @@ impl Tile {
             visibility: TileVisibility::Hidden,
         }
     }
+
     pub fn blocked() -> Self {
         Tile {
             tile_type: TileType::Blocked,
