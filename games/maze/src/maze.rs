@@ -191,7 +191,7 @@ impl Tile {
         self.visibility = TileVisibility::Revealed
     }
 
-    pub fn is_visible(self) -> bool {
+    pub fn is_revealed(self) -> bool {
         self.visibility == TileVisibility::Revealed
     }
 }
@@ -214,7 +214,7 @@ impl Serialize for Tile {
     where
         S: Serializer,
     {
-        if self.is_visible() {
+        if self.is_revealed() {
             match self.tile_type {
                 TileType::Open => serializer.serialize_str("open"),
                 TileType::Blocked => serializer.serialize_str("blocked"),
