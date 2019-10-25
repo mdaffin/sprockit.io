@@ -105,6 +105,8 @@ impl Maze {
                 y: y as usize,
             };
         }
+
+        self.reveal_around_player();
     }
 
     #[cfg(test)]
