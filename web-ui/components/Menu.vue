@@ -4,9 +4,6 @@
       <h1>Sprockit.io</h1>
     </div>
     <div class="button-group">
-      <HeaderButton>Home</HeaderButton>
-    </div>
-    <div class="button-group">
       <HeaderButton @click="$emit('run')">
         <span>Run</span>
       </HeaderButton>
