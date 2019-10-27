@@ -20,7 +20,8 @@ pub fn move_player(
 #[cfg(test)]
 mod tests {
     use super::{super::routes, SessionToken, Sessions};
-    use crate::maze::{Direction, Maze, Tile};
+    use crate::maze::tests::maze_from_slice_with_player_at;
+    use crate::maze::{Direction, Tile};
     use actix_web::{test, web, App};
     use std::collections::HashMap;
     use std::sync::Mutex;
@@ -112,7 +113,7 @@ mod tests {
         ) {
             let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
             let token = SessionToken::new();
-            let maze = Maze::from_slice_with_player_at(start_x, start_y, map);
+            let maze = maze_from_slice_with_player_at(start_x, start_y, map);
 
             {
                 let mut sessions = sessions.lock().unwrap();

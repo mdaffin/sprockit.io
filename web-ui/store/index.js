@@ -15,7 +15,7 @@ export const actions = {
     const { data } = await this.$axios.get("/api/game/maze/map", {
       headers: { "X-TOKEN": token },
     });
-    commit("SET_MAZE", data.map);
+    commit("SET_MAZE", data);
     return data;
   },
 };
