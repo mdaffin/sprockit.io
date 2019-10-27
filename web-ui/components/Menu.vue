@@ -7,6 +7,12 @@
       <HeaderButton @click="$emit('run')">
         <span>Run</span>
       </HeaderButton>
+      <HeaderButton
+        class="clear-button"
+        @click="$store.commit('console/clear')"
+      >
+        <span>Clear</span>
+      </HeaderButton>
     </div>
   </header>
 </template>
