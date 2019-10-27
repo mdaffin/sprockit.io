@@ -14,13 +14,28 @@ describe("Console", () => {
     return { localVue, store };
   }
 
-  test("Console output passed into the component is displayed to the user", () => {
-    const consoleComponent = mount(
-      Console,
-      createStore([{ type: "norm", output: "This is some console output" }]),
-    );
-    expect(consoleComponent.html()).toContain("This is some console output");
-  });
+  test.each([
+    { output: "This is some console output" },
+    { type: "error", output: "This is an error" },
+    { output: "This is some other output" },
+    { type: "error", output: "This is another error" },
+  ])(
+    "Console output passed into the component is displayed to the user",
+    line => {
+      const consoleComponent = mount(Console, createStore([line]));
+      expect(consoleComponent.html()).toContain(line.output);
+    },
+  );
+
+  test.each([{ type: "error", output: "This is an error" }])(
+    "Console errors add the error class",
+    line => {
+      const consoleComponent = mount(Console, createStore([line]));
+      expect(consoleComponent.find(".console-line").classes()).toContain(
+        "error",
+      );
+    },
+  );
 
   test("Output should be blank if none has been passed in yet", () => {
     const consoleComponent = mount(Console, createStore([]));
