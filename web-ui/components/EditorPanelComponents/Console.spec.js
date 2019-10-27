@@ -1,19 +1,8 @@
 import { mount } from "@vue/test-utils";
 import Console from "@/components/EditorPanelComponents/Console";
-import Vuex from "vuex";
-import { createLocalVue } from "@vue/test-utils";
-import { mutations } from "@/store/console";
+import { createStore } from "@/tests/utils.js";
 
 describe("Console", () => {
-  function createStore(lines) {
-    const localVue = createLocalVue();
-    localVue.use(Vuex);
-    const store = new Vuex.Store({
-      modules: { console: { state: { lines }, mutations } },
-    });
-    return { localVue, store };
-  }
-
   test.each([
     { output: "This is some console output" },
     { type: "error", output: "This is an error" },
