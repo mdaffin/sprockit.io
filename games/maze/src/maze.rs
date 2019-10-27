@@ -2,15 +2,10 @@ use serde::ser::{SerializeSeq, Serializer};
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Clone)]
 pub struct Maze {
     player: Position,
     exit: Position,
-    map: MazeMap,
-}
-
-#[derive(Debug, Clone)]
-struct MazeMap {
     size: usize,
     map: Vec<Tile>,
 }
@@ -55,104 +50,22 @@ impl Maze {
     pub fn new(size: usize) -> Self {
         let mut maze = Maze {
             player: Position { x: 0, y: 0 },
-            exit: Position { x: size - 1, y: 0 },
-            map: MazeMap::random(size),
-        };
-
-        for x in 0..size {
-            maze.map.set(x, 0, Tile::open())
-        }
-
-        maze.reveal_around_player();
-
-        maze
-    }
-
-    #[cfg(test)]
-    pub fn from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Self {
-        let map = MazeMap::from_slice(map);
-        let mut maze = Maze {
-            player: Position { x, y },
             exit: Position {
-                x: map.size() - 1,
-                y: map.size() - 1,
+                x: size - 1,
+                y: size - 1,
             },
-            map,
-        };
-
-        maze.reveal_around_player();
-        maze
-    }
-
-    pub fn move_player(&mut self, direction: Direction) {
-        use Direction::*;
-
-        let (x, y) = match dbg!(direction) {
-            Up => (self.player.x as i32, self.player.y as i32 - 1),
-            Down => (self.player.x as i32, self.player.y as i32 + 1),
-            Left => (self.player.x as i32 - 1, self.player.y as i32),
-            Right => (self.player.x as i32 + 1, self.player.y as i32),
-        };
-
-        if x >= 0
-            && y >= 0
-            && (x as usize) < self.map.size
-            && (y as usize) < self.map.size
-            && self.map.get(x as usize, y as usize).tile_type == TileType::Open
-        {
-            self.player = Position {
-                x: x as usize,
-                y: y as usize,
-            };
-        }
-
-        self.reveal_around_player();
-    }
-
-    #[cfg(test)]
-    pub fn player(&self) -> Position {
-        self.player
-    }
-
-    fn reveal_around_player(&mut self) {
-        self.map.reveal(self.player.x, self.player.y);
-        if self.player.x > 0 {
-            self.map.reveal(self.player.x - 1, self.player.y);
-        }
-        if self.player.y > 0 {
-            self.map.reveal(self.player.x, self.player.y - 1);
-        }
-        if self.player.x < self.map.size - 1 {
-            self.map.reveal(self.player.x + 1, self.player.y);
-        }
-        if self.player.y < self.map.size - 1 {
-            self.map.reveal(self.player.x, self.player.y + 1);
-        }
-    }
-}
-
-impl MazeMap {
-    pub fn random(size: usize) -> Self {
-        MazeMap {
             size,
             map: vec![Tile::blocked(); size * size],
+        };
+
+        for i in 0..size {
+            maze.set(i, 0, Tile::open());
+            maze.set(size - 1, i, Tile::open());
         }
-    }
 
-    #[cfg(test)]
-    pub fn from_slice(map: &[Tile]) -> Self {
-        let size = (map.len() as f64).sqrt() as usize;
-        assert_eq!(map.len(), size * size);
+        maze.reveal_around_player();
 
-        MazeMap {
-            size,
-            map: Vec::from(map),
-        }
-    }
-
-    #[cfg(test)]
-    pub fn size(&self) -> usize {
-        self.size
+        maze
     }
 
     fn to_index(&self, x: usize, y: usize) -> usize {
@@ -171,6 +84,52 @@ impl MazeMap {
 
     fn get(&mut self, x: usize, y: usize) -> Tile {
         self.map[self.to_index(x, y)]
+    }
+
+    pub fn move_player(&mut self, direction: Direction) {
+        use Direction::*;
+
+        let (x, y) = match dbg!(direction) {
+            Up => (self.player.x as i32, self.player.y as i32 - 1),
+            Down => (self.player.x as i32, self.player.y as i32 + 1),
+            Left => (self.player.x as i32 - 1, self.player.y as i32),
+            Right => (self.player.x as i32 + 1, self.player.y as i32),
+        };
+
+        if x >= 0
+            && y >= 0
+            && (x as usize) < self.size
+            && (y as usize) < self.size
+            && self.get(x as usize, y as usize).tile_type == TileType::Open
+        {
+            self.player = Position {
+                x: x as usize,
+                y: y as usize,
+            };
+        }
+
+        self.reveal_around_player();
+    }
+
+    #[cfg(test)]
+    pub fn player(&self) -> Position {
+        self.player
+    }
+
+    fn reveal_around_player(&mut self) {
+        self.reveal(self.player.x, self.player.y);
+        if self.player.x > 0 {
+            self.reveal(self.player.x - 1, self.player.y);
+        }
+        if self.player.y > 0 {
+            self.reveal(self.player.x, self.player.y - 1);
+        }
+        if self.player.x < self.size - 1 {
+            self.reveal(self.player.x + 1, self.player.y);
+        }
+        if self.player.y < self.size - 1 {
+            self.reveal(self.player.x, self.player.y + 1);
+        }
     }
 }
 
@@ -198,14 +157,46 @@ impl Tile {
     }
 }
 
-impl Serialize for MazeMap {
+impl Serialize for Maze {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
+        // To serialise a single row without copying all the elements into a new array.
+        struct Row<'a> {
+            row_index: usize,
+            player: &'a Position,
+            exit: &'a Position,
+            elements: &'a [Tile],
+        }
+
+        impl<'a> Serialize for Row<'a> {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                let mut seq = serializer.serialize_seq(Some(self.elements.len()))?;
+                for x in 0..self.elements.len() {
+                    if self.player.x == x && self.player.y == self.row_index {
+                        seq.serialize_element("player")?;
+                    } else if self.exit.x == x && self.exit.y == self.row_index {
+                        seq.serialize_element("exit")?;
+                    } else {
+                        seq.serialize_element(&self.elements[x])?;
+                    }
+                }
+                seq.end()
+            }
+        }
+
         let mut seq = serializer.serialize_seq(Some(self.size))?;
-        for i in 0..self.size {
-            seq.serialize_element(&self.map[(i * self.size)..(i * self.size) + self.size])?;
+        for y in 0..self.size {
+            seq.serialize_element(&Row {
+                row_index: y,
+                player: &self.player,
+                exit: &self.exit,
+                elements: &self.map[(y * self.size)..(y * self.size) + self.size],
+            })?;
         }
         seq.end()
     }
@@ -244,9 +235,26 @@ impl fmt::Display for Direction {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
     use serde_json;
+
+    pub fn maze_from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Maze {
+        let size = (map.len() as f64).sqrt() as usize;
+        assert_eq!(map.len(), size * size);
+        let mut maze = Maze {
+            player: Position { x, y },
+            exit: Position {
+                x: size - 1,
+                y: size - 1,
+            },
+            size,
+            map: Vec::from(map),
+        };
+
+        maze.reveal_around_player();
+        maze
+    }
 
     #[test]
     /// A new map gets created with a backing array of cells of size equal to a square of `size`
@@ -254,7 +262,7 @@ mod tests {
     fn creating_maze_with_size() {
         for size in 1..100 {
             let maze = Maze::new(size);
-            assert_eq!(maze.map.map.len(), size * size);
+            assert_eq!(maze.map.len(), size * size);
         }
     }
 
@@ -262,18 +270,15 @@ mod tests {
     /// The map maze should serialize to a 2d array instead of its internal representation.
     fn mazemap_serializes_to_a_2d_array() {
         let test_cases = [
-            (3, r#"[["open","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","blocked"]]"#),
-            (2, r#"[["open","hidden"],["hidden","blocked"]]"#),
+            (3, r#"[["player","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","exit"]]"#),
+            (2, r#"[["player","hidden"],["hidden","exit"]]"#),
         ];
         for &(size, expected) in test_cases.into_iter() {
             let mut blocked = Tile::blocked();
             blocked.reveal();
             let mut open = Tile::open();
             open.reveal();
-            let mut map = MazeMap {
-                size,
-                map: vec![blocked; size * size],
-            };
+            let mut map = maze_from_slice_with_player_at(0, 0, &vec![blocked; size * size]);
 
             map.set(0, 0, open);
             map.set(1, 0, Tile::blocked());
