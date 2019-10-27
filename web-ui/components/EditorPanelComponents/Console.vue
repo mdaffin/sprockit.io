@@ -3,7 +3,7 @@
     <div
       class="console-line"
       :class="[line.type]"
-      v-for="(line, index) in this.console"
+      v-for="(line, index) in $store.state.console.lines"
       :key="index"
     >
       {{ line.output }}
@@ -11,22 +11,9 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    console: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-  },
-};
-</script>
-
 <style>
-.console-line {
-  padding: 5px;
+.output {
+  padding: 0.3em;
 }
 .error {
   color: red;
