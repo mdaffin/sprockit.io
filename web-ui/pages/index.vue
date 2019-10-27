@@ -1,21 +1,19 @@
 <template>
   <div class="app">
+    <Menu class="header" @run="run" />
     <GamePanel class="game-panel" />
-    <EditorPanel
-      class="editor-panel"
-      v-model="code"
-      @run="run"
-      :console="console"
-    />
+    <EditorPanel class="editor-panel" v-model="code" :console="console" />
   </div>
 </template>
 
 <script>
+import Menu from "~/components/Menu.vue";
 import EditorPanel from "~/components/EditorPanel.vue";
 import GamePanel from "~/components/GamePanel.vue";
 
 export default {
   components: {
+    Menu,
     EditorPanel,
     GamePanel,
   },
@@ -27,32 +25,12 @@ export default {
     };
   },
   mounted() {
-    if (typeof Storage !== "undefined") {
-      if (localStorage.code) {
-        this.code = localStorage.code;
-      }
-      if (localStorage.editorWidth) {
-        document.documentElement.style.setProperty(
-          "--output-width",
-          `${localStorage.editorWidth}`,
-        );
-      }
+    if (typeof Storage !== "undefined" && localStorage.code) {
+      this.code = localStorage.code;
     }
-
     window.log = (output, type) => {
       this.addToLog(output, type);
     };
-
-    const saveCode = e => {
-      const modifierKey = navigator.platform.match("Mac")
-        ? e.metaKey
-        : e.ctrlKey;
-      if (e.keyCode == 83 && modifierKey) {
-        e.preventDefault();
-        if (typeof Storage !== "undefined") localStorage.code = this.code;
-      }
-    };
-    document.addEventListener("keydown", saveCode);
   },
   methods: {
     async run() {
@@ -111,9 +89,11 @@ export default {
 .app {
   display: grid;
   height: 100vh;
-  width: 100vw;
   grid-template-columns: 1fr var(--output-width);
-  grid-template-areas: "game editor";
+  grid-template-rows: 42px 1fr;
+  grid-template-areas:
+    "header header"
+    "game editor";
 }
 
 .editor-panel {
@@ -122,5 +102,9 @@ export default {
 
 .game-panel {
   grid-area: game;
+}
+
+.header {
+  grid-area: header;
 }
 </style>

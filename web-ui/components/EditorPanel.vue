@@ -13,7 +13,6 @@
       >
         <span @click="handleTab('Console')">Console</span>
       </div>
-      <ExecuteButton @click="$emit('run')" />
       <div id="editor-panel-header-handle" @mousedown="startDrag" />
     </div>
     <component
@@ -27,13 +26,11 @@
 </template>
 
 <script>
-import ExecuteButton from "~/components/EditorPanelComponents/ExecuteButton";
 import Editor from "~/components/EditorPanelComponents/Editor";
 import Console from "~/components/EditorPanelComponents/Console";
 
 export default {
   components: {
-    ExecuteButton,
     Editor,
     Console,
   },
@@ -45,6 +42,16 @@ export default {
         return [];
       },
     },
+  },
+  mounted() {
+    if (typeof Storage !== "undefined") {
+      if (localStorage.editorWidth) {
+        document.documentElement.style.setProperty(
+          "--output-width",
+          `${localStorage.editorWidth}`,
+        );
+      }
+    }
   },
   data() {
     return {
@@ -143,7 +150,7 @@ export default {
 }
 
 #editor-panel-header-handle {
-  height: calc(100% - 235px);
+  height: calc(100% - 200px);
   background-color: #f0f0f0;
 }
 
