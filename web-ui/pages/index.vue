@@ -68,7 +68,7 @@ export default {
         output: output,
         type: type,
       };
-      this.console.push(consoleLine);
+      this.$store.commit("console/append", consoleLine);
     },
     async fetch_token() {
       const { data } = await this.$axios.post(
