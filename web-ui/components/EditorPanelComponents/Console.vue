@@ -1,5 +1,5 @@
 <template>
-  <div class="output" id="console">
+  <div class="console">
     <div
       class="console-line"
       :class="[line.type]"
@@ -12,13 +12,13 @@
 </template>
 
 <style>
-.output {
+.console {
   padding: 0.3em;
+}
+.console-line {
+  color: #2b2b2b;
 }
 .error {
   color: red;
-}
-.norm {
-  color: #2b2b2b;
 }
 </style>
