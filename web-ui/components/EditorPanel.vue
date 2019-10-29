@@ -21,7 +21,6 @@
       :class="{ 'block-highlight': isResizing }"
       :[currentPropKey]="currentProp"
       @input="$emit('input', $event)"
-      @focus=""
     />
   </div>
 </template>
