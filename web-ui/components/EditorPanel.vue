@@ -71,9 +71,10 @@ export default {
     handleTab(tab) {
       this.currentTabComponent = tab;
     },
-    startDrag() {
+    startDrag(e) {
+      e.preventDefault();
       this.isResizing = true;
-      window.addEventListener("mousemove", e => this.resizeEditor(e));
+      window.addEventListener("mousemove", this.resizeEditor);
       window.addEventListener("mouseup", this.stopDrag);
     },
     stopDrag() {
