@@ -22,7 +22,6 @@ import HeaderButton from "~/components/EditorPanelComponents/HeaderButton";
 
 function PressCtrlPlusKey({ key, keyCode, fun }) {
   return document.addEventListener("keydown", e => {
-    console.log(e);
     const modifierKey = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
     if ((e.key === key || e.keyCode === keyCode) && modifierKey) {
       fun(e);
