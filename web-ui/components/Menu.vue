@@ -20,27 +20,36 @@
 <script>
 import HeaderButton from "~/components/EditorPanelComponents/HeaderButton";
 
+function PressCtrlPlusKey({ key, keyCode, fun }) {
+  return document.addEventListener("keydown", e => {
+    console.log(e);
+    const modifierKey = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
+    if ((e.key === key || e.keyCode === keyCode) && modifierKey) {
+      fun(e);
+    }
+  });
+}
+
 export default {
   components: { HeaderButton },
   mounted() {
     // run run() on <C-Enter>
-    document.addEventListener("keydown", e => {
-      const modifierKey = navigator.platform.match("Mac")
-        ? e.metaKey
-        : e.ctrlKey;
-      if (e.key === "Enter" && modifierKey) {
+    PressCtrlPlusKey({
+      key: "Enter",
+      keyCode: 13,
+      fun: e => {
+        e.preventDefault();
         this.$emit("run");
-      }
+      },
     });
     // clear console on <C-l>
-    document.addEventListener("keydown", e => {
-      const modifierKey = navigator.platform.match("Mac")
-        ? e.metaKey
-        : e.ctrlKey;
-      if (e.key === "l" && modifierKey) {
+    PressCtrlPlusKey({
+      key: "l",
+      keyCode: 76,
+      fun: e => {
         e.preventDefault();
         this.$store.commit("console/clear");
-      }
+      },
     });
   },
 };
