@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="button-group">
-      <h1>Sprockit.io</h1>
+      <img src="/logo.png" alt="sprockit.io logo" class="header-logo" />
     </div>
     <div class="button-group">
       <HeaderButton @click="$emit('run')">
@@ -22,6 +22,27 @@ import HeaderButton from "~/components/EditorPanelComponents/HeaderButton";
 
 export default {
   components: { HeaderButton },
+  mounted() {
+    // run run() on <C-Enter>
+    document.addEventListener("keydown", e => {
+      const modifierKey = navigator.platform.match("Mac")
+        ? e.metaKey
+        : e.ctrlKey;
+      if (e.key === "Enter" && modifierKey) {
+        this.$emit("run");
+      }
+    });
+    // clear console on <C-l>
+    document.addEventListener("keydown", e => {
+      const modifierKey = navigator.platform.match("Mac")
+        ? e.metaKey
+        : e.ctrlKey;
+      if (e.key === "l" && modifierKey) {
+        e.preventDefault();
+        this.$store.commit("console/clear");
+      }
+    });
+  },
 };
 </script>
 
@@ -35,5 +56,10 @@ header {
 
 .button-group {
   display: flex;
+}
+
+.header-logo {
+  padding-top: 5px;
+  height: 100%;
 }
 </style>

@@ -18,7 +18,7 @@ export default {
       const modifierKey = navigator.platform.match("Mac")
         ? e.metaKey
         : e.ctrlKey;
-      if (e.keyCode == 83 && modifierKey) {
+      if (e.key === "s" && modifierKey) {
         e.preventDefault();
         if (typeof Storage !== "undefined") {
           localStorage.code = this.$props.value;
