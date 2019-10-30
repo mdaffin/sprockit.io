@@ -90,7 +90,7 @@ impl Maze {
     pub fn move_player(&mut self, direction: Direction) -> Result<(), ServiceError> {
         use Direction::*;
 
-        let (x, y) = match dbg!(direction) {
+        let (x, y) = match direction {
             Up => (self.player.x as i32, self.player.y as i32 - 1),
             Down => (self.player.x as i32, self.player.y as i32 + 1),
             Left => (self.player.x as i32 - 1, self.player.y as i32),
