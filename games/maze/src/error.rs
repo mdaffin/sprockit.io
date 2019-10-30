@@ -12,6 +12,8 @@ pub enum ServiceError {
     InvalidTokenUUID,
     #[display(fmt = "session not found")]
     SessionNotFound,
+    #[display(fmt = "direction blocked")]
+    DirectionBlocked,
 }
 
 #[derive(Debug, Serialize)]
@@ -45,6 +47,12 @@ impl ResponseError for ServiceError {
                 HttpResponse::NotFound().json(ErrorResponse{
                     error: &format!("{}", self),
                     help: "No session was found for the given token. Session tokens are obtained by sending a post request to /start",
+                })
+            }
+            ServiceError::DirectionBlocked => {
+                HttpResponse::BadRequest().json(ErrorResponse{
+                    error: &format!("{}", self),
+                    help: "The direction was blocked, you need to pick another way.",
                 })
             }
         }

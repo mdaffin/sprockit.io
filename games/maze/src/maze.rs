@@ -1,3 +1,4 @@
+use crate::error::ServiceError;
 use serde::ser::{SerializeSeq, Serializer};
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -86,7 +87,7 @@ impl Maze {
         self.map[self.to_index(x, y)]
     }
 
-    pub fn move_player(&mut self, direction: Direction) {
+    pub fn move_player(&mut self, direction: Direction) -> Result<(), ServiceError> {
         use Direction::*;
 
         let (x, y) = match dbg!(direction) {
@@ -96,19 +97,22 @@ impl Maze {
             Right => (self.player.x as i32 + 1, self.player.y as i32),
         };
 
-        if x >= 0
-            && y >= 0
-            && (x as usize) < self.size
-            && (y as usize) < self.size
-            && self.get(x as usize, y as usize).tile_type == TileType::Open
+        if x < 0
+            || y < 0
+            || (x as usize) >= self.size
+            || (y as usize) >= self.size
+            || self.get(x as usize, y as usize).tile_type == TileType::Blocked
         {
-            self.player = Position {
-                x: x as usize,
-                y: y as usize,
-            };
+            return Err(ServiceError::DirectionBlocked);
         }
 
+        self.player = Position {
+            x: x as usize,
+            y: y as usize,
+        };
+
         self.reveal_around_player();
+        Ok(())
     }
 
     #[cfg(test)]
