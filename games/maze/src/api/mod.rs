@@ -12,7 +12,27 @@ mod map;
 mod move_player;
 mod start;
 
-type Sessions = web::Data<Mutex<HashMap<SessionToken, Maze>>>;
+type Sessions = web::Data<Mutex<HashMap<SessionToken, Session>>>;
+
+pub struct Session {
+    maze: Maze,
+}
+
+impl Session {
+    pub fn new(size: usize) -> Self {
+        Session {
+            maze: Maze::new(size),
+        }
+    }
+
+    pub fn maze(&self) -> &Maze {
+        &self.maze
+    }
+
+    pub fn mut_maze(&mut self) -> &mut Maze {
+        &mut self.maze
+    }
+}
 
 /// A session token used to identify a currently running game. Users must supply this in the
 /// X-TOKEN header and can obtain it from the /start endpoint.

@@ -2,8 +2,7 @@ use actix_web::HttpResponse;
 use log::info;
 use serde::{Deserialize, Serialize};
 
-use super::{SessionToken, Sessions};
-use crate::maze::Maze;
+use super::{Session, SessionToken, Sessions};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Response {
@@ -14,11 +13,11 @@ struct Response {
 /// session.
 pub fn start(state: Sessions) -> HttpResponse {
     let token = SessionToken::new();
-    let maze = Maze::new(10);
+    let session = Session::new(10);
 
     {
         let mut sessions = state.lock().unwrap();
-        (*sessions).insert(token, maze);
+        (*sessions).insert(token, session);
     }
 
     info!("New game started with token: {}", token);
