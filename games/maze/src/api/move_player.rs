@@ -10,16 +10,19 @@ pub fn move_player(
     token: SessionToken,
 ) -> Result<HttpResponse, ServiceError> {
     let mut sessions = state.lock().unwrap();
-    let maze = sessions
+    let session = sessions
         .get_mut(&token)
         .ok_or(ServiceError::SessionNotFound)?;
 
-    maze.move_player(*direction)?;
+    session.mut_maze().move_player(*direction)?;
     Ok(HttpResponse::NoContent().body(""))
 }
 #[cfg(test)]
 mod tests {
-    use super::{super::routes, SessionToken, Sessions};
+    use super::{
+        super::{routes, Session},
+        SessionToken, Sessions,
+    };
     use crate::maze::tests::maze_from_slice_with_player_at;
     use crate::maze::{Direction, Position, Tile};
     use actix_web::{dev::ServiceResponse, test, web, App};
@@ -140,10 +143,11 @@ mod tests {
             let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
             let token = SessionToken::new();
             let maze = maze_from_slice_with_player_at(x, y, map);
+            let session = Session { maze };
 
             {
                 let mut sessions = sessions.lock().unwrap();
-                (*sessions).insert(token, maze);
+                (*sessions).insert(token, session);
             }
 
             let mut app =
@@ -157,7 +161,7 @@ mod tests {
 
             let player = {
                 let sessions = sessions.lock().unwrap();
-                (*sessions).get(&token).unwrap().player()
+                (*sessions).get(&token).unwrap().maze().player()
             };
 
             (player, response)
