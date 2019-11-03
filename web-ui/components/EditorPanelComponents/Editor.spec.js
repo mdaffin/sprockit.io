@@ -1,29 +1,27 @@
 import { mount } from "@vue/test-utils";
 import Editor from "@/components/EditorPanelComponents/Editor";
+import { createStore } from "@/tests/utils.js";
 
 describe("Editor", () => {
   test.each(["Mac-Intel", "Linux x86_64"])(
     "If user hits ctrl + s the code should be saved to local storage",
     platform => {
-      mount(Editor, {
-        propsData: {
-          value: "this is a test",
-        },
-      });
+      const { localVue, store } = createStore({ script: "this is a test" });
+      mount(Editor, { localVue, store });
       Object.defineProperty(window.navigator, "platform", {
         value: "",
         writable: true,
       });
       navigator.platform = platform;
 
-      var event = new KeyboardEvent("keydown", {
+      const keyPress = new KeyboardEvent("keydown", {
         keyCode: 83,
         ctrlKey: platform !== "Mac-Intel",
         metaKey: platform === "Mac-Intel",
       });
-      document.dispatchEvent(event);
+      document.dispatchEvent(keyPress);
 
-      expect(localStorage.getItem("code")).toEqual("this is a test");
+      expect(localStorage.getItem("mazeScript")).toEqual("this is a test");
     },
   );
 });

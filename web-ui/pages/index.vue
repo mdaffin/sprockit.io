@@ -2,7 +2,7 @@
   <div class="app">
     <Menu class="header" @run="run" />
     <GamePanel class="game-panel" />
-    <EditorPanel class="editor-panel" v-model="code" :console="console" />
+    <EditorPanel class="editor-panel" :console="console" />
   </div>
 </template>
 
@@ -19,15 +19,10 @@ export default {
   },
   data() {
     return {
-      code:
-        "const a = 10;\nconst b = 20;\nconsole.log(a + b);\nconsole.log('A String');\n",
       console: [],
     };
   },
   mounted() {
-    if (typeof Storage !== "undefined" && localStorage.code) {
-      this.code = localStorage.code;
-    }
     window.log = (output, type) => {
       this.addToLog(output, type);
     };
@@ -59,7 +54,9 @@ export default {
 
       doc.open();
       doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
-      doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
+      doc.write(
+        `<script>${this.$store.state.script}${unescape("%3C/script%3E")}`,
+      );
       doc.close();
       this.$store.dispatch("fetchMaze", token);
     },
