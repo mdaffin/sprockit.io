@@ -5,17 +5,16 @@ export const state = () => ({
 });
 
 export const mutations = {
-  SET_MAZE(state, maze) {
+  setMaze(state, maze) {
     state.maze = maze;
   },
 };
 
 export const actions = {
-  async FETCH_MAZE({ commit }, token) {
+  async fetchMaze({ commit }, token) {
     const { data } = await this.$axios.get("/api/game/maze/map", {
       headers: { "X-TOKEN": token },
     });
-    commit("SET_MAZE", data);
-    return data;
+    commit("setMaze", data);
   },
 };

@@ -61,7 +61,7 @@ export default {
       doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
       doc.write(`<script>${this.code}${unescape("%3C/script%3E")}`);
       doc.close();
-      this.$store.dispatch("FETCH_MAZE", token);
+      this.$store.dispatch("fetchMaze", token);
     },
     addToLog(output, type) {
       const consoleLine = {
