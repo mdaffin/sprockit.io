@@ -4,13 +4,14 @@
       <img src="/logo.png" alt="sprockit.io logo" class="header-logo" />
     </div>
     <div class="button-group">
-      <HeaderButton @click="$emit('run')">Run</HeaderButton>
+      <HeaderButton @click="run()">Run</HeaderButton>
       <HeaderButton
         class="clear-button"
         @click="$store.commit('console/clear')"
       >
         Clear
       </HeaderButton>
+      <div ref="iframe"></div>
     </div>
   </header>
 </template>
@@ -36,7 +37,7 @@ export default {
       keyCode: 13,
       fun: e => {
         e.preventDefault();
-        this.$emit("run");
+        this.run();
       },
     });
     // clear console on <C-l>
@@ -48,6 +49,57 @@ export default {
         this.$store.commit("console/clear");
       },
     });
+    window.log = (output, type) => {
+      this.addToLog(output, type);
+    };
+  },
+  methods: {
+    async run() {
+      const container = document.getElementById("editor-panel-header-handle");
+      const iframe = document.createElement("IFRAME");
+      const token = await this.fetch_token();
+      container.innerHTML = "";
+      iframe.style.width = "0px";
+      iframe.style.height = "0px";
+      iframe.style.border = "none";
+      container.appendChild(iframe);
+
+      const doc = iframe.contentDocument;
+
+      const logger = `
+        const console = {
+          log:(output) => {
+            parent.log(output, 'norm');
+          }
+        };
+
+        window.onerror = function(error, url, line) {
+          parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
+        }
+      `;
+
+      doc.open();
+      doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
+      doc.write(
+        `<script>${this.$store.state.script}${unescape("%3C/script%3E")}`,
+      );
+      doc.close();
+      this.$store.dispatch("fetchMaze", token);
+    },
+    addToLog(output, type) {
+      const consoleLine = {
+        output: output,
+        type: type,
+      };
+      this.$store.commit("console/append", consoleLine);
+    },
+    async fetch_token() {
+      const { data } = await this.$axios.post(
+        "/api/game/maze/start",
+        `${Date.now()}`,
+      );
+      return data.token;
+    },
   },
 };
 </script>
