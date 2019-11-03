@@ -5,13 +5,16 @@ use actix_web::HttpResponse;
 /// The /map endpoint. Returns the map associated with the session token passed into the request.
 pub fn map(state: Sessions, token: SessionToken) -> Result<HttpResponse, ServiceError> {
     let sessions = state.lock().unwrap();
-    let maze = sessions.get(&token).ok_or(ServiceError::SessionNotFound)?;
-    Ok(HttpResponse::Ok().json(maze))
+    let session = sessions.get(&token).ok_or(ServiceError::SessionNotFound)?;
+    Ok(HttpResponse::Ok().json(session.maze()))
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{super::routes, SessionToken, Sessions};
+    use super::{
+        super::{routes, Session},
+        SessionToken, Sessions,
+    };
     use crate::maze::Maze;
     use actix_web::{http::StatusCode, test, web, App};
     use bytes::Bytes;
@@ -27,7 +30,7 @@ mod tests {
 
         {
             let mut sessions = sessions.lock().unwrap();
-            (*sessions).insert(token, maze.clone());
+            (*sessions).insert(token, Session { maze: maze.clone() });
         }
 
         let mut app =

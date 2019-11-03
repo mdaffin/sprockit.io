@@ -10,19 +10,23 @@ pub fn move_player(
     token: SessionToken,
 ) -> Result<HttpResponse, ServiceError> {
     let mut sessions = state.lock().unwrap();
-    let maze = sessions
+    let session = sessions
         .get_mut(&token)
         .ok_or(ServiceError::SessionNotFound)?;
 
-    maze.move_player(*direction);
-    Ok(HttpResponse::Ok().body("{}"))
+    session.mut_maze().move_player(*direction)?;
+    Ok(HttpResponse::NoContent().body(""))
 }
 #[cfg(test)]
 mod tests {
-    use super::{super::routes, SessionToken, Sessions};
+    use super::{
+        super::{routes, Session},
+        SessionToken, Sessions,
+    };
     use crate::maze::tests::maze_from_slice_with_player_at;
-    use crate::maze::{Direction, Tile};
-    use actix_web::{test, web, App};
+    use crate::maze::{Direction, Position, Tile};
+    use actix_web::{dev::ServiceResponse, test, web, App};
+    use http::status::StatusCode;
     use lazy_static::lazy_static;
     use std::collections::HashMap;
     use std::sync::Mutex;
@@ -45,87 +49,105 @@ mod tests {
 
         #[test]
         fn open_direction_up_player_is_moved() {
-            test_player_moves(Direction::Up, 1, 1, 1, 0, &[Tile::open(); 3 * 3]);
+            let (player, response) = setup_and_run(Direction::Up, 1, 1, &[Tile::open(); 3 * 3]);
+            assert_eq!(player.x, 1);
+            assert_eq!(player.y, 0);
+            assert_eq!(response.status(), StatusCode::NO_CONTENT);
         }
         #[test]
         fn open_direction_down_player_is_moved() {
-            test_player_moves(Direction::Down, 1, 1, 1, 2, &[Tile::open(); 3 * 3]);
+            let (player, response) = setup_and_run(Direction::Down, 1, 1, &[Tile::open(); 3 * 3]);
+            assert_eq!(player.x, 1);
+            assert_eq!(player.y, 2);
+            assert_eq!(response.status(), StatusCode::NO_CONTENT);
         }
         #[test]
         fn open_direction_left_player_is_moved() {
-            test_player_moves(Direction::Left, 1, 1, 0, 1, &[Tile::open(); 3 * 3]);
+            let (player, response) = setup_and_run(Direction::Left, 1, 1, &[Tile::open(); 3 * 3]);
+            assert_eq!(player.x, 0);
+            assert_eq!(player.y, 1);
+            assert_eq!(response.status(), StatusCode::NO_CONTENT);
         }
         #[test]
         fn open_direction_right_player_is_moved() {
-            test_player_moves(Direction::Right, 1, 1, 2, 1, &[Tile::open(); 3 * 3]);
+            let (player, response) = setup_and_run(Direction::Right, 1, 1, &[Tile::open(); 3 * 3]);
+            assert_eq!(player.x, 2);
+            assert_eq!(player.y, 1);
+            assert_eq!(response.status(), StatusCode::NO_CONTENT);
         }
 
         #[test]
         fn blocked_direction_up_player_is_moved() {
-            test_player_moves(Direction::Up, 1, 1, 1, 1, &BLOCKED_MAP[..]);
+            let (player, response) = setup_and_run(Direction::Up, 1, 1, &BLOCKED_MAP[..]);
+            assert_eq!(player.x, 1);
+            assert_eq!(player.y, 1);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
         #[test]
         fn blocked_direction_down_player_is_moved() {
-            test_player_moves(Direction::Down, 1, 1, 1, 1, &BLOCKED_MAP[..]);
+            let (player, response) = setup_and_run(Direction::Down, 1, 1, &BLOCKED_MAP[..]);
+            assert_eq!(player.x, 1);
+            assert_eq!(player.y, 1);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
         #[test]
         fn blocked_direction_left_player_is_moved() {
-            test_player_moves(Direction::Left, 1, 1, 1, 1, &BLOCKED_MAP[..]);
+            let (player, response) = setup_and_run(Direction::Left, 1, 1, &BLOCKED_MAP[..]);
+            assert_eq!(player.x, 1);
+            assert_eq!(player.y, 1);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
         #[test]
         fn blocked_direction_right_player_is_moved() {
-            test_player_moves(Direction::Right, 1, 1, 1, 1, &BLOCKED_MAP[..]);
+            let (player, response) = setup_and_run(Direction::Right, 1, 1, &BLOCKED_MAP[..]);
+            assert_eq!(player.x, 1);
+            assert_eq!(player.y, 1);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
 
         #[test]
         fn edge_direction_up_player_is_moved() {
-            test_player_moves(Direction::Up, 0, 0, 0, 0, &[Tile::open()]);
+            let (player, response) = setup_and_run(Direction::Up, 0, 0, &[Tile::open()]);
+            assert_eq!(player.x, 0);
+            assert_eq!(player.y, 0);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
         #[test]
         fn edge_direction_down_player_is_moved() {
-            test_player_moves(Direction::Down, 0, 0, 0, 0, &[Tile::open()]);
+            let (player, response) = setup_and_run(Direction::Down, 0, 0, &[Tile::open()]);
+            assert_eq!(player.x, 0);
+            assert_eq!(player.y, 0);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
         #[test]
         fn edge_direction_left_player_is_moved() {
-            test_player_moves(Direction::Left, 0, 0, 0, 0, &[Tile::open()]);
+            let (player, response) = setup_and_run(Direction::Left, 0, 0, &[Tile::open()]);
+            assert_eq!(player.x, 0);
+            assert_eq!(player.y, 0);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
         #[test]
         fn edge_direction_right_player_is_moved() {
-            test_player_moves(Direction::Right, 0, 0, 0, 0, &[Tile::open()]);
+            let (player, response) = setup_and_run(Direction::Right, 0, 0, &[Tile::open()]);
+            assert_eq!(player.x, 0);
+            assert_eq!(player.y, 0);
+            assert_eq!(response.status(), StatusCode::BAD_REQUEST);
         }
 
-        fn test_player_moves(
+        fn setup_and_run(
             direction: Direction,
-            start_x: usize,
-            start_y: usize,
-            end_x: usize,
-            end_y: usize,
+            x: usize,
+            y: usize,
             map: &[Tile],
-        ) {
-            let (sessions, token, _) = run_test(direction, start_x, start_y, map);
-
-            let player = {
-                let sessions = sessions.lock().unwrap();
-                (*sessions).get(&token).unwrap().player()
-            };
-
-            assert_eq!(player.x, end_x);
-            assert_eq!(player.y, end_y);
-        }
-
-        fn run_test(
-            direction: Direction,
-            start_x: usize,
-            start_y: usize,
-            map: &[Tile],
-        ) -> (Sessions, SessionToken, serde_json::Value) {
+        ) -> (Position, ServiceResponse) {
             let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
             let token = SessionToken::new();
-            let maze = maze_from_slice_with_player_at(start_x, start_y, map);
+            let maze = maze_from_slice_with_player_at(x, y, map);
+            let session = Session { maze };
 
             {
                 let mut sessions = sessions.lock().unwrap();
-                (*sessions).insert(token, maze);
+                (*sessions).insert(token, session);
             }
 
             let mut app =
@@ -135,9 +157,14 @@ mod tests {
                 .header("X-TOKEN", token.to_string())
                 .to_request();
 
-            let response: serde_json::Value = dbg!(test::read_response_json(&mut app, req));
+            let response = dbg!(test::call_service(&mut app, req));
 
-            (sessions, token, response)
+            let player = {
+                let sessions = sessions.lock().unwrap();
+                (*sessions).get(&token).unwrap().maze().player()
+            };
+
+            (player, response)
         }
     }
 }
