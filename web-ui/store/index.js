@@ -16,6 +16,5 @@ export const actions = {
       headers: { "X-TOKEN": token },
     });
     commit("setMaze", data);
-    return data;
   },
 };
