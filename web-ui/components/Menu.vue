@@ -4,14 +4,12 @@
       <img src="/logo.png" alt="sprockit.io logo" class="header-logo" />
     </div>
     <div class="button-group">
-      <HeaderButton @click="$emit('run')">
-        <span>Run</span>
-      </HeaderButton>
+      <HeaderButton @click="$emit('run')">Run</HeaderButton>
       <HeaderButton
         class="clear-button"
         @click="$store.commit('console/clear')"
       >
-        <span>Clear</span>
+        Clear
       </HeaderButton>
     </div>
   </header>
