@@ -20,5 +20,6 @@ export default {
   padding: 2em;
   border-radius: 2em;
   background-color: #c0b283;
+  color: var(--background-color);
 }
 </style>

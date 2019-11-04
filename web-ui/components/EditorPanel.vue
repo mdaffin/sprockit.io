@@ -139,6 +139,7 @@ export default {
   background: #dcd0c0;
   display: flex;
   cursor: pointer;
+  color: var(--background-color);
 }
 
 .editor-panel-header-tab span {

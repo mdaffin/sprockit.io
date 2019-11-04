@@ -37,7 +37,11 @@ export default {
     ],
   },
   loading: { color: "#fff" },
-  css: ["codemirror/lib/codemirror.css", "codemirror/theme/duotone-light.css"],
+  css: [
+    "normalize.css/normalize.css",
+    "codemirror/lib/codemirror.css",
+    "codemirror/theme/duotone-light.css",
+  ],
   plugins: [{ src: "~plugins/nuxt-codemirror-plugin.js", ssr: false }],
   buildModules: [],
   modules: ["@nuxtjs/axios"],
