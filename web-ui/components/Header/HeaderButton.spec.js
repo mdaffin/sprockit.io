@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import HeaderButton from "@/components/EditorPanelComponents/HeaderButton";
+import HeaderButton from "./HeaderButton";
 
 describe("ExecuteButton", () => {
   test("Should emit a event with a click property", () => {

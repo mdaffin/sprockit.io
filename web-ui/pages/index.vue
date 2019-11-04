@@ -1,19 +1,19 @@
 <template>
   <div class="app">
-    <Menu class="header" />
+    <Header class="header" />
     <GamePanel class="game-panel" />
     <EditorPanel class="editor-panel" :console="console" />
   </div>
 </template>
 
 <script>
-import Menu from "~/components/Menu.vue";
+import Header from "~/components/Header/Header.vue";
 import EditorPanel from "~/components/EditorPanel.vue";
 import GamePanel from "~/components/GamePanel.vue";
 
 export default {
   components: {
-    Menu,
+    Header,
     EditorPanel,
     GamePanel,
   },

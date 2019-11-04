@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import Menu from "@/components/Menu";
+import Header from "./Header";
 import { createStore } from "@/tests/utils.js";
 
 describe("Console", () => {
@@ -7,8 +7,8 @@ describe("Console", () => {
     const { localVue, store } = createStore({
       lines: [{ output: "Some output" }],
     });
-    const menu = mount(Menu, { localVue, store });
-    menu.find(".clear-button").trigger("click");
+    const menu = mount(Header, { localVue, store });
+    menu.find({ ref: "clear" }).trigger("click");
     expect(store.state.console.lines).toEqual([]);
   });
 });
