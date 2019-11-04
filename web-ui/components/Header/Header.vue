@@ -1,14 +1,11 @@
 <template>
   <header>
+    <a href="/">
+      <img src="/logo-192x32.png" alt="sprockit.io logo" />
+    </a>
     <div class="button-group">
-      <img src="/logo.png" alt="sprockit.io logo" class="header-logo" />
-    </div>
-    <div class="button-group">
-      <HeaderButton @click="run()">Run</HeaderButton>
-      <HeaderButton
-        class="clear-button"
-        @click="$store.commit('console/clear')"
-      >
+      <HeaderButton class="primary" @click="run()">Run</HeaderButton>
+      <HeaderButton ref="clear" @click="$store.commit('console/clear')">
         Clear
       </HeaderButton>
       <div ref="iframe"></div>
@@ -17,7 +14,7 @@
 </template>
 
 <script>
-import HeaderButton from "~/components/EditorPanelComponents/HeaderButton";
+import HeaderButton from "./HeaderButton";
 
 function PressCtrlPlusKey({ key, keyCode, fun }) {
   document.addEventListener("keydown", e => {
@@ -108,16 +105,10 @@ export default {
 header {
   display: flex;
   justify-content: space-between;
-  padding-left: 16px;
-  padding-right: 16px;
+  height: 48px;
 }
 
-.button-group {
-  display: flex;
-}
-
-.header-logo {
-  padding-top: 5px;
-  height: 100%;
+header img {
+  margin: 8px;
 }
 </style>
