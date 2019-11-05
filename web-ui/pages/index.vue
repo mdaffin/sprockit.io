@@ -1,8 +1,10 @@
 <template>
   <div class="app">
-    <Header class="header" />
-    <GamePanel class="game-panel" />
-    <EditorPanel class="editor-panel" :console="console" />
+    <Header />
+    <main>
+      <GamePanel />
+      <EditorPanel class="editor-panel" :console="console" />
+    </main>
   </div>
 </template>
 
@@ -26,29 +28,18 @@ export default {
 </script>
 
 <style scoped>
-:root {
-  --output-width: 30%;
-}
-
 .app {
-  display: grid;
+  display: flex;
   height: 100vh;
-  grid-template-columns: 1fr var(--output-width);
-  grid-template-rows: 42px 1fr;
-  grid-template-areas:
-    "header header"
-    "game editor";
+  flex-direction: column;
 }
 
-.editor-panel {
-  grid-area: editor;
+main {
+  flex-grow: 1;
+  display: flex;
 }
 
-.game-panel {
-  grid-area: game;
-}
-
-.header {
-  grid-area: header;
+main > * {
+  flex-grow: 1;
 }
 </style>
