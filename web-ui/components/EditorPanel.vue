@@ -42,19 +42,8 @@ export default {
       },
     },
   },
-  mounted() {
-    if (typeof Storage !== "undefined") {
-      if (localStorage.editorWidth) {
-        document.documentElement.style.setProperty(
-          "--output-width",
-          `${localStorage.editorWidth}`,
-        );
-      }
-    }
-  },
   data() {
     return {
-      isResizing: false,
       currentTabComponent: "Editor",
     };
   },
@@ -69,41 +58,6 @@ export default {
   methods: {
     handleTab(tab) {
       this.currentTabComponent = tab;
-    },
-    startDrag(e) {
-      e.preventDefault();
-      this.isResizing = true;
-      window.addEventListener("mousemove", this.resizeEditor);
-      window.addEventListener("mouseup", this.stopDrag);
-    },
-    stopDrag() {
-      window.removeEventListener("mousemove", e => this.resizeEditor(e));
-      window.removeEventListener("mouseup", this.stopDrag);
-      if (typeof Storage !== "undefined")
-        localStorage.editorWidth = window
-          .getComputedStyle(document.documentElement)
-          .getPropertyValue("--output-width");
-      this.isResizing = false;
-    },
-    resizeEditor(e) {
-      let windowWidth =
-        window.innerWidth ||
-        document.documentElement.clientWidth ||
-        document.body.clientWidth;
-      let width = windowWidth - e.clientX;
-
-      if (width > window.innerWidth) {
-        width = window.innerWidth;
-      }
-
-      if (width > 35) {
-        width = `${width / ((width + e.clientX) / 100)}%`;
-      } else {
-        width = "35px";
-      }
-
-      if (this.isResizing)
-        document.documentElement.style.setProperty("--output-width", width);
     },
   },
 };
@@ -130,7 +84,6 @@ export default {
 
 .editor-panel-header {
   position: relative;
-  cursor: e-resize;
 }
 
 .editor-panel-header-tab {

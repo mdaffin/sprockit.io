@@ -27,14 +27,25 @@ export default {
       console: [],
     };
   },
+  mounted() {
+    if (typeof Storage !== "undefined") {
+      if (localStorage.editorWidth) {
+        document.documentElement.style.setProperty(
+          "--output-width",
+          `${localStorage.editorWidth}`,
+        );
+      }
+    }
+  },
   methods: {
     dragHandle(e) {
       const outputWidth = `${100 - Math.min(100, Math.max(0, e.percentageX))}%`;
       document.documentElement.style.setProperty("--output-width", outputWidth);
-      console.log(
-        document.documentElement.style.getPropertyValue("--output-width"),
-      );
-      console.log(e);
+      if (typeof Storage !== "undefined") {
+        localStorage.editorWidth = window
+          .getComputedStyle(document.documentElement)
+          .getPropertyValue("--output-width");
+      }
     },
   },
 };
