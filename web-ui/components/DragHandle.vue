@@ -1,12 +1,9 @@
 <template>
-  <div :class="horizontal" @mousedown="startDrag"><span>...</span></div>
+  <div @mousedown="startDrag"><span>...</span></div>
 </template>
 
 <script>
 export default {
-  props: {
-    horizontal: { type: Boolean, default: false },
-  },
   methods: {
     startDrag(e) {
       e.preventDefault();
@@ -45,15 +42,20 @@ div {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: e-resize;
+  cursor: ew-resize;
 }
 
 div > span {
-  transform: translateX(4px) rotate(90deg);
+  transform: translateX(0.25em) rotate(90deg);
 }
 
-div.horizontal {
+.panel.vertical > div > span {
+  transform: translateY(-0.25em);
+}
+
+.panel.vertical > div {
   width: 100%;
   height: 8px;
+  cursor: ns-resize;
 }
 </style>

@@ -1,10 +1,14 @@
 <template>
   <div class="app">
     <Header />
-    <main>
+    <main class="panel">
       <GamePanel class="game-panel" />
-      <DragHandle @drag="dragHandle" />
-      <EditorPanel class="editor-panel" :console="console" />
+      <DragHandle @drag="mainDragHandle" />
+      <div class="editor-panel panel vertical">
+        <Editor />
+        <DragHandle @drag="editorDragHandle" />
+        <Console />
+      </div>
     </main>
   </div>
 </template>
@@ -12,20 +16,17 @@
 <script>
 import Header from "~/components/Header/Header.vue";
 import DragHandle from "~/components/DragHandle.vue";
-import EditorPanel from "~/components/EditorPanel.vue";
 import GamePanel from "~/components/GamePanel.vue";
+import Editor from "~/components/EditorPanelComponents/Editor";
+import Console from "~/components/EditorPanelComponents/Console";
 
 export default {
   components: {
     Header,
     DragHandle,
-    EditorPanel,
+    Editor,
+    Console,
     GamePanel,
-  },
-  data() {
-    return {
-      console: [],
-    };
   },
   mounted() {
     if (typeof Storage !== "undefined") {
@@ -38,7 +39,7 @@ export default {
     }
   },
   methods: {
-    dragHandle(e) {
+    mainDragHandle(e) {
       const outputWidth = `${100 - Math.min(100, Math.max(0, e.percentageX))}%`;
       document.documentElement.style.setProperty("--output-width", outputWidth);
       if (typeof Storage !== "undefined") {
@@ -58,18 +59,31 @@ export default {
   flex-direction: column;
 }
 
-main {
+.panel {
   height: 100%;
   display: flex;
 }
 
-main > .game-panel {
+.panel.vertical {
+  flex-direction: column;
+}
+
+.panel > .game-panel {
   width: calc(100% - var(--output-width));
   overflow: auto;
 }
 
-main > .editor-panel {
+.panel > .editor-panel {
   width: var(--output-width);
+  overflow: auto;
+}
+
+.vue-codemirror {
+  flex-grow: 1;
+}
+
+.console {
+  height: 30%;
   overflow: auto;
 }
 </style>
