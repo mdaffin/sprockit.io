@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Header />
-    <main class="panel">
+    <main class=" panel">
       <GamePanel class="game-panel" />
       <DragHandle @drag="mainDragHandle" />
       <div class="editor-panel panel vertical">
@@ -30,22 +30,23 @@ export default {
   },
   mounted() {
     if (typeof Storage !== "undefined") {
-      if (localStorage.editorWidth) {
-        document.documentElement.style.setProperty(
-          "--output-width",
-          `${localStorage.editorWidth}`,
-        );
-      }
+      document.documentElement.style.setProperty(
+        "--game-panel-width",
+        localStorage.gamePanelWidth || "50%",
+      );
     }
   },
   methods: {
     mainDragHandle(e) {
       const outputWidth = `${100 - Math.min(100, Math.max(0, e.percentageX))}%`;
-      document.documentElement.style.setProperty("--output-width", outputWidth);
+      document.documentElement.style.setProperty(
+        "--game-panel-width",
+        outputWidth,
+      );
       if (typeof Storage !== "undefined") {
-        localStorage.editorWidth = window
+        localStorage.gamePanelWidth = window
           .getComputedStyle(document.documentElement)
-          .getPropertyValue("--output-width");
+          .getPropertyValue("--game-panel-width");
       }
     },
   },
@@ -69,12 +70,12 @@ export default {
 }
 
 .panel > .game-panel {
-  width: calc(100% - var(--output-width));
+  width: var(--game-panel-width);
   overflow: auto;
 }
 
 .panel > .editor-panel {
-  width: var(--output-width);
+  width: calc(100% - var(--game-panel-width));
   overflow: auto;
 }
 

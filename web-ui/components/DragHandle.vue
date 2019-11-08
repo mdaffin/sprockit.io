@@ -25,8 +25,8 @@ export default {
         y,
         offsetX: x - offsetLeft,
         offsetY: y - offsetTop,
-        percentageX: ((x - offsetLeft) / offsetWidth) * 100,
-        percentageY: ((y - offsetTop) / offsetHeight) * 100,
+        percentageX: 100 - ((x - offsetLeft) / offsetWidth) * 100,
+        percentageY: 100 - ((y - offsetTop) / offsetHeight) * 100,
       });
     },
   },
