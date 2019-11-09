@@ -5,9 +5,9 @@
       <GamePanel class="game-panel" />
       <DragHandle @drag="mainDragHandle" />
       <div class="editor-panel panel vertical">
-        <Editor />
+        <Editor class="panel-editor" />
         <DragHandle @drag="editorDragHandle" />
-        <Console />
+        <Console class="panel-console" />
       </div>
     </main>
   </div>
@@ -83,7 +83,11 @@ export default {
   flex-grow: 1;
 }
 
-.console {
+.panel-editor {
+  height: 70%;
+  overflow: auto;
+}
+.panel-console {
   height: 30%;
   overflow: auto;
 }
