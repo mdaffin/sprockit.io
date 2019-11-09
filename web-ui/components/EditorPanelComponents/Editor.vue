@@ -1,19 +1,26 @@
 <template>
   <client-only placeholder="Codemirror Loading...">
-    <codemirror
-      :value="value"
-      @input="$emit('input', $event)"
-      :options="cmOption"
-    />
+    <codemirror v-model="script" :options="cmOption" />
   </client-only>
 </template>
 
 <script>
 export default {
-  props: {
-    value: { type: String, default: "" },
+  computed: {
+    script: {
+      get() {
+        return this.$store.state.script;
+      },
+      set(value) {
+        this.$store.commit("setScript", value);
+      },
+    },
   },
   mounted() {
+    const script = localStorage.mazeScript;
+    if (script) {
+      this.$store.commit("setScript", script);
+    }
     document.addEventListener("keydown", e => {
       const modifierKey = navigator.platform.match("Mac")
         ? e.metaKey
@@ -21,7 +28,7 @@ export default {
       if ((e.key ? e.key === "s" : e.keyCode === 83) && modifierKey) {
         e.preventDefault();
         if (typeof Storage !== "undefined") {
-          localStorage.code = this.$props.value;
+          localStorage.mazeScript = this.$store.state.script;
         }
       }
     });

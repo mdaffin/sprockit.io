@@ -11,7 +11,7 @@ describe("Console", () => {
   ])(
     "Console output passed into the component is displayed to the user",
     line => {
-      const consoleComponent = mount(Console, createStore([line]));
+      const consoleComponent = mount(Console, createStore({ lines: [line] }));
       expect(consoleComponent.html()).toContain(line.output);
     },
   );
@@ -19,7 +19,7 @@ describe("Console", () => {
   test.each([{ type: "error", output: "This is an error" }])(
     "Console errors add the error class",
     line => {
-      const consoleComponent = mount(Console, createStore([line]));
+      const consoleComponent = mount(Console, createStore({ lines: [line] }));
       expect(consoleComponent.find(".console-line").classes()).toContain(
         "error",
       );

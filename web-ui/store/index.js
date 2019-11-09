@@ -1,21 +1,30 @@
+const DEFAULT_SCRIPT = `const a = 10;
+const b = 20;
+console.log(a + b);
+console.log('A String');
+`;
+
 export const state = () => ({
   maze: Array.from({ length: 10 }, () =>
     Array.from({ length: 10 }, () => "hidden"),
   ),
+  script: DEFAULT_SCRIPT,
 });
 
 export const mutations = {
-  SET_MAZE(state, maze) {
+  setMaze(state, maze) {
     state.maze = maze;
+  },
+  setScript(state, script) {
+    state.script = script;
   },
 };
 
 export const actions = {
-  async FETCH_MAZE({ commit }, token) {
+  async fetchMaze({ commit }, token) {
     const { data } = await this.$axios.get("/api/game/maze/map", {
       headers: { "X-TOKEN": token },
     });
-    commit("SET_MAZE", data);
-    return data;
+    commit("setMaze", data);
   },
 };

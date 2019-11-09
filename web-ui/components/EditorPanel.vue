@@ -18,7 +18,6 @@
     <component
       class="panel-content"
       :is="currentTabComponent"
-      :class="{ 'block-highlight': isResizing }"
       :[currentPropKey]="currentProp"
       @input="$emit('input', $event)"
     />
@@ -113,6 +112,7 @@ export default {
 <style scoped>
 .editor-panel {
   display: flex;
+  width: var(--output-width);
 }
 
 .CodeMirror,
@@ -139,6 +139,7 @@ export default {
   background: #dcd0c0;
   display: flex;
   cursor: pointer;
+  color: var(--background-color);
 }
 
 .editor-panel-header-tab span {
@@ -157,13 +158,5 @@ export default {
 
 .is-selected {
   background: #c0b283;
-}
-
-.is-resizing {
-  background: #304155;
-}
-
-.block-highlight {
-  user-select: none;
 }
 </style>

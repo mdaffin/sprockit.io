@@ -1,40 +1,36 @@
 <template>
-  <div>
-    <nuxt />
-  </div>
+  <nuxt />
 </template>
 
 <style>
 html {
+  --background-color: #2b2b2b;
+  --color: #f3f3f3;
+  --red: #b33a2e;
+  --orange: #e08433;
+  --yellow: #fde354;
+  --green: #6dc957;
+  --dark-green: #12270c;
+  --cyan: #57c9bd;
+  --purple: #9271d5;
+  --rose: #d5719b;
+
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+  background-color: var(--background-color);
+  color: var(--color);
   box-sizing: border-box;
-  background-color: #2b2b2b;
-  color: #373737;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
 }
 
 *,
 *:before,
 *:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-::-webkit-scrollbar-track {
-  background: #35495e;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #47627f;
+  box-sizing: inherit;
 }
 </style>
