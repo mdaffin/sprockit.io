@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <Header />
-    <main class=" panel">
+    <main class="panel">
       <GamePanel class="game-panel" />
       <DragHandle @drag="mainDragHandle" />
       <div class="editor-panel panel vertical">
