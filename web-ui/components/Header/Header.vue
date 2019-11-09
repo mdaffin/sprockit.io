@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     async run() {
-      const container = document.getElementById("editor-panel-header-handle");
+      const container = this.$refs.iframe;
       const iframe = document.createElement("IFRAME");
       const token = await this.fetch_token();
       container.innerHTML = "";
@@ -82,6 +82,7 @@ export default {
       );
       doc.close();
       this.$store.dispatch("fetchMaze", token);
+      iframe.remove();
     },
     addToLog(output, type) {
       const consoleLine = {

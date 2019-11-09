@@ -1,7 +1,6 @@
 <template>
   <div class="console">
     <div
-      class="console-line"
       :class="[line.type]"
       v-for="(line, index) in $store.state.console.lines"
       :key="index"
@@ -13,10 +12,8 @@
 
 <style>
 .console {
-  padding: 0.3em;
-}
-.console-line {
-  color: #2b2b2b;
+  color: var(--background-color);
+  background-color: var(--color);
 }
 .error {
   color: red;
