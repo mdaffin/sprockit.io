@@ -1,10 +1,14 @@
 <template>
   <div class="app">
     <Header />
-    <main>
+    <main class="panel">
       <GamePanel class="game-panel" />
-      <DragHandle @drag="dragHandle" />
-      <EditorPanel class="editor-panel" :console="console" />
+      <DragHandle @drag="mainDragHandle" />
+      <div class="editor-panel panel vertical">
+        <Editor class="panel-editor" />
+        <DragHandle @drag="editorDragHandle" />
+        <Console class="panel-console" />
+      </div>
     </main>
   </div>
 </template>
@@ -12,29 +16,38 @@
 <script>
 import Header from "~/components/Header/Header.vue";
 import DragHandle from "~/components/DragHandle.vue";
-import EditorPanel from "~/components/EditorPanel.vue";
 import GamePanel from "~/components/GamePanel.vue";
+import Editor from "~/components/EditorPanelComponents/Editor";
+import Console from "~/components/EditorPanelComponents/Console";
 
 export default {
   components: {
     Header,
     DragHandle,
-    EditorPanel,
+    Editor,
+    Console,
     GamePanel,
   },
-  data() {
-    return {
-      console: [],
-    };
+  mounted() {
+    if (typeof Storage !== "undefined") {
+      document.documentElement.style.setProperty(
+        "--game-panel-width",
+        localStorage.gamePanelWidth || "50%",
+      );
+    }
   },
   methods: {
-    dragHandle(e) {
+    mainDragHandle(e) {
       const outputWidth = `${100 - Math.min(100, Math.max(0, e.percentageX))}%`;
-      document.documentElement.style.setProperty("--output-width", outputWidth);
-      console.log(
-        document.documentElement.style.getPropertyValue("--output-width"),
+      document.documentElement.style.setProperty(
+        "--game-panel-width",
+        outputWidth,
       );
-      console.log(e);
+      if (typeof Storage !== "undefined") {
+        localStorage.gamePanelWidth = window
+          .getComputedStyle(document.documentElement)
+          .getPropertyValue("--game-panel-width");
+      }
     },
   },
 };
@@ -47,18 +60,35 @@ export default {
   flex-direction: column;
 }
 
-main {
+.panel {
   height: 100%;
   display: flex;
 }
 
-main > .game-panel {
-  width: calc(100% - var(--output-width));
+.panel.vertical {
+  flex-direction: column;
+}
+
+.panel > .game-panel {
+  width: var(--game-panel-width);
   overflow: auto;
 }
 
-main > .editor-panel {
-  width: var(--output-width);
+.panel > .editor-panel {
+  width: calc(100% - var(--game-panel-width));
+  overflow: auto;
+}
+
+.vue-codemirror {
+  flex-grow: 1;
+}
+
+.panel-editor {
+  height: 70%;
+  overflow: auto;
+}
+.panel-console {
+  height: 30%;
   overflow: auto;
 }
 </style>

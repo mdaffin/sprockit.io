@@ -20,7 +20,7 @@ describe("Console", () => {
     "Console errors add the error class",
     line => {
       const consoleComponent = mount(Console, createStore({ lines: [line] }));
-      expect(consoleComponent.find(".console-line").classes()).toContain(
+      expect(consoleComponent.find(".console > div").classes()).toContain(
         "error",
       );
     },
