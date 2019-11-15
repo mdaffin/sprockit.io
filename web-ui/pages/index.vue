@@ -63,6 +63,7 @@ export default {
 .panel {
   height: 100%;
   display: flex;
+  overflow: auto;
 }
 
 .panel.vertical {
