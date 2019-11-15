@@ -8,7 +8,7 @@
       <HeaderButton ref="clear" @click="$store.commit('console/clear')">
         Clear
       </HeaderButton>
-      <div ref="iframe"></div>
+      <iframe ref="iframe"></iframe>
     </div>
   </header>
 </template>
@@ -23,6 +23,30 @@ function PressCtrlPlusKey({ key, keyCode, fun }) {
       fun(e);
     }
   });
+}
+
+function genIFrameSource(code) {
+  return `
+    <html>
+      <head>
+        <script>
+          const console = {
+             log: (output) => {
+              parent.log(output, 'norm');
+            }
+          };
+
+          window.onerror = function(error, url, line) {
+            parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
+          }
+        <\/script>
+        <script>
+          ${code}
+        <\/script>
+      </head>
+      <body></body>
+    </html>
+  `;
 }
 
 export default {
@@ -52,37 +76,11 @@ export default {
   },
   methods: {
     async run() {
-      const container = this.$refs.iframe;
-      const iframe = document.createElement("IFRAME");
-      const token = await this.fetch_token();
-      container.innerHTML = "";
-      iframe.style.width = "0px";
-      iframe.style.height = "0px";
-      iframe.style.border = "none";
-      container.appendChild(iframe);
-
-      const doc = iframe.contentDocument;
-
-      const logger = `
-        const console = {
-          log:(output) => {
-            parent.log(output, 'norm');
-          }
-        };
-
-        window.onerror = function(error, url, line) {
-          parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
-        }
-      `;
-
-      doc.open();
-      doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
-      doc.write(
-        `<script>${this.$store.state.script}${unescape("%3C/script%3E")}`,
+      this.$refs.iframe.src = URL.createObjectURL(
+        new Blob([genIFrameSource(this.$store.state.script)], {
+          type: "text/html",
+        }),
       );
-      doc.close();
-      this.$store.dispatch("fetchMaze", token);
-      iframe.remove();
     },
     addToLog(output, type) {
       const consoleLine = {
@@ -107,6 +105,10 @@ header {
   display: flex;
   justify-content: space-between;
   height: 48px;
+}
+
+iframe {
+  display: none;
 }
 
 header img {
