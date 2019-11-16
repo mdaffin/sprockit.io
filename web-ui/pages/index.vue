@@ -35,6 +35,12 @@ export default {
         localStorage.gamePanelWidth || "50%",
       );
     }
+    if (typeof Storage !== "undefined") {
+      document.documentElement.style.setProperty(
+        "--editor-panel-width",
+        localStorage.gamePanelWidth || "60%",
+      );
+    }
   },
   methods: {
     mainDragHandle(e) {
@@ -47,6 +53,19 @@ export default {
         localStorage.gamePanelWidth = window
           .getComputedStyle(document.documentElement)
           .getPropertyValue("--game-panel-width");
+      }
+    },
+    editorDragHandle(e) {
+      const outputHeight = `${100 -
+        Math.min(100, Math.max(0, e.percentageY))}%`;
+      document.documentElement.style.setProperty(
+        "--editor-panel-width",
+        outputHeight,
+      );
+      if (typeof Storage !== "undefined") {
+        localStorage.gamePanelWidth = window
+          .getComputedStyle(document.documentElement)
+          .getPropertyValue("--editor-panel-width");
       }
     },
   },
@@ -63,6 +82,7 @@ export default {
 .panel {
   height: 100%;
   display: flex;
+  overflow: auto;
 }
 
 .panel.vertical {
@@ -84,11 +104,11 @@ export default {
 }
 
 .panel-editor {
-  height: 70%;
+  height: var(--editor-panel-width);
   overflow: auto;
 }
 .panel-console {
-  height: 30%;
+  height: calc(100% - var(--editor-panel-width));
   overflow: auto;
 }
 </style>
