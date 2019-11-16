@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <script>
+      const console = {
+        log: output => {
+          parent.log(output, "norm");
+        },
+      };
+      window.onerror = function(error, url, line) {
+        parent.log(`Javascript Error : ${error} on line ${line}`, "error");
+      };
+    </script>
+    <script src="/game/maze.js"></script>
+  </head>
+  <body></body>
+</html>

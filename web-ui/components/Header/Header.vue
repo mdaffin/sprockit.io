@@ -25,30 +25,6 @@ function PressCtrlPlusKey({ key, keyCode, fun }) {
   });
 }
 
-function genIFrameSource(code) {
-  return `
-    <html>
-      <head>
-        <script>
-          const console = {
-             log: (output) => {
-              parent.log(output, 'norm');
-            }
-          };
-
-          window.onerror = function(error, url, line) {
-            parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
-          }
-        <\/script>
-        <script>
-          ${code}
-        <\/script>
-      </head>
-      <body></body>
-    </html>
-  `;
-}
-
 export default {
   components: { HeaderButton },
   mounted() {
@@ -76,11 +52,14 @@ export default {
   },
   methods: {
     async run() {
-      this.$refs.iframe.src = URL.createObjectURL(
-        new Blob([genIFrameSource(this.$store.state.script)], {
-          type: "text/html",
-        }),
-      );
+      const iframe = this.$refs.iframe;
+      iframe.src = "/game/maze.html";
+      iframe.onload = () => {
+        const body = iframe.contentWindow.document.querySelector("body");
+        const script = document.createElement("script");
+        script.text = this.$store.state.script;
+        body.appendChild(script);
+      };
     },
     addToLog(output, type) {
       const consoleLine = {
