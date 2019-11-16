@@ -41,7 +41,7 @@ export class Maze {
     await post("move/right", this.token);
   }
 
-  async map() {
-    return await get("map", this.token);
+  async updateMaze() {
+    parent.updateMaze(await get("map", this.token));
   }
 }
