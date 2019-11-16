@@ -8,7 +8,7 @@
       <HeaderButton ref="clear" @click="$store.commit('console/clear')">
         Clear
       </HeaderButton>
-      <div ref="iframe"></div>
+      <iframe ref="iframe"></iframe>
     </div>
   </header>
 </template>
@@ -52,37 +52,14 @@ export default {
   },
   methods: {
     async run() {
-      const container = this.$refs.iframe;
-      const iframe = document.createElement("IFRAME");
-      const token = await this.fetch_token();
-      container.innerHTML = "";
-      iframe.style.width = "0px";
-      iframe.style.height = "0px";
-      iframe.style.border = "none";
-      container.appendChild(iframe);
-
-      const doc = iframe.contentDocument;
-
-      const logger = `
-        const console = {
-          log:(output) => {
-            parent.log(output, 'norm');
-          }
-        };
-
-        window.onerror = function(error, url, line) {
-          parent.log(\`Javascript Error : \${error} on line \${line}\`, 'error');
-        }
-      `;
-
-      doc.open();
-      doc.write(`<script>${logger}${unescape("%3C/script%3E")}`);
-      doc.write(
-        `<script>${this.$store.state.script}${unescape("%3C/script%3E")}`,
-      );
-      doc.close();
-      this.$store.dispatch("fetchMaze", token);
-      iframe.remove();
+      const iframe = this.$refs.iframe;
+      iframe.src = "/game/maze.html";
+      iframe.onload = () => {
+        const body = iframe.contentWindow.document.querySelector("body");
+        const script = document.createElement("script");
+        script.text = this.$store.state.script;
+        body.appendChild(script);
+      };
     },
     addToLog(output, type) {
       const consoleLine = {
@@ -107,6 +84,10 @@ header {
   display: flex;
   justify-content: space-between;
   height: 48px;
+}
+
+iframe {
+  display: none;
 }
 
 header img {
