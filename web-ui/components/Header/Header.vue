@@ -57,6 +57,7 @@ export default {
       iframe.onload = () => {
         const body = iframe.contentWindow.document.querySelector("body");
         const script = document.createElement("script");
+        script.type = "module";
         script.text = this.$store.state.script;
         body.appendChild(script);
       };

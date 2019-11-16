@@ -1,7 +1,13 @@
-const DEFAULT_SCRIPT = `const a = 10;
-const b = 20;
-console.log(a + b);
-console.log('A String');
+const DEFAULT_SCRIPT = `import {Maze} from '/game/maze.js';
+
+async function run() {
+  console.log("Starting maze solver");
+  const maze = new Maze();
+  await maze.start();
+  console.log("token: " + maze.token);
+}
+
+(async function() {run()})();
 `;
 
 export const state = () => ({
