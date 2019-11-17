@@ -15,7 +15,7 @@ pub fn move_player(
         .ok_or(ServiceError::SessionNotFound)?;
 
     session.mut_maze().move_player(*direction)?;
-    Ok(HttpResponse::Ok().json(session.maze().give_player_directions()))
+    Ok(HttpResponse::Ok().json(session.maze().neighbouring_tile_types()))
 }
 
 /// Displays the tile_types of the directions the player can move to.
@@ -27,7 +27,7 @@ pub fn neighbouring_tile_types(
     let session = sessions
         .get_mut(&token)
         .ok_or(ServiceError::SessionNotFound)?;
-    Ok(HttpResponse::Ok().json(session.maze().give_player_directions()))
+    Ok(HttpResponse::Ok().json(session.maze().neighbouring_tile_types()))
 }
 
 #[cfg(test)]

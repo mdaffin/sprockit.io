@@ -95,7 +95,7 @@ impl Maze {
         self.map[self.to_index(x, y)]
     }
 
-    fn get_tile_type(&self, x: i32, y: i32) -> TileType {
+    fn tile_type_at(&self, x: i32, y: i32) -> TileType {
         if x < 0 || y < 0 || x >= self.size as i32 || y >= self.size as i32 {
             TileType::Blocked
         } else {
@@ -131,15 +131,15 @@ impl Maze {
         Ok(())
     }
 
-    pub fn give_player_directions(&self) -> NeighbouringTileTypes {
+    pub fn neighbouring_tile_types(&self) -> NeighbouringTileTypes {
         let player_x = self.player.x as i32;
         let player_y = self.player.y as i32;
 
         NeighbouringTileTypes {
-            left: self.get_tile_type(player_x - 1, player_y),
-            right: self.get_tile_type(player_x + 1, player_y),
-            up: self.get_tile_type(player_x, player_y - 1),
-            down: self.get_tile_type(player_x, player_y + 1),
+            left: self.tile_type_at(player_x - 1, player_y),
+            right: self.tile_type_at(player_x + 1, player_y),
+            up: self.tile_type_at(player_x, player_y - 1),
+            down: self.tile_type_at(player_x, player_y + 1),
         }
     }
 
