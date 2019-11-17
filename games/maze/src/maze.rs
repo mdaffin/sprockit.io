@@ -12,7 +12,7 @@ pub struct Maze {
 }
 
 #[derive(Debug, Serialize)]
-pub struct GiveDirections {
+pub struct NeighbouringTileTypes {
     left: TileType,
     right: TileType,
     up: TileType,
@@ -91,7 +91,7 @@ impl Maze {
         self.map[i] = cell;
     }
 
-    fn get(&self, x: usize, y: usize) -> Tile {
+    fn tile_at(&self, x: usize, y: usize) -> Tile {
         self.map[self.to_index(x, y)]
     }
 
@@ -99,7 +99,7 @@ impl Maze {
         if x < 0 || y < 0 || x >= self.size as i32 || y >= self.size as i32 {
             TileType::Blocked
         } else {
-            self.get(x as usize, y as usize).tile_type
+            self.tile_at(x as usize, y as usize).tile_type
         }
     }
 
@@ -117,7 +117,7 @@ impl Maze {
             || y < 0
             || (x as usize) >= self.size
             || (y as usize) >= self.size
-            || self.get(x as usize, y as usize).tile_type == TileType::Blocked
+            || self.tile_at(x as usize, y as usize).tile_type == TileType::Blocked
         {
             return Err(ServiceError::DirectionBlocked);
         }
@@ -131,12 +131,15 @@ impl Maze {
         Ok(())
     }
 
-    pub fn give_player_directions(&self) -> GiveDirections {
-        GiveDirections {
-            left: self.get_tile_type(self.player.x as i32 - 1, self.player.y as i32),
-            right: self.get_tile_type(self.player.x as i32 + 1, self.player.y as i32),
-            up: self.get_tile_type(self.player.x as i32, self.player.y as i32 - 1),
-            down: self.get_tile_type(self.player.x as i32, self.player.y as i32 + 1),
+    pub fn give_player_directions(&self) -> NeighbouringTileTypes {
+        let player_x = self.player.x as i32;
+        let player_y = self.player.y as i32;
+
+        NeighbouringTileTypes {
+            left: self.get_tile_type(player_x - 1, player_y),
+            right: self.get_tile_type(player_x + 1, player_y),
+            up: self.get_tile_type(player_x, player_y - 1),
+            down: self.get_tile_type(player_x, player_y + 1),
         }
     }
 

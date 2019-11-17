@@ -19,7 +19,10 @@ pub fn move_player(
 }
 
 /// Displays the tile_types of the directions the player can move to.
-pub fn get_directions(state: Sessions, token: SessionToken) -> Result<HttpResponse, ServiceError> {
+pub fn neighbouring_tile_types(
+    state: Sessions,
+    token: SessionToken,
+) -> Result<HttpResponse, ServiceError> {
     let mut sessions = state.lock().unwrap();
     let session = sessions
         .get_mut(&token)

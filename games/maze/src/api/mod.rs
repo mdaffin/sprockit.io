@@ -42,7 +42,7 @@ pub struct SessionToken(uuid::Uuid);
 /// Registers the routes for this API
 fn routes(cfg: &mut web::ServiceConfig) {
     cfg.service(web::resource("/map").route(web::get().to(map::map)));
-    cfg.service(web::resource("/move").route(web::get().to(move_player::get_directions)));
+    cfg.service(web::resource("/move").route(web::get().to(move_player::neighbouring_tile_types)));
     cfg.service(web::resource("/start").route(web::post().to(start::start)));
     cfg.service(web::resource("/move/{direction}").route(web::post().to(move_player::move_player)));
 }
