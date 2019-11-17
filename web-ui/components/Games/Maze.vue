@@ -17,6 +17,11 @@ export default {
       },
     };
   },
+  mounted() {
+    window.updateMaze = maze => {
+      this.$store.commit("setMaze", maze);
+    };
+  },
   computed: {
     drawMaze() {
       return this.$store.state.maze
