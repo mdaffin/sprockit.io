@@ -11,6 +11,14 @@ pub struct Maze {
     map: Vec<Tile>,
 }
 
+#[derive(Debug, Serialize)]
+pub struct GiveDirections {
+    left: TileType,
+    right: TileType,
+    up: TileType,
+    down: TileType,
+}
+
 #[derive(Debug, Copy, Clone, Serialize)]
 pub struct Position {
     pub x: usize,
@@ -83,8 +91,16 @@ impl Maze {
         self.map[i] = cell;
     }
 
-    fn get(&mut self, x: usize, y: usize) -> Tile {
+    fn get(&self, x: usize, y: usize) -> Tile {
         self.map[self.to_index(x, y)]
+    }
+
+    fn get_tile_type(&self, x: i32, y: i32) -> TileType {
+        if x < 0 || y < 0 || x >= self.size as i32 || y >= self.size as i32 {
+            TileType::Blocked
+        } else {
+            self.get(x as usize, y as usize).tile_type
+        }
     }
 
     pub fn move_player(&mut self, direction: Direction) -> Result<(), ServiceError> {
@@ -113,6 +129,15 @@ impl Maze {
 
         self.reveal_around_player();
         Ok(())
+    }
+
+    pub fn give_player_directions(&self) -> GiveDirections {
+        GiveDirections {
+            left: self.get_tile_type(self.player.x as i32 - 1, self.player.y as i32),
+            right: self.get_tile_type(self.player.x as i32 + 1, self.player.y as i32),
+            up: self.get_tile_type(self.player.x as i32, self.player.y as i32 - 1),
+            down: self.get_tile_type(self.player.x as i32, self.player.y as i32 + 1),
+        }
     }
 
     #[cfg(test)]

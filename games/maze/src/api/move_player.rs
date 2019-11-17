@@ -3,7 +3,7 @@ use crate::error::ServiceError;
 use crate::maze::Direction;
 use actix_web::{web, HttpResponse};
 
-/// Moves a player in one direction if the path is not blocked.
+/// Moves a player in one direction if the path is not blocked and returns the tile_types of the directions the player can move to.
 pub fn move_player(
     direction: web::Path<Direction>,
     state: Sessions,
@@ -15,8 +15,18 @@ pub fn move_player(
         .ok_or(ServiceError::SessionNotFound)?;
 
     session.mut_maze().move_player(*direction)?;
-    Ok(HttpResponse::NoContent().body(""))
+    Ok(HttpResponse::Ok().json(session.maze().give_player_directions()))
 }
+
+/// Displays the tile_types of the directions the player can move to.
+pub fn get_directions(state: Sessions, token: SessionToken) -> Result<HttpResponse, ServiceError> {
+    let mut sessions = state.lock().unwrap();
+    let session = sessions
+        .get_mut(&token)
+        .ok_or(ServiceError::SessionNotFound)?;
+    Ok(HttpResponse::Ok().json(session.maze().give_player_directions()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
