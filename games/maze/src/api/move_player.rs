@@ -18,7 +18,7 @@ pub fn move_player(
     Ok(HttpResponse::Ok().json(session.maze().neighbouring_tile_types()))
 }
 
-/// Displays the tile_types of the directions the player can move to.
+/// Returns the types for each tile that neighbours the players current position.
 pub fn neighbouring_tile_types(
     state: Sessions,
     token: SessionToken,
