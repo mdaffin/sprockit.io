@@ -62,28 +62,28 @@ mod tests {
             let (player, response) = setup_and_run(Direction::Up, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 1);
             assert_eq!(player.y, 0);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
         #[test]
         fn open_direction_down_player_is_moved() {
             let (player, response) = setup_and_run(Direction::Down, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 1);
             assert_eq!(player.y, 2);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
         #[test]
         fn open_direction_left_player_is_moved() {
             let (player, response) = setup_and_run(Direction::Left, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 0);
             assert_eq!(player.y, 1);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
         #[test]
         fn open_direction_right_player_is_moved() {
             let (player, response) = setup_and_run(Direction::Right, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 2);
             assert_eq!(player.y, 1);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
 
         #[test]
