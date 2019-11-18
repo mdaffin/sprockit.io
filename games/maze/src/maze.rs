@@ -11,7 +11,7 @@ pub struct Maze {
     map: Vec<Tile>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, PartialEq, Serialize)]
 pub struct NeighbouringTileTypes {
     left: TileType,
     right: TileType,
@@ -271,6 +271,12 @@ pub mod tests {
     use super::*;
     use serde_json;
 
+    struct NeighbouringTileTypesTestCase {
+        size: usize,
+        player_position: Position,
+        compare_tile_types: NeighbouringTileTypes,
+    }
+
     pub fn maze_from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Maze {
         let size = (map.len() as f64).sqrt() as usize;
         assert_eq!(map.len(), size * size);
@@ -318,6 +324,52 @@ pub mod tests {
 
             let serialized = serde_json::to_string(&map).unwrap();
             assert_eq!(serialized.as_str(), expected);
+        }
+    }
+
+    #[test]
+    /// test
+    fn neighbouring_tile_types_shows_correct_tile_types() {
+        let test_cases = vec![
+            /// Player on the outer left edge
+            NeighbouringTileTypesTestCase {
+                size: 2,
+                player_position: Position { x: 0, y: 0 },
+                compare_tile_types: NeighbouringTileTypes {
+                    left: TileType::Blocked,
+                    right: TileType::Open,
+                    up: TileType::Blocked,
+                    down: TileType::Blocked,
+                },
+            },
+            /// Player in the middle
+            NeighbouringTileTypesTestCase {
+                size: 3,
+                player_position: Position { x: 1, y: 1 },
+                compare_tile_types: NeighbouringTileTypes {
+                    left: TileType::Blocked,
+                    right: TileType::Open,
+                    up: TileType::Open,
+                    down: TileType::Blocked,
+                },
+            },
+            /// Player on the bottom right edge
+            NeighbouringTileTypesTestCase {
+                size: 100,
+                player_position: Position { x: 99, y: 99 },
+                compare_tile_types: NeighbouringTileTypes {
+                    left: TileType::Blocked,
+                    right: TileType::Blocked,
+                    up: TileType::Open,
+                    down: TileType::Blocked,
+                },
+            },
+        ];
+        for case in test_cases {
+            let mut maze = Maze::new(case.size);
+            maze.player = case.player_position;
+            maze.reveal_around_player();
+            assert_eq!(maze.neighbouring_tile_types(), case.compare_tile_types);
         }
     }
 }
