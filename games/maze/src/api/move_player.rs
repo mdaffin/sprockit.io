@@ -170,7 +170,7 @@ mod tests {
                 .header("X-TOKEN", token.to_string())
                 .to_request();
 
-            let response = test::call_service(&mut app, req);
+            let response = dbg!(test::call_service(&mut app, req));
 
             let player = {
                 let sessions = sessions.lock().unwrap();

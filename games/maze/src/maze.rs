@@ -271,12 +271,6 @@ pub mod tests {
     use super::*;
     use serde_json;
 
-    struct NeighbouringTileTypesTestCase {
-        size: usize,
-        player_position: Position,
-        compare_tile_types: NeighbouringTileTypes,
-    }
-
     pub fn maze_from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Maze {
         let size = (map.len() as f64).sqrt() as usize;
         assert_eq!(map.len(), size * size);
@@ -326,50 +320,61 @@ pub mod tests {
             assert_eq!(serialized.as_str(), expected);
         }
     }
+}
+
+#[cfg(test)]
+mod neighbouring_tile_types {
+    use super::*;
+    use crate::maze::tests::maze_from_slice_with_player_at;
+
+    fn neighbouring_tile_types_test_setup(
+        size: usize,
+        player_position: Position,
+    ) -> NeighbouringTileTypes {
+        let maze = maze_from_slice_with_player_at(
+            player_position.x,
+            player_position.y,
+            &vec![Tile::open(); size * size],
+        );
+        return maze.neighbouring_tile_types();
+    }
 
     #[test]
-    /// test
-    fn neighbouring_tile_types_shows_correct_tile_types() {
-        let test_cases = vec![
-            /// Player on the outer left edge
-            NeighbouringTileTypesTestCase {
-                size: 2,
-                player_position: Position { x: 0, y: 0 },
-                compare_tile_types: NeighbouringTileTypes {
-                    left: TileType::Blocked,
-                    right: TileType::Open,
-                    up: TileType::Blocked,
-                    down: TileType::Blocked,
-                },
-            },
-            /// Player in the middle
-            NeighbouringTileTypesTestCase {
-                size: 3,
-                player_position: Position { x: 1, y: 1 },
-                compare_tile_types: NeighbouringTileTypes {
-                    left: TileType::Blocked,
-                    right: TileType::Open,
-                    up: TileType::Open,
-                    down: TileType::Blocked,
-                },
-            },
-            /// Player on the bottom right edge
-            NeighbouringTileTypesTestCase {
-                size: 100,
-                player_position: Position { x: 99, y: 99 },
-                compare_tile_types: NeighbouringTileTypes {
-                    left: TileType::Blocked,
-                    right: TileType::Blocked,
-                    up: TileType::Open,
-                    down: TileType::Blocked,
-                },
-            },
-        ];
-        for case in test_cases {
-            let mut maze = Maze::new(case.size);
-            maze.player = case.player_position;
-            maze.reveal_around_player();
-            assert_eq!(maze.neighbouring_tile_types(), case.compare_tile_types);
-        }
+    /// Checks that negative coordinates given to the neighbouring_tile_types function actually return blocked
+    fn when_in_upper_left_corner_up_and_left_are_blocked() {
+        let tile_types_actual = neighbouring_tile_types_test_setup(2, Position { x: 0, y: 0 });
+        let tile_types_should_be = NeighbouringTileTypes {
+            left: TileType::Blocked,
+            right: TileType::Open,
+            up: TileType::Blocked,
+            down: TileType::Open,
+        };
+        assert_eq!(tile_types_actual, tile_types_should_be);
+    }
+
+    #[test]
+    /// Checks that the neighbouring_tile_types function returns simply the map given no borders
+    fn when_in_middle_all_open() {
+        let tile_types_actual = neighbouring_tile_types_test_setup(3, Position { x: 1, y: 1 });
+        let tile_types_should_be = NeighbouringTileTypes {
+            left: TileType::Open,
+            right: TileType::Open,
+            up: TileType::Open,
+            down: TileType::Open,
+        };
+        assert_eq!(tile_types_actual, tile_types_should_be);
+    }
+
+    #[test]
+    /// Checks that coordinates given to the neighbouring_tile_types function that exceeds the size actually return blocked
+    fn when_in_bottom_right_corner_down_and_right_are_blocked() {
+        let tile_types_actual = neighbouring_tile_types_test_setup(100, Position { x: 99, y: 99 });
+        let tile_types_should_be = NeighbouringTileTypes {
+            left: TileType::Open,
+            right: TileType::Blocked,
+            up: TileType::Open,
+            down: TileType::Blocked,
+        };
+        assert_eq!(tile_types_actual, tile_types_should_be);
     }
 }
