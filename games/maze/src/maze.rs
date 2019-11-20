@@ -11,6 +11,14 @@ pub struct Maze {
     map: Vec<Tile>,
 }
 
+#[derive(Debug, PartialEq, Serialize)]
+pub struct NeighbouringTileTypes {
+    left: TileType,
+    right: TileType,
+    up: TileType,
+    down: TileType,
+}
+
 #[derive(Debug, Copy, Clone, Serialize)]
 pub struct Position {
     pub x: usize,
@@ -83,8 +91,16 @@ impl Maze {
         self.map[i] = cell;
     }
 
-    fn get(&mut self, x: usize, y: usize) -> Tile {
+    fn tile_at(&self, x: usize, y: usize) -> Tile {
         self.map[self.to_index(x, y)]
+    }
+
+    fn tile_type_at(&self, x: i32, y: i32) -> TileType {
+        if x < 0 || y < 0 || x >= self.size as i32 || y >= self.size as i32 {
+            TileType::Blocked
+        } else {
+            self.tile_at(x as usize, y as usize).tile_type
+        }
     }
 
     pub fn move_player(&mut self, direction: Direction) -> Result<(), ServiceError> {
@@ -101,7 +117,7 @@ impl Maze {
             || y < 0
             || (x as usize) >= self.size
             || (y as usize) >= self.size
-            || self.get(x as usize, y as usize).tile_type == TileType::Blocked
+            || self.tile_at(x as usize, y as usize).tile_type == TileType::Blocked
         {
             return Err(ServiceError::DirectionBlocked);
         }
@@ -113,6 +129,18 @@ impl Maze {
 
         self.reveal_around_player();
         Ok(())
+    }
+
+    pub fn neighbouring_tile_types(&self) -> NeighbouringTileTypes {
+        let player_x = self.player.x as i32;
+        let player_y = self.player.y as i32;
+
+        NeighbouringTileTypes {
+            left: self.tile_type_at(player_x - 1, player_y),
+            right: self.tile_type_at(player_x + 1, player_y),
+            up: self.tile_type_at(player_x, player_y - 1),
+            down: self.tile_type_at(player_x, player_y + 1),
+        }
     }
 
     #[cfg(test)]
@@ -291,5 +319,62 @@ pub mod tests {
             let serialized = serde_json::to_string(&map).unwrap();
             assert_eq!(serialized.as_str(), expected);
         }
+    }
+}
+
+#[cfg(test)]
+mod neighbouring_tile_types {
+    use super::*;
+    use crate::maze::tests::maze_from_slice_with_player_at;
+
+    fn neighbouring_tile_types_test_setup(
+        size: usize,
+        player_position: Position,
+    ) -> NeighbouringTileTypes {
+        let maze = maze_from_slice_with_player_at(
+            player_position.x,
+            player_position.y,
+            &vec![Tile::open(); size * size],
+        );
+        maze.neighbouring_tile_types()
+    }
+
+    #[test]
+    /// Checks that negative coordinates given to the neighbouring_tile_types function actually return blocked
+    fn when_in_upper_left_corner_up_and_left_are_blocked() {
+        let tile_types_actual = neighbouring_tile_types_test_setup(2, Position { x: 0, y: 0 });
+        let tile_types_should_be = NeighbouringTileTypes {
+            left: TileType::Blocked,
+            right: TileType::Open,
+            up: TileType::Blocked,
+            down: TileType::Open,
+        };
+        assert_eq!(tile_types_actual, tile_types_should_be);
+    }
+
+    #[test]
+    /// Checks that the neighbouring_tile_types function returns simply the map given no borders
+    fn when_in_middle_all_open() {
+        let tile_types_actual = neighbouring_tile_types_test_setup(3, Position { x: 1, y: 1 });
+        let tile_types_should_be = NeighbouringTileTypes {
+            left: TileType::Open,
+            right: TileType::Open,
+            up: TileType::Open,
+            down: TileType::Open,
+        };
+        assert_eq!(tile_types_actual, tile_types_should_be);
+    }
+
+    #[test]
+    /// Checks that coordinates given to the neighbouring_tile_types function that exceeds the size actually return blocked
+    fn when_in_bottom_right_corner_down_and_right_are_blocked() {
+        let tile_types_actual = neighbouring_tile_types_test_setup(100, Position { x: 99, y: 99 });
+        let tile_types_should_be = NeighbouringTileTypes {
+            left: TileType::Open,
+            right: TileType::Blocked,
+            up: TileType::Open,
+            down: TileType::Blocked,
+        };
+        assert_eq!(tile_types_actual, tile_types_should_be);
     }
 }

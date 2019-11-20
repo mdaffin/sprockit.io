@@ -3,7 +3,7 @@ use crate::error::ServiceError;
 use crate::maze::Direction;
 use actix_web::{web, HttpResponse};
 
-/// Moves a player in one direction if the path is not blocked.
+/// Moves a player in one direction if the path is not blocked and returns the tile_types of the directions the player can move to.
 pub fn move_player(
     direction: web::Path<Direction>,
     state: Sessions,
@@ -15,8 +15,21 @@ pub fn move_player(
         .ok_or(ServiceError::SessionNotFound)?;
 
     session.mut_maze().move_player(*direction)?;
-    Ok(HttpResponse::NoContent().body(""))
+    Ok(HttpResponse::Ok().json(session.maze().neighbouring_tile_types()))
 }
+
+/// Returns the types for each tile that neighbours the players current position.
+pub fn neighbouring_tile_types(
+    state: Sessions,
+    token: SessionToken,
+) -> Result<HttpResponse, ServiceError> {
+    let mut sessions = state.lock().unwrap();
+    let session = sessions
+        .get_mut(&token)
+        .ok_or(ServiceError::SessionNotFound)?;
+    Ok(HttpResponse::Ok().json(session.maze().neighbouring_tile_types()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
@@ -52,28 +65,28 @@ mod tests {
             let (player, response) = setup_and_run(Direction::Up, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 1);
             assert_eq!(player.y, 0);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
         #[test]
         fn open_direction_down_player_is_moved() {
             let (player, response) = setup_and_run(Direction::Down, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 1);
             assert_eq!(player.y, 2);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
         #[test]
         fn open_direction_left_player_is_moved() {
             let (player, response) = setup_and_run(Direction::Left, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 0);
             assert_eq!(player.y, 1);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
         #[test]
         fn open_direction_right_player_is_moved() {
             let (player, response) = setup_and_run(Direction::Right, 1, 1, &[Tile::open(); 3 * 3]);
             assert_eq!(player.x, 2);
             assert_eq!(player.y, 1);
-            assert_eq!(response.status(), StatusCode::NO_CONTENT);
+            assert_eq!(response.status(), StatusCode::OK);
         }
 
         #[test]
