@@ -336,7 +336,7 @@ mod neighbouring_tile_types {
             player_position.y,
             &vec![Tile::open(); size * size],
         );
-        return maze.neighbouring_tile_types();
+        maze.neighbouring_tile_types()
     }
 
     #[test]
