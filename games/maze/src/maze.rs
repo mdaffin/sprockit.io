@@ -67,9 +67,17 @@ pub enum Direction {
 
 impl Maze {
     pub fn new(size: usize) -> Self {
-        fn find(map: &Vec<Vec<MazeGenerationTile>>, position: Position) -> Position {
-            let (x, y) = (position.x, position.y);
-            map[x][y].link
+        fn find(
+            map: &Vec<Vec<MazeGenerationTile>>,
+            (p, q): (Position, Position),
+        ) -> (Position, Position) {
+            let cell_p = map[p.y][p.x].link;
+            let cell_q = map[q.y][q.x].link;
+            if p != cell_p || q != cell_q {
+                find(map, (cell_p, cell_q))
+            } else {
+                (cell_p, cell_q)
+            }
         }
 
         let mut gen_map: Vec<Vec<MazeGenerationTile>> = vec![];
@@ -77,7 +85,7 @@ impl Maze {
         for i in 0..size {
             let mut gen_row: Vec<_> = vec![];
             for j in 0..size {
-                let pos = Position { x: i, y: j };
+                let pos = Position { x: j, y: i };
                 let (j_is_even, i_is_even) = (j % 2 == 0, i % 2 == 0);
 
                 // TODO: match?
@@ -117,31 +125,31 @@ impl Maze {
             let find_map = |x| find(&gen_map, x);
             let pos = i.position;
 
-            let (neigh_a, neigh_b) = match pos.y & 1 == 0 {
-                true => (
-                    find_map(Position {
+            let (p, q) = match pos.y & 1 == 0 {
+                true => find_map((
+                    Position {
                         x: pos.x + 1,
                         y: pos.y,
-                    }),
-                    find_map(Position {
+                    },
+                    Position {
                         x: pos.x - 1,
                         y: pos.y,
-                    }),
-                ),
-                false => (
-                    find_map(Position {
+                    },
+                )),
+                false => find_map((
+                    Position {
                         x: pos.x,
                         y: pos.y - 1,
-                    }),
-                    find_map(Position {
+                    },
+                    Position {
                         x: pos.x,
                         y: pos.y + 1,
-                    }),
-                ),
+                    },
+                )),
             };
-            if neigh_a != neigh_b {
+            if p != q {
                 gen_map[pos.y][pos.x].tile = Tile::open();
-                gen_map[neigh_a.y][neigh_a.x].link = neigh_b;
+                gen_map[p.y][p.x].link = q;
             } else {
                 gen_map[pos.y][pos.x].tile = Tile::blocked();
             }
@@ -159,7 +167,6 @@ impl Maze {
 
         //maze.reveal_around_player();
         maze.reveal_all();
-        dbg!(&gen_map);
         maze
     }
 
