@@ -1,4 +1,6 @@
 use crate::error::ServiceError;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use serde::ser::{SerializeSeq, Serializer};
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -9,6 +11,13 @@ pub struct Maze {
     exit: Position,
     size: usize,
     map: Vec<Tile>,
+}
+
+#[derive(Debug, Clone)]
+struct MazeGenerationTile {
+    position: Position,
+    link: Position,
+    tile: Tile,
 }
 
 #[derive(Debug, PartialEq, Serialize)]
@@ -41,6 +50,7 @@ enum TileVisibility {
 enum TileType {
     Blocked,
     Open,
+    Neither,
 }
 
 #[derive(Debug, Copy, Clone, Deserialize, Serialize, PartialEq)]
@@ -57,6 +67,86 @@ pub enum Direction {
 
 impl Maze {
     pub fn new(size: usize) -> Self {
+        fn find(map: &Vec<Vec<MazeGenerationTile>>, position: Position) -> Position {
+            let (x, y) = (position.x, position.y);
+            map[x][y].link
+        }
+
+        let mut gen_map: Vec<Vec<MazeGenerationTile>> = vec![];
+
+        for i in 0..size {
+            let mut gen_row: Vec<_> = vec![];
+            for j in 0..size {
+                let pos = Position { x: i, y: j };
+                let (j_is_even, i_is_even) = (j % 2 == 0, i % 2 == 0);
+
+                // TODO: match?
+                if !j_is_even && !i_is_even {
+                    gen_row.push(MazeGenerationTile {
+                        position: pos,
+                        ..MazeGenerationTile::blocked(pos)
+                    });
+                } else if j_is_even && i_is_even {
+                    gen_row.push(MazeGenerationTile {
+                        position: pos,
+                        ..MazeGenerationTile::open(pos)
+                    });
+                } else if (!j_is_even && i_is_even) || (j_is_even && !i_is_even) {
+                    gen_row.push(MazeGenerationTile {
+                        position: pos,
+                        ..MazeGenerationTile::neither(pos)
+                    });
+                }
+            }
+            gen_map.push(gen_row);
+        }
+
+        let neither_map = gen_map.to_vec();
+        let mut neither_map = neither_map
+            .iter()
+            .flatten()
+            .filter(|x| match x.tile.tile_type {
+                TileType::Neither => true,
+                _ => false,
+            })
+            .collect::<Vec<_>>();
+
+        neither_map.shuffle(&mut thread_rng());
+
+        for i in neither_map {
+            let find_map = |x| find(&gen_map, x);
+            let pos = i.position;
+
+            let (neigh_a, neigh_b) = match pos.y & 1 == 0 {
+                true => (
+                    find_map(Position {
+                        x: pos.x + 1,
+                        y: pos.y,
+                    }),
+                    find_map(Position {
+                        x: pos.x - 1,
+                        y: pos.y,
+                    }),
+                ),
+                false => (
+                    find_map(Position {
+                        x: pos.x,
+                        y: pos.y - 1,
+                    }),
+                    find_map(Position {
+                        x: pos.x,
+                        y: pos.y + 1,
+                    }),
+                ),
+            };
+            if neigh_a != neigh_b {
+                gen_map[pos.y][pos.x].tile = Tile::open();
+                gen_map[neigh_a.y][neigh_a.x].link = neigh_b;
+            } else {
+                gen_map[pos.y][pos.x].tile = Tile::blocked();
+            }
+        }
+
         let mut maze = Maze {
             player: Position { x: 0, y: 0 },
             exit: Position {
@@ -64,16 +154,12 @@ impl Maze {
                 y: size - 1,
             },
             size,
-            map: vec![Tile::blocked(); size * size],
+            map: gen_map.iter().flatten().map(|x| x.tile).collect::<Vec<_>>(),
         };
 
-        for i in 0..size {
-            maze.set(i, 0, Tile::open());
-            maze.set(size - 1, i, Tile::open());
-        }
-
-        maze.reveal_around_player();
-
+        //maze.reveal_around_player();
+        maze.reveal_all();
+        dbg!(&gen_map);
         maze
     }
 
@@ -163,6 +249,55 @@ impl Maze {
             self.reveal(self.player.x, self.player.y + 1);
         }
     }
+
+    fn reveal_all(&mut self) {
+        for i in 0..self.size {
+            for j in 0..self.size {
+                self.reveal(i, j);
+            }
+        }
+    }
+}
+
+impl MazeGenerationTile {
+    fn open(pos: Position) -> Self {
+        MazeGenerationTile {
+            position: pos,
+            link: pos,
+            tile: Tile {
+                tile_type: TileType::Open,
+                visibility: TileVisibility::Hidden,
+            },
+        }
+    }
+
+    fn blocked(pos: Position) -> Self {
+        MazeGenerationTile {
+            position: pos,
+            link: pos,
+            tile: Tile {
+                tile_type: TileType::Blocked,
+                visibility: TileVisibility::Hidden,
+            },
+        }
+    }
+
+    fn neither(pos: Position) -> Self {
+        MazeGenerationTile {
+            position: pos,
+            link: pos,
+            tile: Tile {
+                tile_type: TileType::Neither,
+                visibility: TileVisibility::Hidden,
+            },
+        }
+    }
+}
+
+impl PartialEq for Position {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
 }
 
 impl Tile {
@@ -243,6 +378,7 @@ impl Serialize for Tile {
             match self.tile_type {
                 TileType::Open => serializer.serialize_str("open"),
                 TileType::Blocked => serializer.serialize_str("blocked"),
+                _ => panic!("Neither open nor blocked"),
             }
         } else {
             serializer.serialize_str("hidden")
