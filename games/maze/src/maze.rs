@@ -67,12 +67,30 @@ pub enum Direction {
 
 impl Maze {
     pub fn new(size: usize) -> Self {
+        let random_map = Maze::generate_random_map(size);
+
+        let mut maze = Maze {
+            player: Position { x: 0, y: 0 },
+            exit: Position {
+                x: size - 1,
+                y: size - 1,
+            },
+            size,
+            map: random_map,
+        };
+
+        maze.reveal_around_player();
+
+        maze
+    }
+
+    fn generate_random_map(size: usize) -> Vec<Tile> {
         fn find(
             map: &Vec<Vec<MazeGenerationTile>>,
             (p, q): (Position, Position),
         ) -> (Position, Position) {
-            let cell_p = map[p.y][p.x].link;
-            let cell_q = map[q.y][q.x].link;
+            let (cell_p, cell_q) = (map[p.y][p.x].link, map[q.y][q.x].link);
+
             if p != cell_p || q != cell_q {
                 find(map, (cell_p, cell_q))
             } else {
@@ -80,30 +98,30 @@ impl Maze {
             }
         }
 
+        if size & 1 == 0 {
+            panic!("Random maze only allows odd numbers")
+        };
+
         let mut gen_map: Vec<Vec<MazeGenerationTile>> = vec![];
 
         for i in 0..size {
             let mut gen_row: Vec<_> = vec![];
             for j in 0..size {
                 let pos = Position { x: j, y: i };
-                let (j_is_even, i_is_even) = (j % 2 == 0, i % 2 == 0);
 
-                // TODO: match?
-                if !j_is_even && !i_is_even {
-                    gen_row.push(MazeGenerationTile {
-                        position: pos,
-                        ..MazeGenerationTile::blocked(pos)
-                    });
-                } else if j_is_even && i_is_even {
-                    gen_row.push(MazeGenerationTile {
+                match (j & 1 == 0, i & 1 == 0) {
+                    (true, true) => gen_row.push(MazeGenerationTile {
                         position: pos,
                         ..MazeGenerationTile::open(pos)
-                    });
-                } else if (!j_is_even && i_is_even) || (j_is_even && !i_is_even) {
-                    gen_row.push(MazeGenerationTile {
+                    }),
+                    (false, false) => gen_row.push(MazeGenerationTile {
+                        position: pos,
+                        ..MazeGenerationTile::blocked(pos)
+                    }),
+                    (false, true) | (true, false) => gen_row.push(MazeGenerationTile {
                         position: pos,
                         ..MazeGenerationTile::neither(pos)
-                    });
+                    }),
                 }
             }
             gen_map.push(gen_row);
@@ -155,19 +173,7 @@ impl Maze {
             }
         }
 
-        let mut maze = Maze {
-            player: Position { x: 0, y: 0 },
-            exit: Position {
-                x: size - 1,
-                y: size - 1,
-            },
-            size,
-            map: gen_map.iter().flatten().map(|x| x.tile).collect::<Vec<_>>(),
-        };
-
-        //maze.reveal_around_player();
-        maze.reveal_all();
-        maze
+        gen_map.iter().flatten().map(|x| x.tile).collect::<Vec<_>>()
     }
 
     fn to_index(&self, x: usize, y: usize) -> usize {
@@ -435,9 +441,23 @@ pub mod tests {
     /// A new map gets created with a backing array of cells of size equal to a square of `size`
     /// sides.
     fn creating_maze_with_size() {
-        for size in 1..100 {
+        for size in (1..100).filter(|x| x & 1 != 0) {
             let maze = Maze::new(size);
             assert_eq!(maze.map.len(), size * size);
+        }
+    }
+
+    #[test]
+    /// Start and exit tile are not blocked in a random maze
+    fn random_maze_start_and_exit_not_blocked() {
+        for size in (1..100).filter(|x| x & 1 != 0) {
+            let maze = Maze::new(size);
+
+            let start_tile_type = maze.map[maze.to_index(0, 0)].tile_type;
+            let end_tile_type = maze.map[maze.to_index(size - 1, size - 1)].tile_type;
+
+            assert_eq!(start_tile_type, TileType::Open);
+            assert_eq!(end_tile_type, TileType::Open);
         }
     }
 
