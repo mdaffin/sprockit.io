@@ -86,12 +86,14 @@ impl Maze {
         fn find(
             size: usize,
             map: &[MazeGenerationTile],
-            (p, q): (Position, Position),
+            p: Position,
+            q: Position,
         ) -> (Position, Position) {
-            let (cell_p, cell_q) = (map[size * p.y + p.x].link, map[size * q.y + q.x].link);
+            let cell_p = map[size * p.y + p.x].link;
+            let cell_q = map[size * q.y + q.x].link;
 
             if p != cell_p || q != cell_q {
-                find(size, map, (cell_p, cell_q))
+                find(size, map, cell_p, cell_q)
             } else {
                 (cell_p, cell_q)
             }
@@ -136,29 +138,29 @@ impl Maze {
                 size,
                 &gen_map,
                 if pos.y & 1 == 0 {
-                    (
-                        Position {
-                            x: pos.x + 1,
-                            y: pos.y,
-                        },
-                        Position {
-                            x: pos.x - 1,
-                            y: pos.y,
-                        },
-                    )
+                    Position {
+                        x: pos.x + 1,
+                        y: pos.y,
+                    }
                 } else {
-                    (
-                        Position {
-                            x: pos.x,
-                            y: pos.y - 1,
-                        },
-                        Position {
-                            x: pos.x,
-                            y: pos.y + 1,
-                        },
-                    )
+                    Position {
+                        x: pos.x,
+                        y: pos.y - 1,
+                    }
+                },
+                if pos.y & 1 == 0 {
+                    Position {
+                        x: pos.x - 1,
+                        y: pos.y,
+                    }
+                } else {
+                    Position {
+                        x: pos.x,
+                        y: pos.y + 1,
+                    }
                 },
             );
+
             if p != q {
                 gen_map[size * pos.y + pos.x].tile_type = Some(TileType::Open);
                 gen_map[size * p.y + p.x].link = q;
