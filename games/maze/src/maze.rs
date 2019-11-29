@@ -106,30 +106,21 @@ impl Maze {
         for i in 0..size {
             for j in 0..size {
                 let pos = Position { x: j, y: i };
-
-                match (j & 1 == 0, i & 1 == 0) {
-                    (true, true) => gen_map.push(MazeGenerationTile {
-                        position: pos,
-                        link: pos,
-                        tile_type: Some(TileType::Open),
-                    }),
-                    (false, false) => gen_map.push(MazeGenerationTile {
-                        position: pos,
-                        link: pos,
-                        tile_type: Some(TileType::Blocked),
-                    }),
-                    (false, true) | (true, false) => gen_map.push(MazeGenerationTile {
-                        position: pos,
-                        link: pos,
-                        tile_type: None,
-                    }),
-                }
+                gen_map.push(MazeGenerationTile {
+                    position: pos,
+                    link: pos,
+                    tile_type: match (j & 1 == 0, i & 1 == 0) {
+                        (true, true) => Some(TileType::Open),
+                        (false, false) => Some(TileType::Blocked),
+                        (false, true) | (true, false) => None,
+                    },
+                });
             }
         }
 
-        let neither_map = gen_map.to_vec();
-        let mut neither_map = neither_map
+        let mut neither_map = gen_map
             .iter()
+            .cloned()
             .filter(|x| match x.tile_type {
                 None => true,
                 _ => false,
@@ -139,32 +130,35 @@ impl Maze {
         neither_map.shuffle(&mut thread_rng());
 
         for i in neither_map {
-            let find_map = |x| find(size, &gen_map, x);
             let pos = i.position;
 
-            let (p, q) = if pos.y & 1 == 0 {
-                find_map((
-                    Position {
-                        x: pos.x + 1,
-                        y: pos.y,
-                    },
-                    Position {
-                        x: pos.x - 1,
-                        y: pos.y,
-                    },
-                ))
-            } else {
-                find_map((
-                    Position {
-                        x: pos.x,
-                        y: pos.y - 1,
-                    },
-                    Position {
-                        x: pos.x,
-                        y: pos.y + 1,
-                    },
-                ))
-            };
+            let (p, q) = find(
+                size,
+                &gen_map,
+                if pos.y & 1 == 0 {
+                    (
+                        Position {
+                            x: pos.x + 1,
+                            y: pos.y,
+                        },
+                        Position {
+                            x: pos.x - 1,
+                            y: pos.y,
+                        },
+                    )
+                } else {
+                    (
+                        Position {
+                            x: pos.x,
+                            y: pos.y - 1,
+                        },
+                        Position {
+                            x: pos.x,
+                            y: pos.y + 1,
+                        },
+                    )
+                },
+            );
             if p != q {
                 gen_map[size * pos.y + pos.x].tile_type = Some(TileType::Open);
                 gen_map[size * p.y + p.x].link = q;
