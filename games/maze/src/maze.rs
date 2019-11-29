@@ -99,9 +99,7 @@ impl Maze {
             }
         }
 
-        if size & 1 == 0 {
-            panic!("Random maze only allows odd numbers")
-        };
+        assert_eq!(size % 2, 1, "Random maze only allows odd numbers");
 
         let mut gen_map = Vec::with_capacity(size * size);
 
