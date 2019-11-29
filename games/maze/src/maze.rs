@@ -191,6 +191,7 @@ impl Maze {
         self.map[i].reveal();
     }
 
+    #[cfg(test)]
     fn set(&mut self, x: usize, y: usize, cell: Tile) {
         let i = self.to_index(x, y);
         self.map[i] = cell;
@@ -268,14 +269,6 @@ impl Maze {
             self.reveal(self.player.x, self.player.y + 1);
         }
     }
-
-    fn reveal_all(&mut self) {
-        for i in 0..self.size {
-            for j in 0..self.size {
-                self.reveal(i, j);
-            }
-        }
-    }
 }
 
 impl PartialEq for Position {
@@ -285,6 +278,7 @@ impl PartialEq for Position {
 }
 
 impl Tile {
+    #[cfg(test)]
     pub fn open() -> Self {
         Tile {
             tile_type: TileType::Open,
@@ -292,6 +286,7 @@ impl Tile {
         }
     }
 
+    #[cfg(test)]
     pub fn blocked() -> Self {
         Tile {
             tile_type: TileType::Blocked,
