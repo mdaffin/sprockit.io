@@ -26,7 +26,7 @@ mod tests {
     fn returns_maze_associated_with_token() {
         let sessions: Sessions = web::Data::new(Mutex::new(HashMap::new()));
         let token = SessionToken::new();
-        let maze = Maze::new(10);
+        let maze = Maze::new(9);
 
         {
             let mut sessions = sessions.lock().unwrap();
