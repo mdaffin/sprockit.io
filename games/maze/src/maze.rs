@@ -85,7 +85,7 @@ impl Maze {
     fn generate_random_map(size: usize) -> Vec<Tile> {
         fn find(
             size: usize,
-            map: &Vec<MazeGenerationTile>,
+            map: &[MazeGenerationTile],
             (p, q): (Position, Position),
         ) -> (Position, Position) {
             let (cell_p, cell_q) = (map[size * p.y + p.x].link, map[size * q.y + q.x].link);
