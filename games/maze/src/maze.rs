@@ -17,7 +17,7 @@ pub struct Maze {
 struct MazeGenerationTile {
     position: Position,
     link: Position,
-    tile: Tile,
+    tile_type: Option<TileType>,
 }
 
 #[derive(Debug, PartialEq, Serialize)]
@@ -50,7 +50,6 @@ enum TileVisibility {
 enum TileType {
     Blocked,
     Open,
-    Neither,
 }
 
 #[derive(Debug, Copy, Clone, Deserialize, Serialize, PartialEq)]
@@ -80,19 +79,19 @@ impl Maze {
         };
 
         maze.reveal_around_player();
-
         maze
     }
 
     fn generate_random_map(size: usize) -> Vec<Tile> {
         fn find(
-            map: &Vec<Vec<MazeGenerationTile>>,
+            size: usize,
+            map: &Vec<MazeGenerationTile>,
             (p, q): (Position, Position),
         ) -> (Position, Position) {
-            let (cell_p, cell_q) = (map[p.y][p.x].link, map[q.y][q.x].link);
+            let (cell_p, cell_q) = (map[size * p.y + p.x].link, map[size * q.y + q.x].link);
 
             if p != cell_p || q != cell_q {
-                find(map, (cell_p, cell_q))
+                find(size, map, (cell_p, cell_q))
             } else {
                 (cell_p, cell_q)
             }
@@ -102,37 +101,37 @@ impl Maze {
             panic!("Random maze only allows odd numbers")
         };
 
-        let mut gen_map: Vec<Vec<MazeGenerationTile>> = vec![];
+        let mut gen_map = Vec::with_capacity(size * size);
 
         for i in 0..size {
-            let mut gen_row: Vec<_> = vec![];
             for j in 0..size {
                 let pos = Position { x: j, y: i };
 
                 match (j & 1 == 0, i & 1 == 0) {
-                    (true, true) => gen_row.push(MazeGenerationTile {
+                    (true, true) => gen_map.push(MazeGenerationTile {
                         position: pos,
-                        ..MazeGenerationTile::open(pos)
+                        link: pos,
+                        tile_type: Some(TileType::Open),
                     }),
-                    (false, false) => gen_row.push(MazeGenerationTile {
+                    (false, false) => gen_map.push(MazeGenerationTile {
                         position: pos,
-                        ..MazeGenerationTile::blocked(pos)
+                        link: pos,
+                        tile_type: Some(TileType::Blocked),
                     }),
-                    (false, true) | (true, false) => gen_row.push(MazeGenerationTile {
+                    (false, true) | (true, false) => gen_map.push(MazeGenerationTile {
                         position: pos,
-                        ..MazeGenerationTile::neither(pos)
+                        link: pos,
+                        tile_type: None,
                     }),
                 }
             }
-            gen_map.push(gen_row);
         }
 
         let neither_map = gen_map.to_vec();
         let mut neither_map = neither_map
             .iter()
-            .flatten()
-            .filter(|x| match x.tile.tile_type {
-                TileType::Neither => true,
+            .filter(|x| match x.tile_type {
+                None => true,
                 _ => false,
             })
             .collect::<Vec<_>>();
@@ -140,11 +139,11 @@ impl Maze {
         neither_map.shuffle(&mut thread_rng());
 
         for i in neither_map {
-            let find_map = |x| find(&gen_map, x);
+            let find_map = |x| find(size, &gen_map, x);
             let pos = i.position;
 
-            let (p, q) = match pos.y & 1 == 0 {
-                true => find_map((
+            let (p, q) = if pos.y & 1 == 0 {
+                find_map((
                     Position {
                         x: pos.x + 1,
                         y: pos.y,
@@ -153,8 +152,9 @@ impl Maze {
                         x: pos.x - 1,
                         y: pos.y,
                     },
-                )),
-                false => find_map((
+                ))
+            } else {
+                find_map((
                     Position {
                         x: pos.x,
                         y: pos.y - 1,
@@ -163,17 +163,23 @@ impl Maze {
                         x: pos.x,
                         y: pos.y + 1,
                     },
-                )),
+                ))
             };
             if p != q {
-                gen_map[pos.y][pos.x].tile = Tile::open();
-                gen_map[p.y][p.x].link = q;
+                gen_map[size * pos.y + pos.x].tile_type = Some(TileType::Open);
+                gen_map[size * p.y + p.x].link = q;
             } else {
-                gen_map[pos.y][pos.x].tile = Tile::blocked();
+                gen_map[size * pos.y + pos.x].tile_type = Some(TileType::Blocked);
             }
         }
 
-        gen_map.iter().flatten().map(|x| x.tile).collect::<Vec<_>>()
+        gen_map
+            .iter()
+            .map(|x| Tile {
+                tile_type: x.tile_type.unwrap(),
+                visibility: TileVisibility::Hidden,
+            })
+            .collect::<Vec<_>>()
     }
 
     fn to_index(&self, x: usize, y: usize) -> usize {
@@ -272,41 +278,6 @@ impl Maze {
     }
 }
 
-impl MazeGenerationTile {
-    fn open(pos: Position) -> Self {
-        MazeGenerationTile {
-            position: pos,
-            link: pos,
-            tile: Tile {
-                tile_type: TileType::Open,
-                visibility: TileVisibility::Hidden,
-            },
-        }
-    }
-
-    fn blocked(pos: Position) -> Self {
-        MazeGenerationTile {
-            position: pos,
-            link: pos,
-            tile: Tile {
-                tile_type: TileType::Blocked,
-                visibility: TileVisibility::Hidden,
-            },
-        }
-    }
-
-    fn neither(pos: Position) -> Self {
-        MazeGenerationTile {
-            position: pos,
-            link: pos,
-            tile: Tile {
-                tile_type: TileType::Neither,
-                visibility: TileVisibility::Hidden,
-            },
-        }
-    }
-}
-
 impl PartialEq for Position {
     fn eq(&self, other: &Self) -> bool {
         self.x == other.x && self.y == other.y
@@ -391,7 +362,6 @@ impl Serialize for Tile {
             match self.tile_type {
                 TileType::Open => serializer.serialize_str("open"),
                 TileType::Blocked => serializer.serialize_str("blocked"),
-                _ => panic!("Neither open nor blocked"),
             }
         } else {
             serializer.serialize_str("hidden")
