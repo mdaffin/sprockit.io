@@ -189,12 +189,6 @@ impl Maze {
         self.map[i].reveal();
     }
 
-    #[cfg(test)]
-    fn set(&mut self, x: usize, y: usize, cell: Tile) {
-        let i = self.to_index(x, y);
-        self.map[i] = cell;
-    }
-
     fn tile_at(&self, x: usize, y: usize) -> Tile {
         self.map[self.to_index(x, y)]
     }
@@ -424,6 +418,11 @@ pub mod tests {
     #[test]
     /// The map maze should serialize to a 2d array instead of its internal representation.
     fn mazemap_serializes_to_a_2d_array() {
+        fn set(maze: &mut Maze, x: usize, y: usize, cell: Tile) {
+            let i = maze.to_index(x, y);
+            maze.map[i] = cell;
+        };
+
         let test_cases = [
             (3, r#"[["player","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","exit"]]"#),
             (2, r#"[["player","hidden"],["hidden","exit"]]"#),
@@ -433,13 +432,13 @@ pub mod tests {
             blocked.reveal();
             let mut open = Tile::open();
             open.reveal();
-            let mut map = maze_from_slice_with_player_at(0, 0, &vec![blocked; size * size]);
+            let mut maze = maze_from_slice_with_player_at(0, 0, &vec![blocked; size * size]);
 
-            map.set(0, 0, open);
-            map.set(1, 0, Tile::blocked());
-            map.set(0, 1, Tile::open());
+            set(&mut maze, 0, 0, open);
+            set(&mut maze, 1, 0, Tile::blocked());
+            set(&mut maze, 0, 1, Tile::open());
 
-            let serialized = serde_json::to_string(&map).unwrap();
+            let serialized = serde_json::to_string(&maze).unwrap();
             assert_eq!(serialized.as_str(), expected);
         }
     }
