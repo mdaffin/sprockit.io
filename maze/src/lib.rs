@@ -5,10 +5,19 @@ use serde::ser::{SerializeSeq, Serializer};
 use serde::{self, Deserialize, Serialize};
 use std::fmt;
 
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+
+#[cfg(target_arch = "wasm32")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Display, PartialEq)]
 #[display(fmt = "direction blocked")]
 pub struct DirectionBlocked;
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Clone)]
 pub struct Maze {
     player: Position,
@@ -24,6 +33,7 @@ struct MazeGenerationTile {
     tile_type: Option<TileType>,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, PartialEq, Serialize)]
 pub struct NeighbouringTileTypes {
     left: TileType,
@@ -32,30 +42,35 @@ pub struct NeighbouringTileTypes {
     down: TileType,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Copy, Clone, Serialize)]
 pub struct Position {
     pub x: usize,
     pub y: usize,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Tile {
     tile_type: TileType,
     visibility: TileVisibility,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]
-enum TileVisibility {
+pub enum TileVisibility {
     Hidden,
     Revealed,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Copy, Clone, Serialize, PartialEq)]
-enum TileType {
+pub enum TileType {
     Blocked,
     Open,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 #[derive(Debug, Copy, Clone, Deserialize, Serialize, PartialEq)]
 pub enum Direction {
     #[serde(rename = "up")]
@@ -68,6 +83,7 @@ pub enum Direction {
     Right,
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 impl Maze {
     pub fn new(size: usize) -> Self {
         let random_map = Maze::generate_random_map(size);
@@ -201,7 +217,18 @@ impl Maze {
         }
     }
 
+    #[cfg(target_arch = "wasm32")]
+    pub fn move_player(&mut self, direction: Direction) -> Result<(), JsValue> {
+        self.internal_move_player(direction)
+            .map_err(|_| JsValue::from_str("direction blocked"))
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
     pub fn move_player(&mut self, direction: Direction) -> Result<(), DirectionBlocked> {
+        self.internal_move_player(direction)
+    }
+
+    fn internal_move_player(&mut self, direction: Direction) -> Result<(), DirectionBlocked> {
         use Direction::*;
 
         let (x, y) = match direction {
@@ -268,6 +295,7 @@ impl PartialEq for Position {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 impl Tile {
     pub fn open() -> Self {
         Tile {
