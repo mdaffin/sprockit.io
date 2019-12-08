@@ -4,6 +4,7 @@ async function run() {
   console.log("Starting maze solver");
   const maze = new Maze();
   await maze.start();
+  await maze.updateMaze();
   console.log("token: " + maze.token);
 }
 
@@ -11,8 +12,8 @@ async function run() {
 `;
 
 export const state = () => ({
-  maze: Array.from({ length: 10 }, () =>
-    Array.from({ length: 10 }, () => "hidden"),
+  maze: Array.from({ length: 9 }, () =>
+    Array.from({ length: 9 }, () => "hidden"),
   ),
   script: DEFAULT_SCRIPT,
 });

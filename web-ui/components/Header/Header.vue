@@ -4,9 +4,14 @@
       <img src="/logo-192x32.png" alt="sprockit.io logo" />
     </a>
     <div class="button-group">
-      <HeaderButton class="primary" @click="run()">Run</HeaderButton>
-      <HeaderButton ref="clear" @click="$store.commit('console/clear')">
-        Clear
+      <HeaderButton class="primary" @click="run()">
+        Run
+      </HeaderButton>
+      <HeaderButton @click="saveScript()">
+        Save
+      </HeaderButton>
+      <HeaderButton @click="run()">
+        Reset
       </HeaderButton>
       <iframe ref="iframe"></iframe>
     </div>
@@ -28,6 +33,15 @@ function PressCtrlPlusKey({ key, keyCode, fun }) {
 export default {
   components: { HeaderButton },
   mounted() {
+    // save script in localStorage
+    PressCtrlPlusKey({
+      key: "s",
+      keyCode: 83,
+      fun: e => {
+        e.preventDefault();
+        this.saveScript();
+      },
+    });
     // run run() on <C-Enter>
     PressCtrlPlusKey({
       key: "Enter",
@@ -75,6 +89,14 @@ export default {
         `${Date.now()}`,
       );
       return data.token;
+    },
+    saveScript() {
+      if (typeof Storage !== "undefined") {
+        localStorage.mazeScript = this.$store.state.script;
+        this.$store.commit("console/append", {
+          output: "Saving your script",
+        });
+      }
     },
   },
 };
