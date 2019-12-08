@@ -21,17 +21,6 @@ export default {
     if (script) {
       this.$store.commit("setScript", script);
     }
-    document.addEventListener("keydown", e => {
-      const modifierKey = navigator.platform.match("Mac")
-        ? e.metaKey
-        : e.ctrlKey;
-      if ((e.key ? e.key === "s" : e.keyCode === 83) && modifierKey) {
-        e.preventDefault();
-        if (typeof Storage !== "undefined") {
-          localStorage.mazeScript = this.$store.state.script;
-        }
-      }
-    });
   },
   data() {
     return {

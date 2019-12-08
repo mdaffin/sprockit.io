@@ -4,7 +4,15 @@
       <img src="/logo-192x32.png" alt="sprockit.io logo" />
     </a>
     <div class="button-group">
-      <HeaderButton class="primary" @click="run()">Run</HeaderButton>
+      <HeaderButton class="primary" @click="run()">
+        Run
+      </HeaderButton>
+      <HeaderButton ref="save" @click="saveScript()">
+        Save
+      </HeaderButton>
+      <HeaderButton @click="resetScript()">
+        Reset
+      </HeaderButton>
       <HeaderButton ref="clear" @click="$store.commit('console/clear')">
         Clear
       </HeaderButton>
@@ -28,6 +36,15 @@ function PressCtrlPlusKey({ key, keyCode, fun }) {
 export default {
   components: { HeaderButton },
   mounted() {
+    // save script in localStorage
+    PressCtrlPlusKey({
+      key: "s",
+      keyCode: 83,
+      fun: e => {
+        e.preventDefault();
+        this.saveScript();
+      },
+    });
     // run run() on <C-Enter>
     PressCtrlPlusKey({
       key: "Enter",
@@ -62,6 +79,11 @@ export default {
         body.appendChild(script);
       };
     },
+    writeToConsole(msg) {
+      this.$store.commit("console/append", {
+        output: msg,
+      });
+    },
     addToLog(output, type) {
       const consoleLine = {
         output: output,
@@ -75,6 +97,16 @@ export default {
         `${Date.now()}`,
       );
       return data.token;
+    },
+    saveScript() {
+      if (typeof Storage !== "undefined") {
+        localStorage.mazeScript = this.$store.state.script;
+        this.writeToConsole("Saving script");
+      }
+    },
+    resetScript() {
+      this.$store.commit("resetScript");
+      this.writeToConsole("Resetting script");
     },
   },
 };
