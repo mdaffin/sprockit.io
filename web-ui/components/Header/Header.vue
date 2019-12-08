@@ -7,7 +7,7 @@
       <HeaderButton class="primary" @click="run()">
         Run
       </HeaderButton>
-      <HeaderButton @click="saveScript()">
+      <HeaderButton ref="save" @click="saveScript()">
         Save
       </HeaderButton>
       <HeaderButton @click="resetScript()">
