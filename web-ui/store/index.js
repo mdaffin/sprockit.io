@@ -25,6 +25,9 @@ export const mutations = {
   setScript(state, script) {
     state.script = script;
   },
+  resetScript(state) {
+    state.script = DEFAULT_SCRIPT;
+  },
 };
 
 export const actions = {

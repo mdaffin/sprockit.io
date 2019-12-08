@@ -10,8 +10,11 @@
       <HeaderButton @click="saveScript()">
         Save
       </HeaderButton>
-      <HeaderButton @click="run()">
+      <HeaderButton @click="resetScript()">
         Reset
+      </HeaderButton>
+      <HeaderButton ref="clear" @click="$store.commit('console/clear')">
+        Clear
       </HeaderButton>
       <iframe ref="iframe"></iframe>
     </div>
@@ -76,6 +79,11 @@ export default {
         body.appendChild(script);
       };
     },
+    writeToConsole(msg) {
+      this.$store.commit("console/append", {
+        output: msg,
+      });
+    },
     addToLog(output, type) {
       const consoleLine = {
         output: output,
@@ -93,10 +101,12 @@ export default {
     saveScript() {
       if (typeof Storage !== "undefined") {
         localStorage.mazeScript = this.$store.state.script;
-        this.$store.commit("console/append", {
-          output: "Saving your script",
-        });
+        this.writeToConsole("Saving script");
       }
+    },
+    resetScript() {
+      this.$store.commit("resetScript");
+      this.writeToConsole("Resetting script");
     },
   },
 };
