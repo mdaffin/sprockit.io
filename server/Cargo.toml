@@ -7,19 +7,21 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "1.0.8"
+maze = { path = "../maze", package = "sprokit_maze" }
 actix-http = "0.2.10"
 actix-service = "0.4.2"
-futures = "0.1.29"
-failure = "0.1.6"
-log = "0.4.8"
+actix-web = "1.0.8"
+derive_more = "0.15.0"
 env_logger = "0.7.0"
+failure = "0.1.6"
+futures = "0.1.29"
+log = "0.4.8"
+rand = "0.7.2"
 serde = "1.0.101"
 uuid = { version = "0.8.1", features = ["serde", "v4"] }
-derive_more = "0.15.0"
 
 [dev-dependencies]
-serde_json = "1.0.41"
 bytes = "0.4.12"
-lazy_static = "1.4.0"
 http = "0.1.19"
+lazy_static = "1.4.0"
+serde_json = "1.0.41"

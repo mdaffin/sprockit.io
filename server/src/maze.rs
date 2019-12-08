@@ -1,4 +1,6 @@
 use crate::error::ServiceError;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use serde::ser::{SerializeSeq, Serializer};
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -9,6 +11,13 @@ pub struct Maze {
     exit: Position,
     size: usize,
     map: Vec<Tile>,
+}
+
+#[derive(Debug, Clone)]
+struct MazeGenerationTile {
+    position: Position,
+    link: Position,
+    tile_type: Option<TileType>,
 }
 
 #[derive(Debug, PartialEq, Serialize)]
@@ -57,6 +66,8 @@ pub enum Direction {
 
 impl Maze {
     pub fn new(size: usize) -> Self {
+        let random_map = Maze::generate_random_map(size);
+
         let mut maze = Maze {
             player: Position { x: 0, y: 0 },
             exit: Position {
@@ -64,17 +75,105 @@ impl Maze {
                 y: size - 1,
             },
             size,
-            map: vec![Tile::blocked(); size * size],
+            map: random_map,
         };
 
-        for i in 0..size {
-            maze.set(i, 0, Tile::open());
-            maze.set(size - 1, i, Tile::open());
+        maze.reveal_around_player();
+        maze
+    }
+
+    fn generate_random_map(size: usize) -> Vec<Tile> {
+        fn find(
+            size: usize,
+            map: &[MazeGenerationTile],
+            p: Position,
+            q: Position,
+        ) -> (Position, Position) {
+            let cell_p = map[size * p.y + p.x].link;
+            let cell_q = map[size * q.y + q.x].link;
+
+            if p != cell_p || q != cell_q {
+                find(size, map, cell_p, cell_q)
+            } else {
+                (cell_p, cell_q)
+            }
         }
 
-        maze.reveal_around_player();
+        assert_eq!(size % 2, 1, "Random maze only allows odd numbers");
 
-        maze
+        let mut gen_map = Vec::with_capacity(size * size);
+
+        for i in 0..size {
+            for j in 0..size {
+                let pos = Position { x: j, y: i };
+                gen_map.push(MazeGenerationTile {
+                    position: pos,
+                    link: pos,
+                    tile_type: match (j & 1 == 0, i & 1 == 0) {
+                        (true, true) => Some(TileType::Open),
+                        (false, false) => Some(TileType::Blocked),
+                        (false, true) | (true, false) => None,
+                    },
+                });
+            }
+        }
+
+        let mut neither_map = gen_map
+            .iter()
+            .cloned()
+            .filter(|x| match x.tile_type {
+                None => true,
+                _ => false,
+            })
+            .collect::<Vec<_>>();
+
+        neither_map.shuffle(&mut thread_rng());
+
+        for i in neither_map {
+            let pos = i.position;
+
+            let (p, q) = find(
+                size,
+                &gen_map,
+                if pos.y & 1 == 0 {
+                    Position {
+                        x: pos.x + 1,
+                        y: pos.y,
+                    }
+                } else {
+                    Position {
+                        x: pos.x,
+                        y: pos.y - 1,
+                    }
+                },
+                if pos.y & 1 == 0 {
+                    Position {
+                        x: pos.x - 1,
+                        y: pos.y,
+                    }
+                } else {
+                    Position {
+                        x: pos.x,
+                        y: pos.y + 1,
+                    }
+                },
+            );
+
+            if p != q {
+                gen_map[size * pos.y + pos.x].tile_type = Some(TileType::Open);
+                gen_map[size * p.y + p.x].link = q;
+            } else {
+                gen_map[size * pos.y + pos.x].tile_type = Some(TileType::Blocked);
+            }
+        }
+
+        gen_map
+            .iter()
+            .map(|x| Tile {
+                tile_type: x.tile_type.unwrap(),
+                visibility: TileVisibility::Hidden,
+            })
+            .collect::<Vec<_>>()
     }
 
     fn to_index(&self, x: usize, y: usize) -> usize {
@@ -86,6 +185,7 @@ impl Maze {
         self.map[i].reveal();
     }
 
+    #[cfg(test)]
     fn set(&mut self, x: usize, y: usize, cell: Tile) {
         let i = self.to_index(x, y);
         self.map[i] = cell;
@@ -165,7 +265,14 @@ impl Maze {
     }
 }
 
+impl PartialEq for Position {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
+}
+
 impl Tile {
+    #[cfg(test)]
     pub fn open() -> Self {
         Tile {
             tile_type: TileType::Open,
@@ -173,6 +280,7 @@ impl Tile {
         }
     }
 
+    #[cfg(test)]
     pub fn blocked() -> Self {
         Tile {
             tile_type: TileType::Blocked,
@@ -292,9 +400,23 @@ pub mod tests {
     /// A new map gets created with a backing array of cells of size equal to a square of `size`
     /// sides.
     fn creating_maze_with_size() {
-        for size in 1..100 {
+        for size in (1..100).filter(|x| x & 1 != 0) {
             let maze = Maze::new(size);
             assert_eq!(maze.map.len(), size * size);
+        }
+    }
+
+    #[test]
+    /// Start and exit tile are not blocked in a random maze
+    fn random_maze_start_and_exit_not_blocked() {
+        for size in (1..100).filter(|x| x & 1 != 0) {
+            let maze = Maze::new(size);
+
+            let start_tile_type = maze.map[maze.to_index(0, 0)].tile_type;
+            let end_tile_type = maze.map[maze.to_index(size - 1, size - 1)].tile_type;
+
+            assert_eq!(start_tile_type, TileType::Open);
+            assert_eq!(end_tile_type, TileType::Open);
         }
     }
 

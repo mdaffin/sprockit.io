@@ -1,5 +1,6 @@
 use actix_web::{error::ResponseError, HttpResponse};
 use derive_more::Display;
+use maze;
 use serde::Serialize;
 
 #[derive(Debug, Display, PartialEq)]
@@ -14,6 +15,12 @@ pub enum ServiceError {
     SessionNotFound,
     #[display(fmt = "direction blocked")]
     DirectionBlocked,
+}
+
+impl From<maze::DirectionBlocked> for ServiceError {
+    fn from(_error: maze::DirectionBlocked) -> Self {
+        ServiceError::DirectionBlocked
+    }
 }
 
 #[derive(Debug, Serialize)]

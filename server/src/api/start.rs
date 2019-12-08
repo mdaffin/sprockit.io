@@ -13,7 +13,7 @@ struct Response {
 /// session.
 pub fn start(state: Sessions) -> HttpResponse {
     let token = SessionToken::new();
-    let session = Session::new(10);
+    let session = Session::new(9);
 
     {
         let mut sessions = state.lock().unwrap();
