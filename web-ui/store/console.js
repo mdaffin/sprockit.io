@@ -4,7 +4,7 @@ export const state = () => ({
 
 export const mutations = {
   append(state, line) {
-    state.lines.unshift(line);
+    state.lines.push(line);
   },
   clear(state) {
     state.lines = [];
