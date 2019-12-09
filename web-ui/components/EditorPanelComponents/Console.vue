@@ -10,6 +10,17 @@
   </div>
 </template>
 
+<script>
+export default {
+  updated: function() {
+    this.$nextTick(function() {
+      const panel = document.querySelector(".panel-console");
+      panel.scrollBy(0, panel.scrollHeight);
+    });
+  },
+};
+</script>
+
 <style>
 .console {
   color: var(--background-color);
