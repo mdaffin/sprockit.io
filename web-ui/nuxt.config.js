@@ -40,7 +40,7 @@ export default {
   css: [
     "normalize.css/normalize.css",
     "codemirror/lib/codemirror.css",
-    "codemirror/theme/duotone-light.css",
+    "~static/css/sprockit.css",
   ],
   plugins: [{ src: "~plugins/nuxt-codemirror-plugin.js", ssr: false }],
   buildModules: [],

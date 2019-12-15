@@ -4,19 +4,27 @@
 
 <style>
 html {
-  --background-color: #2b2b2b;
-  --color: #f3f3f3;
   --red: #b33a2e;
   --orange: #e08433;
   --yellow: #fde354;
   --green: #6dc957;
-  --dark-green: #12270c;
   --cyan: #57c9bd;
   --purple: #9271d5;
   --rose: #d5719b;
 
-  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --dark-grey: #2b2b2b;
+  --lighter-dark-grey: #505050;
+  --grey: #b0b0b0;
+  --light-grey: #e0e0e0;
+  --lighter-grey: #f0f0f0;
+  --very-light-grey: #f5f5f5;
+
+  --background-color: var(--very-light-grey);
+  --color: var(--dark-grey);
+  --border: var(--lighter-grey);
+
+  font-family: "Roboto Mono", "Inconsolata", "Consolas", "Ubuntu Mono",
+    "Anonymous Pro", "Monospace";
   font-size: 16px;
   background-color: var(--background-color);
   color: var(--color);

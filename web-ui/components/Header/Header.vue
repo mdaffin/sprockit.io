@@ -7,13 +7,17 @@
       <HeaderButton class="primary" @click="run()">
         Run
       </HeaderButton>
-      <HeaderButton ref="save" @click="saveScript()">
+      <HeaderButton class="cyan" ref="save" @click="saveScript()">
         Save
       </HeaderButton>
-      <HeaderButton @click="resetScript()">
+      <HeaderButton class="purple" @click="resetScript()">
         Reset
       </HeaderButton>
-      <HeaderButton ref="clear" @click="$store.commit('console/clear')">
+      <HeaderButton
+        class="rose"
+        ref="clear"
+        @click="$store.commit('console/clear')"
+      >
         Clear
       </HeaderButton>
       <iframe ref="iframe"></iframe>
@@ -117,6 +121,12 @@ header {
   display: flex;
   justify-content: space-between;
   height: 48px;
+  background-color: var(--dark-grey);
+}
+
+.button-group {
+  background-color: var(--background-color);
+  display: flex;
 }
 
 iframe {
@@ -125,5 +135,6 @@ iframe {
 
 header img {
   margin: 8px;
+  padding-left: 0.5em;
 }
 </style>

@@ -35,7 +35,7 @@ export default {
         keyMap: "sublime",
         matchBrackets: true,
         showCursorWhenSelecting: true,
-        theme: "duotone-light",
+        theme: "sprockit",
         extraKeys: { Ctrl: "autocomplete" },
         hintOptions: {
           completeSingle: false,

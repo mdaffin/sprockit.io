@@ -36,7 +36,7 @@ export default {
 <style scoped>
 div {
   background-color: #f0f0f0;
-  color: var(--background-color);
+  color: var(--grey);
   width: 8px;
   height: 100%;
   display: flex;

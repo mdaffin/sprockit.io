@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import Header from "~/components/Header/Header.vue";
-import DragHandle from "~/components/DragHandle.vue";
-import GamePanel from "~/components/GamePanel.vue";
-import Editor from "~/components/EditorPanelComponents/Editor";
 import Console from "~/components/EditorPanelComponents/Console";
+import DragHandle from "~/components/DragHandle.vue";
+import Editor from "~/components/EditorPanelComponents/Editor";
+import GamePanel from "~/components/GamePanel.vue";
+import Header from "~/components/Header/Header.vue";
 
 export default {
   components: {
@@ -89,7 +89,7 @@ export default {
   flex-direction: column;
 }
 
-.panel > .game-panel {
+.game-panel {
   width: var(--game-panel-width);
   overflow: auto;
 }
