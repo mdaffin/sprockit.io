@@ -40,7 +40,7 @@ export default {
 }
 
 .maze-game-ascii > pre {
-  border: solid 0.2em var(--color);
+  border: solid 0.1em var(--color);
   font-size: 2.25vw;
 }
 </style>

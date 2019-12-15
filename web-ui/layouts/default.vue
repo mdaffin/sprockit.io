@@ -12,6 +12,7 @@ html {
   --purple: #9271d5;
   --rose: #d5719b;
 
+  --darker-grey: #292929;
   --dark-grey: #2b2b2b;
   --lighter-dark-grey: #505050;
   --grey: #b0b0b0;
@@ -19,9 +20,9 @@ html {
   --lighter-grey: #f0f0f0;
   --very-light-grey: #f5f5f5;
 
-  --background-color: var(--very-light-grey);
-  --color: var(--dark-grey);
-  --border: var(--lighter-grey);
+  --background-color: var(--dark-grey);
+  --color: var(--very-light-grey);
+  --border: var(--darker-grey);
 
   font-family: "Roboto Mono", "Inconsolata", "Consolas", "Ubuntu Mono",
     "Anonymous Pro", "Monospace";

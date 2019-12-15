@@ -121,7 +121,7 @@ header {
   display: flex;
   justify-content: space-between;
   height: 48px;
-  background-color: var(--dark-grey);
+  background-color: var(--border);
 }
 
 .button-group {

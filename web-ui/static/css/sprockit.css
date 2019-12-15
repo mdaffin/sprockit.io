@@ -24,7 +24,7 @@
   background: var(--light-grey);
 }
 .cm-s-sprockit .CodeMirror-gutters {
-  background: var(--very-light-grey);
+  background: var(--background-color);
   border-right: 0px;
 }
 .cm-s-sprockit .CodeMirror-guttermarker {
@@ -35,7 +35,7 @@
 }
 .cm-s-sprockit .CodeMirror-linenumber {
   color: var(--grey);
-  background-color: var(--very-light-grey);
+  background-color: var(--background-color);
 }
 .cm-s-sprockit .CodeMirror-cursor {
   border-left: 1px solid var(--lighter-dark-grey);
@@ -70,7 +70,7 @@
   color: var(--cyan);
 }
 .cm-s-sprockit span.cm-def {
-  color: var(--orange);
+  color: var(--yellow);
 }
 .cm-s-sprockit span.cm-bracket {
   color: var(--dark-grey);
@@ -90,6 +90,6 @@
   background: var(--background-color);
 }
 .cm-s-sprockit .CodeMirror-matchingbracket {
-  color: var(--very-light-grey) !important;
+  color: var(--border) !important;
   background-color: var(--cyan) !important;
 }
