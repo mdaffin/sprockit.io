@@ -17,6 +17,7 @@ steps:
   - name: server
     image: rust
     commands:
+      - cd server
       - rustup component add clippy
       - cargo clippy --quiet --locked --all-features -- -D warnings
       - cargo test --quiet --locked

@@ -502,7 +502,7 @@ mod neighbouring_tile_types {
 
 #[cfg(test)]
 mod move_player {
-    use super::{Direction, DirectionBlocked, Maze, Position, Tile};
+    use super::{Direction, Maze, Position, ServiceError, Tile};
     use lazy_static::lazy_static;
 
     pub fn maze_from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Maze {
@@ -593,7 +593,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 1);
             assert_eq!(maze.player.y, 1);
         }
@@ -606,7 +606,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 1);
             assert_eq!(maze.player.y, 1);
         }
@@ -619,7 +619,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 1);
             assert_eq!(maze.player.y, 1);
         }
@@ -632,7 +632,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 1);
             assert_eq!(maze.player.y, 1);
         }
@@ -646,7 +646,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 0);
             assert_eq!(maze.player.y, 0);
         }
@@ -659,7 +659,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 0);
             assert_eq!(maze.player.y, 0);
         }
@@ -672,7 +672,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 0);
             assert_eq!(maze.player.y, 0);
         }
@@ -685,7 +685,7 @@ mod move_player {
             let mut maze = maze_from_slice_with_player_at(x, y, map);
             let err = maze.move_player(direction);
 
-            assert_eq!(err, Err(DirectionBlocked));
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
             assert_eq!(maze.player.x, 0);
             assert_eq!(maze.player.y, 0);
         }
