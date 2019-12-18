@@ -1,7 +1,7 @@
 use super::{SessionToken, Sessions};
 use crate::error::ServiceError;
+use crate::maze::Direction;
 use actix_web::{web, HttpResponse};
-use maze::Direction;
 
 /// Moves a player in one direction if the path is not blocked and returns the tile_types of the directions the player can move to.
 pub fn move_player(
