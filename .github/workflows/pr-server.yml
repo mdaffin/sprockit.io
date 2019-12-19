@@ -1,7 +1,7 @@
 on:
   pull_request:
-    paths:
-      - "server/**"
+    paths-ignore:
+      - "web-ui/**"
 
 name: Maze Server
 
