@@ -45,5 +45,6 @@
 .help-panel {
   max-width: 95%;
   margin: 0 auto;
+  display: none;
 }
 </style>
