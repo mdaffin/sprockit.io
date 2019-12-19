@@ -16,6 +16,7 @@ module.exports = {
   ],
   plugins: ["vue", "jest"],
   rules: {
+    "vue/html-self-closing": 0,
     "vue/max-attributes-per-line": "off",
     "vue/attribute-hyphenation": [
       "warn",

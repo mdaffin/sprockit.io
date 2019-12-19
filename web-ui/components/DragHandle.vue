@@ -1,5 +1,7 @@
 <template>
-  <div @mousedown="startDrag"><span>...</span></div>
+  <div @mousedown="startDrag">
+    <span>...</span>
+  </div>
 </template>
 
 <script>
