@@ -1,5 +1,5 @@
 [package]
-name = "sprokit-game-maze"
+name = "sprokit-server"
 version = "0.1.0"
 authors = ["Michael Daffin <michael@daffin.io>"]
 edition = "2018"
