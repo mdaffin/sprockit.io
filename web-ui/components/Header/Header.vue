@@ -20,7 +20,7 @@
       >
         Clear
       </HeaderButton>
-      <iframe ref="iframe"></iframe>
+      <iframe ref="iframe" />
     </div>
   </header>
 </template>

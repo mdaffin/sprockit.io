@@ -1,0 +1,30 @@
+on: [pull_request]
+
+name: Maze UI
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 13
+      - working-directory: ./web-ui
+        run: |
+          yarn install --silent
+          yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 13
+      - working-directory: ./web-ui
+        run: |
+          yarn install --silent
+          yarn test --ci

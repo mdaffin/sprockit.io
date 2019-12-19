@@ -185,12 +185,6 @@ impl Maze {
         self.map[i].reveal();
     }
 
-    #[cfg(test)]
-    fn set(&mut self, x: usize, y: usize, cell: Tile) {
-        let i = self.to_index(x, y);
-        self.map[i] = cell;
-    }
-
     fn tile_at(&self, x: usize, y: usize) -> Tile {
         self.map[self.to_index(x, y)]
     }
@@ -423,8 +417,16 @@ pub mod tests {
     #[test]
     /// The map maze should serialize to a 2d array instead of its internal representation.
     fn mazemap_serializes_to_a_2d_array() {
+        fn set(maze: &mut Maze, x: usize, y: usize, cell: Tile) {
+            let i = maze.to_index(x, y);
+            maze.map[i] = cell;
+        };
+
         let test_cases = [
-            (3, r#"[["player","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","exit"]]"#),
+            (
+                3,
+                r#"[["player","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","exit"]]"#,
+            ),
             (2, r#"[["player","hidden"],["hidden","exit"]]"#),
         ];
         for &(size, expected) in test_cases.into_iter() {
@@ -432,13 +434,13 @@ pub mod tests {
             blocked.reveal();
             let mut open = Tile::open();
             open.reveal();
-            let mut map = maze_from_slice_with_player_at(0, 0, &vec![blocked; size * size]);
+            let mut maze = maze_from_slice_with_player_at(0, 0, &vec![blocked; size * size]);
 
-            map.set(0, 0, open);
-            map.set(1, 0, Tile::blocked());
-            map.set(0, 1, Tile::open());
+            set(&mut maze, 0, 0, open);
+            set(&mut maze, 1, 0, Tile::blocked());
+            set(&mut maze, 0, 1, Tile::open());
 
-            let serialized = serde_json::to_string(&map).unwrap();
+            let serialized = serde_json::to_string(&maze).unwrap();
             assert_eq!(serialized.as_str(), expected);
         }
     }
@@ -446,8 +448,8 @@ pub mod tests {
 
 #[cfg(test)]
 mod neighbouring_tile_types {
+    use super::tests::maze_from_slice_with_player_at;
     use super::*;
-    use crate::maze::tests::maze_from_slice_with_player_at;
 
     fn neighbouring_tile_types_test_setup(
         size: usize,
@@ -498,5 +500,197 @@ mod neighbouring_tile_types {
             down: TileType::Blocked,
         };
         assert_eq!(tile_types_actual, tile_types_should_be);
+    }
+}
+
+#[cfg(test)]
+mod move_player {
+    use super::{Direction, Maze, Position, ServiceError, Tile};
+    use lazy_static::lazy_static;
+
+    pub fn maze_from_slice_with_player_at(x: usize, y: usize, map: &[Tile]) -> Maze {
+        let size = (map.len() as f64).sqrt() as usize;
+        assert_eq!(map.len(), size * size);
+        Maze {
+            player: Position { x, y },
+            exit: Position {
+                x: size - 1,
+                y: size - 1,
+            },
+            size,
+            map: Vec::from(map),
+        }
+    }
+
+    mod when_player_moves_in {
+        use super::*;
+        lazy_static! {
+            static ref BLOCKED_MAP: [Tile; 9] = [
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::open(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+                Tile::blocked(),
+            ];
+        }
+
+        #[test]
+        fn open_direction_up_player_is_moved() {
+            let direction = Direction::Up;
+            let (x, y) = (1, 1);
+            let map = &[Tile::open(); 3 * 3];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            maze.move_player(direction).unwrap();
+
+            assert_eq!(maze.player.x, 1);
+            assert_eq!(maze.player.y, 0);
+        }
+        #[test]
+        fn open_direction_down_player_is_moved() {
+            let direction = Direction::Down;
+            let (x, y) = (1, 1);
+            let map = &[Tile::open(); 3 * 3];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            maze.move_player(direction).unwrap();
+
+            assert_eq!(maze.player.x, 1);
+            assert_eq!(maze.player.y, 2);
+        }
+        #[test]
+        fn open_direction_left_player_is_moved() {
+            let direction = Direction::Left;
+            let (x, y) = (1, 1);
+            let map = &[Tile::open(); 3 * 3];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            maze.move_player(direction).unwrap();
+
+            assert_eq!(maze.player.x, 0);
+            assert_eq!(maze.player.y, 1);
+        }
+        #[test]
+        fn open_direction_right_player_is_moved() {
+            let direction = Direction::Right;
+            let (x, y) = (1, 1);
+            let map = &[Tile::open(); 3 * 3];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            maze.move_player(direction).unwrap();
+
+            assert_eq!(maze.player.x, 2);
+            assert_eq!(maze.player.y, 1);
+        }
+
+        #[test]
+        fn blocked_direction_up_player_is_moved() {
+            let direction = Direction::Up;
+            let (x, y) = (1, 1);
+            let map = &BLOCKED_MAP[..];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 1);
+            assert_eq!(maze.player.y, 1);
+        }
+        #[test]
+        fn blocked_direction_down_player_is_moved() {
+            let direction = Direction::Down;
+            let (x, y) = (1, 1);
+            let map = &BLOCKED_MAP[..];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 1);
+            assert_eq!(maze.player.y, 1);
+        }
+        #[test]
+        fn blocked_direction_left_player_is_moved() {
+            let direction = Direction::Left;
+            let (x, y) = (1, 1);
+            let map = &BLOCKED_MAP[..];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 1);
+            assert_eq!(maze.player.y, 1);
+        }
+        #[test]
+        fn blocked_direction_right_player_is_moved() {
+            let direction = Direction::Right;
+            let (x, y) = (1, 1);
+            let map = &BLOCKED_MAP[..];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 1);
+            assert_eq!(maze.player.y, 1);
+        }
+
+        #[test]
+        fn edge_direction_up_player_is_moved() {
+            let direction = Direction::Up;
+            let (x, y) = (0, 0);
+            let map = &[Tile::open()];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 0);
+            assert_eq!(maze.player.y, 0);
+        }
+        #[test]
+        fn edge_direction_down_player_is_moved() {
+            let direction = Direction::Down;
+            let (x, y) = (0, 0);
+            let map = &[Tile::open()];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 0);
+            assert_eq!(maze.player.y, 0);
+        }
+        #[test]
+        fn edge_direction_left_player_is_moved() {
+            let direction = Direction::Left;
+            let (x, y) = (0, 0);
+            let map = &[Tile::open()];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 0);
+            assert_eq!(maze.player.y, 0);
+        }
+        #[test]
+        fn edge_direction_right_player_is_moved() {
+            let direction = Direction::Right;
+            let (x, y) = (0, 0);
+            let map = &[Tile::open()];
+
+            let mut maze = maze_from_slice_with_player_at(x, y, map);
+            let err = maze.move_player(direction);
+
+            assert_eq!(err, Err(ServiceError::DirectionBlocked));
+            assert_eq!(maze.player.x, 0);
+            assert_eq!(maze.player.y, 0);
+        }
     }
 }
