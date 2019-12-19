@@ -23,25 +23,26 @@ const get = async (url, token) => sendRequest(url, token, "GET");
 export class Maze {
   async start() {
     this.token = (await post("start")).token;
+    parent.updateMaze(await get("map", this.token));
   }
 
   async moveUp() {
     await post("move/up", this.token);
+    parent.updateMaze(await get("map", this.token));
   }
 
   async moveDown() {
     await post("move/down", this.token);
+    parent.updateMaze(await get("map", this.token));
   }
 
   async moveLeft() {
     await post("move/left", this.token);
+    parent.updateMaze(await get("map", this.token));
   }
 
   async moveRight() {
     await post("move/right", this.token);
-  }
-
-  async updateMaze() {
     parent.updateMaze(await get("map", this.token));
   }
 }

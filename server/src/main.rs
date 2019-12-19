@@ -2,7 +2,7 @@ use failure::Fail;
 
 mod api;
 mod error;
-use maze;
+mod maze;
 
 fn main() {
     env_logger::init();
