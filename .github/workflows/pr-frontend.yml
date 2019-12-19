@@ -14,7 +14,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 13
-      - working-directory: ./web-ui
+      - name: yarn lint
+        working-directory: ./web-ui
         run: |
           yarn install --silent
           yarn lint
@@ -27,7 +28,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 13
-      - working-directory: ./web-ui
+      - name: yarn test
+        working-directory: ./web-ui
         run: |
           yarn install --silent
           yarn test --ci
