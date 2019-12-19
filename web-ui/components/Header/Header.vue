@@ -16,7 +16,7 @@
       <HeaderButton ref="clear" @click="$store.commit('console/clear')">
         Clear
       </HeaderButton>
-      <iframe ref="iframe"></iframe>
+      <iframe ref="iframe" />
     </div>
   </header>
 </template>

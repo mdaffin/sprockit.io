@@ -423,7 +423,10 @@ pub mod tests {
         };
 
         let test_cases = [
-            (3, r#"[["player","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","exit"]]"#),
+            (
+                3,
+                r#"[["player","hidden","blocked"],["hidden","blocked","blocked"],["blocked","blocked","exit"]]"#,
+            ),
             (2, r#"[["player","hidden"],["hidden","exit"]]"#),
         ];
         for &(size, expected) in test_cases.into_iter() {
