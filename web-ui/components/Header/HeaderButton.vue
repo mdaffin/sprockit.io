@@ -10,12 +10,28 @@ button {
   color: var(--color);
   cursor: pointer;
   margin: 0;
+  width: 5em;
   height: 100%;
   border: none;
 }
 
 button.primary {
   background-color: var(--green);
-  color: var(--dark-green);
+}
+
+button:hover {
+  color: white;
+}
+
+button.cyan:hover {
+  background-color: var(--cyan);
+}
+
+button.purple:hover {
+  background-color: var(--purple);
+}
+
+button.rose:hover {
+  background-color: var(--rose);
 }
 </style>

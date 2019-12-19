@@ -1,0 +1,95 @@
+/*
+  Name:      Sprockit.io Editor Theme 
+  Author:    Sprockit.io Team 
+
+  Inspiration from Base16 Default Light by Chris Kempson (http://chriskempson.com)
+  CodeMirror template by Jan T. Sott (https://github.com/idleberg/base16-codemirror)
+*/
+
+.cm-s-sprockit.CodeMirror {
+  background: var(--background-color);
+  color: var(--color);
+}
+.cm-s-sprockit div.CodeMirror-selected {
+  background: var(--light-grey);
+}
+.cm-s-sprockit .CodeMirror-line::selection,
+.cm-s-sprockit .CodeMirror-line > span::selection,
+.cm-s-sprockit .CodeMirror-line > span > span::selection {
+  background: var(--light-grey);
+}
+.cm-s-sprockit .CodeMirror-line::-moz-selection,
+.cm-s-sprockit .CodeMirror-line > span::-moz-selection,
+.cm-s-sprockit .CodeMirror-line > span > span::-moz-selection {
+  background: var(--light-grey);
+}
+.cm-s-sprockit .CodeMirror-gutters {
+  background: var(--background-color);
+  border-right: 0px;
+}
+.cm-s-sprockit .CodeMirror-guttermarker {
+  color: var(--red);
+}
+.cm-s-sprockit .CodeMirror-guttermarker-subtle {
+  color: var(--grey);
+}
+.cm-s-sprockit .CodeMirror-linenumber {
+  color: var(--grey);
+  background-color: var(--background-color);
+}
+.cm-s-sprockit .CodeMirror-cursor {
+  border-left: 1px solid var(--lighter-dark-grey);
+}
+
+.cm-s-sprockit span.cm-comment {
+  color: var(--grey);
+}
+.cm-s-sprockit span.cm-atom {
+  color: var(--rose);
+}
+.cm-s-sprockit span.cm-number {
+  color: var(--rose);
+}
+
+.cm-s-sprockit span.cm-property,
+.cm-s-sprockit span.cm-attribute {
+  color: var(--green);
+}
+.cm-s-sprockit span.cm-keyword {
+  color: var(--red);
+}
+.cm-s-sprockit span.cm-string {
+  color: var(--purple);
+}
+
+.cm-s-sprockit span.cm-variable {
+  color: var(--green);
+}
+.cm-s-sprockit span.cm-variable-2 {
+  font-weight: bold;
+  color: var(--cyan);
+}
+.cm-s-sprockit span.cm-def {
+  color: var(--yellow);
+}
+.cm-s-sprockit span.cm-bracket {
+  color: var(--dark-grey);
+}
+.cm-s-sprockit span.cm-tag {
+  color: var(--red);
+}
+.cm-s-sprockit span.cm-link {
+  color: var(--rose);
+}
+.cm-s-sprockit span.cm-error {
+  background: var(--red);
+  color: var(--lighter-dark-grey);
+}
+
+.cm-s-sprockit .CodeMirror-activeline-background {
+  background: var(--background-color);
+}
+.cm-s-sprockit .CodeMirror-matchingbracket {
+  color: var(--border) !important;
+  background-color: var(--cyan) !important;
+}

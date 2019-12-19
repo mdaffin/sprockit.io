@@ -38,7 +38,8 @@ export default {
 <style scoped>
 div {
   background-color: #f0f0f0;
-  color: var(--background-color);
+  color: var(--color);
+  background-color: var(--border);
   width: 8px;
   height: 100%;
   display: flex;

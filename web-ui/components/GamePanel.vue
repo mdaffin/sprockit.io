@@ -1,25 +1,30 @@
 <template>
-  <div class="game-frame">
-    <Maze class="game" />
+  <div class="left-hand-side">
+    <div class="game-frame">
+      <Maze class="game" />
+    </div>
+    <div class="help-frame">
+      <HelpPanel />
+    </div>
   </div>
 </template>
 
 <script>
 import Maze from "~/components/Games/Maze.vue";
+import HelpPanel from "~/components/HelpPanel.vue";
 
 export default {
   components: {
     Maze,
+    HelpPanel,
   },
 };
 </script>
 
 <style scoped>
 .game {
-  margin: 2em;
+  margin: 0;
   padding: 2em;
-  border-radius: 2em;
-  background-color: #c0b283;
-  color: var(--background-color);
+  color: var(--color);
 }
 </style>

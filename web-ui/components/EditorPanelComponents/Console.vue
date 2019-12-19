@@ -23,8 +23,8 @@ export default {
 
 <style>
 .console {
-  color: var(--background-color);
-  background-color: var(--color);
+  color: var(--color);
+  background-color: var(--background-color);
 }
 .error {
   color: red;
