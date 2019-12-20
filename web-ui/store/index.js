@@ -4,12 +4,15 @@ async function run() {
   console.log("Starting maze solver");
   const maze = new Maze();
   await maze.start();
-  await maze.updateMaze();
   console.log("token: " + maze.token);
+  
+  const dirs = await maze.directions();
+  if(dirs.down == "Open"){
+    maze.moveDown();
+  }
 }
 
-(async function() {run()})();
-`;
+(async function() {run()})();`;
 
 export const state = () => ({
   maze: Array.from({ length: 9 }, () =>
